@@ -1,0 +1,1782 @@
+{
+  "results": [
+    {
+      "query_id": "0",
+      "query": "Can you tell me what Faradaic Efficiency for NH3 production was reached by the FeCu DAC at -0.6 V?",
+      "gt_answer": "The FeCu DAC reached a Faradaic Efficiency for NH3 production of 99.88% at -0.6 V.",
+      "response": "The Faradaic Efficiency (FE) for NH3 production reached by the FeCu DAC at -0.6 V was 99.88%.",
+      "retrieved_context": [
+        {
+          "doc_id": "a0b7e6b7-fd03-4c5a-af6d-2baa43f12106",
+          "text": "# Results and Discussion\n\nTo examine the electrocatalytic activity of various catalysts for the  $\\mathrm{NO}_2\\mathrm{RR}$ , initial screening tests were carried out in  $\\mathrm{Ar}_2$ - saturated  $0.1\\mathrm{M}$  KOH solution. First, linear sweep voltammetry (LSV) data were acquired in KOH electrolyte with and without  $\\mathrm{NaNO}_2$  to investigate the catalytic performance of FeCu DAC for nitrite reduction (Figure 3a). The noticeably increased current density at the same potential indicates that  $\\mathrm{NO}_2^-$  ions can be efficiently depleted by FeCu DAC. The ammonia yield rate was determined in the  $\\mathrm{KOH / NaNO}_2$  electrolyte by maintaining a different potential for  $1\\mathrm{h}$  each time, and the synthesized  $\\mathrm{NH}_3$  products were quantified using ultraviolet- visible (UV/Vis) spectrophotometry. As shown in Figure 3b, FeCu DAC exhibited excellent selectivity and a remarkable yield rate for  $\\mathrm{NH}_3$  conversion via the electrocatalysis of  $\\mathrm{NO}_2^-$ .  $\\mathrm{NH}_3$  production was observed at  $- 0.4\\mathrm{V}$  vs. RHE from the beginning of the reaction, with a FE of  $95.11\\%$ , corresponding to a yield rate of  $16,250\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$ . The  $\\mathrm{NH}_3$  selectivity reached a maximum of  $99.88\\%$  at  $- 0.6\\mathrm{V}$ , representing a yield rate of  $24,526\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$ . A significant partial  $\\mathrm{NH}_3$  FE of  $96.74\\%$  was obtained at  $- 0.8\\mathrm{V}$ , delivering a superior yield rate of  $29,382\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$ . The FE and yield rate of FeCu DAC were orders of magnitude higher than those in previous research (Figure 3c) because of the drastically different kinetic energy barriers to\n\n![](images/7d716648842797e7fff166161e4e64b4956ecffb7a3c21a3d66f2cdf93bc1299.jpg)  \nFigure 2. XANES spectra of (a) Fe-K-edge and (b) Cu-K-edge. FT of  $1^{\\circ}$  weighted (c) Fe K-edge and (d) Cu K-edge EXAFS data for FeCu DAC. (e) and (f) R-space curve-fitting of FeCu DAC. Inset illustrates the fitted structure of the Fe and Cu site in FeCu DAC. The grey, purple, blue, and green spheres represent C, N, Fe, and Cu atoms, respectively. (g) WT for the  $k^2$ -weighted Fe K-edge and Cu K-edge EXAFS signals."
+        },
+        {
+          "doc_id": "8ebd2591-eeba-4957-93c4-c0ac52fec1d4",
+          "text": "# Conclusion\n\nIn conclusion, we rationally developed a novel FeCu DAC material exhibiting exceptional electrocatalytic properties for the direct nitrite electroreduction process in ammonia production. The DFT simulation reveals that the introduction of  $\\mathrm{Cu}$  leads to a reconstruction of the electronic structure of Fe in the FeCu DAC, effectively shifting the d- band center towards the Fermi level. This modification significantly enhances the capacity of Fe for adsorption of the intermediates and reduces reaction barriers, resulting in an unprecedented  $\\mathrm{NH}_3$  yield of  $24,526 \\mu \\mathrm{g} \\mathrm{h}^{- 1} \\mathrm{mg}_{\\mathrm{cat}}^{- 1}$  at  $- 0.6 \\mathrm{~V}$  and a remarkable  $\\mathrm{NH}_3$  FE of  $99.88\\%$ . Owing to the electron- rich  $\\mathrm{NO}_2\\mathrm{RR}$  and excellent catalytic performance of FeCu DAC, a  $\\mathrm{Zn - NO}_2$  battery system was established with the FeCu DAC cathode and a metal  $\\mathrm{Zn}$  anode. The constructed  $\\mathrm{Zn - NO}_2$  battery can simultaneously produce ammonia and generate electricity, with a power density of  $23.6 \\mathrm{mW} \\mathrm{cm}^{- 2}$  and a high  $\\mathrm{NH}_3$  FE of  $92.23\\%$  at  $20 \\mathrm{mA} \\mathrm{cm}^{- 2}$ . This study not only proposes a novel theory for purposefully tuning the catalytic performance of atom- dispersed metal catalysts, but also deepens the fundamental understanding of the synergistic effects in heterogeneous dual- atom catalysts. Furthermore, we have experimentally validated the effectiveness of galvanic nitrite- based battery, thereby\n\nproviding a viable method for  $\\mathrm{NH_3}$  production and advancing the field of Zn- based batteries.\n\n# Acknowledgements\n\nAcknowledgementsThis work was financially supported by National Natural Science Foundation of China (U2002213) and Double- First Class University Plan (C176220100042).\n\n# Conflict of Interest\n\nThe authors declare no conflict of interest.\n\n# Data Availability Statement\n\nThe data that support the findings of this study are available from the corresponding author upon reasonable request.\n\nKeywords: Ammonia Production  $\\cdot$  Dual- Atom Catalyst  $\\cdot$  Nitrite Reduction Reaction  $\\cdot$  Zn- Based Battery"
+        },
+        {
+          "doc_id": "0eeff9f7-ca99-4098-9592-bc69796aac8a",
+          "text": "# Nitrogen-bridged Fe-Cu Atomic Pair Sites for Efficient Electrochemical Ammonia Production and Electricity Generation with  $\\mathbf{Zn - NO}_2$  Batteries\n\nZhenghui  $B_i^+$ , Jiao  $H_u^+$ , Ming  $X_u^+$ , Hua Zhang, Yingtang Zhou,* and Guangzhi  $H_u^*$\n\nAbstract The development of environmentally sustainable and highly efficient technologies for ammonia production is crucial for the future advancement of carbon- neutral energy systems. The nitrite reduction reaction  $(\\mathrm{NO}_2\\mathrm{RR})$  for generating  $\\mathrm{NH}_3$  is a promising alternative to the low- efficiency nitrogen reduction reaction (NRR), owing to the low  $\\mathrm{N} = \\mathrm{O}$  bond energy and high solubility of nitrite. In this study, we designed a highly efficient dual- atom catalyst with Fe- Cu atomic pair sites (termed FeCu DAC), and the as- developed FeCu DAC was able to afford a remarkable  $\\mathrm{NH}_3$  yield of  $24,526\\mu \\mathrm{g}\\mathrm{h}^{- 1}$ $\\mathrm{mg_{cat.}^{- 1}}$  at  $- 0.6\\mathrm{V}$  with a Faradaic Efficiency (FE) for  $\\mathrm{NH}_3$  production of  $99.88\\%$ . The FeCu DAC also exhibited exceptional catalytic activity and selectivity in a  $\\mathrm{Zn - NO}_2$  battery, achieving a record- breaking power density of  $23.6\\mathrm{mWcm}^{- 1}$  and maximum  $\\mathrm{NH}_3$  FE of  $92.23\\%$  at  $20\\mathrm{mAcm}^{- 2}$ . Theoretical simulation demonstrated that the incorporation of the  $\\mathrm{Cu}$  atom changed the energy of the Fe 3d orbital and lowered the energy barrier, thereby accelerating the  $\\mathrm{NO}_2\\mathrm{RR}$ . This study not only demonstrates the potential of galvanic nitrite- based cells for expanding the field of  $\\mathrm{Zn}$ - based batteries, but also provides fundamental interpretation for the synergistic effect in highly dispersed dual- atom catalysts.\n\n# Introduction"
+        }
+      ],
+      "response_claims": [
+        [
+          "Faradaic Efficiency for NH3 production",
+          "reached by",
+          "FeCu DAC"
+        ],
+        [
+          "FeCu DAC",
+          "at voltage",
+          "-0.6 V"
+        ],
+        [
+          "Faradaic Efficiency for NH3 production",
+          "was",
+          "99.88%"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "FeCu DAC",
+          "reached",
+          "Faradaic Efficiency for NH3 production of 99.88%"
+        ],
+        [
+          "Faradaic Efficiency for NH3 production",
+          "at",
+          "-0.6 V"
+        ]
+      ],
+      "answer2response": [
+        "Entailment",
+        "Entailment",
+        "Entailment"
+      ],
+      "response2answer": [
+        "Entailment",
+        "Entailment"
+      ],
+      "retrieved2response": [
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "claim_recall": 1.0,
+        "context_precision": 1.0,
+        "noise_sensitivity_in_relevant": 0.0,
+        "noise_sensitivity_in_irrelevant": 0.0,
+        "hallucination": 0.0,
+        "self_knowledge": 0.0,
+        "context_utilization": 1.0
+      }
+    },
+    {
+      "query_id": "1",
+      "query": "What is the main reason the Haber-Bosch process leads to excessive greenhouse gas emissions when making ammonia?",
+      "gt_answer": "The Haber-Bosch process requires high pressure and temperature, which leads to excessive energy consumption and greenhouse gas emissions.",
+      "response": "The main reason the Haber-Bosch process leads to excessive greenhouse gas emissions when making ammonia is due to the high pressure and temperature required in the process, which results in excessive energy consumption and greenhouse gas emissions.",
+      "retrieved_context": [
+        {
+          "doc_id": "38cd2550-3d21-4d74-ac45-c068cbbdb7a1",
+          "text": "# Introduction\n\nAmmonia is a widely- used industrial product that serves as the primary raw material for manufacturing nitrogen- based fertilizers. It is considered an ideal carbon- free fuel for low- carbon energy technologies.[1] The Haber- Bosch process, conventionally used for synthesizing  $\\mathrm{NH}_3$ , involves high pressure and temperature, leading to excessive energy consumption and greenhouse gas emissions.[2] In recent years, there has been extensive interest in using water as a hydrogen source for the electrochemical reduction of nitrogen to  $\\mathrm{NH}_3$ , which allows the direct generation of  $\\mathrm{NH}_3$  from  $\\mathrm{N}_2$  and  $\\mathrm{H}_2\\mathrm{O}$  under mild environmental conditions.[3] The outlook for the NRR appears grim due to the high energy required to cleave the non- polar  $\\mathrm{N} \\equiv \\mathrm{N}$  bond  $(941\\mathrm{kJ}\\mathrm{mol}^{- 1})$  and low solubility of  $\\mathrm{N}_2$  in most electrolytes, which promotes the competitive hydrogen evolution reaction (HER) and results in poor  $\\mathrm{NH}_3$  selectivity and subpar current efficiency.[4] These problems severely limit the activity and selectivity of the NRR in aqueous media, which is a major constraint.  $\\mathrm{NH}_3$  electrosynthesis can prospectively be realized via the  $\\mathrm{NO}_2\\mathrm{RR}$ , because of the substantially lower cleavage energy of the  $\\mathrm{N} = \\mathrm{O}$  bond  $(204\\mathrm{kJ}\\mathrm{mol}^{- 1})$  compared to that of the  $\\mathrm{N} \\equiv \\mathrm{N}$  bond. In contrast with non- polar  $\\mathrm{N}_2$ ,  $\\mathrm{NO}_2^-$  has excellent solubility in water, making it an appealing nitrogen supply that can potentially accelerate the kinetics of  $\\mathrm{NH}_3 / \\mathrm{NH}_4^+$  formation.[5] Additionally,  $\\mathrm{NO}_2^-$  undergoes greater electrocatalytic reduction in the same thermodynamic potential range as  $\\mathrm{N}_2$ .[6]\n\nSingle- atom catalysts (SACs) have unique atomic structures and electronic properties that make them superior to bulk catalysts and nano catalysts. Researchers in the field of catalysis have shown great interest in SACs because of their remarkable activity and selectivity in many catalytic reactions.[7] The development of numerous  $\\mathrm{NO}_2\\mathrm{RR}$  electrocatalysts is now a priority. Homogeneous and heterogeneous SACs offer new prospects for electrocatalysis and represent a potential  $\\mathrm{NO}_2\\mathrm{RR}$  catalyst category. A significant number of pyrolytic SACs with an M- N- C (metal- nitrogen- carbon) structure have been studied for accelerating the  $\\mathrm{NO}_2\\mathrm{RR}$ .[8] Fe- N- C SACs have been extensively studied because of their low cost and excellent selectivity over a wide range of potential windows.[9] Furthermore, the electrocatalytic performance of Fe- N- C SACs can be fine- tuned by altering the coordination number or introducing vacancies to tune the electronic configuration of the Fe atom center.[10] Despite significant advances, the fundamentally stagnant kinetics of"
+        },
+        {
+          "doc_id": "7787c474-9030-458b-ad39-dd650c13def9",
+          "text": "# Coordination Symmetry Breaking of Single-Atom Catalysts for Robust and Efficient Nitrate Electroreduction to Ammonia\n\nXue- Feng Cheng, Jing- Hui He,* Hao- Qing Ji, Hao- Yu Zhang, Qiang Cao, Wu- Ji Sun, Cheng- Lin Yan, and Jian- Mei Lu*\n\nNitrate electrocatalytic reduction  $(NO_3RR)$  for ammonia production is a promising strategy to close the N- cycle from nitration contamination, as well as an alternative to the Haber- Bosch process with less energy consumption and carbon dioxide release. However, current long- term stability of  $NO_3RR$  catalysts is usually tens of hours, far from the requirements for industrialization. Here, symmetry- broken Cusingle- atom catalysts are designed, and the catalytic activity is retained after operation for more than  $2000h$  while an average ammonia production rate of  $27.84\\mathrm{mg h^{- 1} cm^{- 2}}$  at an industrial level current density of  $366\\mathrm{mA cm^{- 2}}$  is achieved, obtaining a good balance between catalytic activity and long- term stability. Coordination symmetry breaking is achieved by embedding one Cu atom in graphene nanosheets with two N and two O atoms in the cis- configuration, effectively lowering the coordination symmetry, rendering the active site more polar, and accumulating more  $NO_3^-$  near the electrocatalyst surface. Additionally, the cis- coordination splits the Cu 3d orbitals, which generates an orbital- symmetry- matched  $\\pi$  - complex of the key intermediate \\*ONH and reduces the energy barrier, compared with the  $\\sigma$  - complex generated with other catalysts. These results reveal the critical role of coordination symmetry in single- atom catalysts, prompting the design of more coordinationsymmetry- broken electrocatalysts toward possible industrialization.\n\n# 1. Introduction\n\nAccumulation of nitrate  $(NO_3^- )$  in groundwater causes photochemical smog and acid rain, and the in vivo conversion of  $NO_3^-$  to nitrite  $(NO_2^- )$  further induces methemoglobinemia and cancers.[1] Thus, closing the  $NO_3^- = N$  cycle by electrochemically reducing nitrate to a valued product ammonia, is promising for reducing carbon dioxide  $(CO_2)$  release and for environmental remediation.[2] In addition, ammonia  $(NH_3)$  as one of the most common chemical feedstocks[3] is mainly produced by the Haber- Bosch method, involving the reaction of  $N_2$  and  $H_2$  at high temperatures, accompanied by  $1 - 2\\%$  energy consumption and  $CO_2$  release.[4] Therefore, the nitrate electrochemical reduction reaction  $(NO_3RR)$  to ammonia, has recently attracted intensive interest because of the high water solubility of  $NO_3^-$  and the low dissociation energy of the  $N = O$  bond  $(204\\mathrm{kJ mol^{- 1}})$  of  $NO_3^-$ .[3a] Numerous noble metal nanoparticles,[2a,3] metal oxides,[10] and 2D materials[7] have been prepared and demonstrated their promising  $NO_3RR$  performance. Even though relatively high catalytic activity was obtained,[2a,8] only a few works focused on improving the catalytic stability.[9] Long- term stability of cata lyst is a more important factor towards real applications,[10] as deactivation of initially activated electrocatalysts after long- term operation due to passivation, leaching, and corrosion often occurs in industrialization.[9,11]"
+        },
+        {
+          "doc_id": "0eeff9f7-ca99-4098-9592-bc69796aac8a",
+          "text": "# Nitrogen-bridged Fe-Cu Atomic Pair Sites for Efficient Electrochemical Ammonia Production and Electricity Generation with  $\\mathbf{Zn - NO}_2$  Batteries\n\nZhenghui  $B_i^+$ , Jiao  $H_u^+$ , Ming  $X_u^+$ , Hua Zhang, Yingtang Zhou,* and Guangzhi  $H_u^*$\n\nAbstract The development of environmentally sustainable and highly efficient technologies for ammonia production is crucial for the future advancement of carbon- neutral energy systems. The nitrite reduction reaction  $(\\mathrm{NO}_2\\mathrm{RR})$  for generating  $\\mathrm{NH}_3$  is a promising alternative to the low- efficiency nitrogen reduction reaction (NRR), owing to the low  $\\mathrm{N} = \\mathrm{O}$  bond energy and high solubility of nitrite. In this study, we designed a highly efficient dual- atom catalyst with Fe- Cu atomic pair sites (termed FeCu DAC), and the as- developed FeCu DAC was able to afford a remarkable  $\\mathrm{NH}_3$  yield of  $24,526\\mu \\mathrm{g}\\mathrm{h}^{- 1}$ $\\mathrm{mg_{cat.}^{- 1}}$  at  $- 0.6\\mathrm{V}$  with a Faradaic Efficiency (FE) for  $\\mathrm{NH}_3$  production of  $99.88\\%$ . The FeCu DAC also exhibited exceptional catalytic activity and selectivity in a  $\\mathrm{Zn - NO}_2$  battery, achieving a record- breaking power density of  $23.6\\mathrm{mWcm}^{- 1}$  and maximum  $\\mathrm{NH}_3$  FE of  $92.23\\%$  at  $20\\mathrm{mAcm}^{- 2}$ . Theoretical simulation demonstrated that the incorporation of the  $\\mathrm{Cu}$  atom changed the energy of the Fe 3d orbital and lowered the energy barrier, thereby accelerating the  $\\mathrm{NO}_2\\mathrm{RR}$ . This study not only demonstrates the potential of galvanic nitrite- based cells for expanding the field of  $\\mathrm{Zn}$ - based batteries, but also provides fundamental interpretation for the synergistic effect in highly dispersed dual- atom catalysts.\n\n# Introduction"
+        }
+      ],
+      "response_claims": [
+        [
+          "Haber-Bosch process",
+          "leads to",
+          "excessive greenhouse gas emissions"
+        ],
+        [
+          "Haber-Bosch process",
+          "requires",
+          "high pressure"
+        ],
+        [
+          "Haber-Bosch process",
+          "requires",
+          "high temperature"
+        ],
+        [
+          "high pressure",
+          "results in",
+          "excessive energy consumption"
+        ],
+        [
+          "high temperature",
+          "results in",
+          "excessive energy consumption"
+        ],
+        [
+          "excessive energy consumption",
+          "causes",
+          "greenhouse gas emissions"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "Haber-Bosch process",
+          "requires",
+          "high pressure"
+        ],
+        [
+          "Haber-Bosch process",
+          "requires",
+          "high temperature"
+        ],
+        [
+          "Haber-Bosch process",
+          "leads to",
+          "excessive energy consumption"
+        ],
+        [
+          "Haber-Bosch process",
+          "leads to",
+          "greenhouse gas emissions"
+        ]
+      ],
+      "answer2response": [
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Entailment"
+      ],
+      "response2answer": [
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Entailment"
+      ],
+      "retrieved2response": [
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "claim_recall": 1.0,
+        "context_precision": 0.6666666666666666,
+        "noise_sensitivity_in_relevant": 0.0,
+        "noise_sensitivity_in_irrelevant": 0.0,
+        "hallucination": 0.0,
+        "self_knowledge": 0.0,
+        "context_utilization": 1.0
+      }
+    },
+    {
+      "query_id": "2",
+      "query": "I've worked with metal clusters\u2014how do dual-site catalysts compare?",
+      "gt_answer": "Dual-site catalysts like Fe\u2013Cu atomic pairs show synergistic effects, outperforming single-atom analogs in selectivity and efficiency for electrocatalytic reduction of nitrogen-based pollutants.",
+      "response": "Dual-site catalysts, such as the nitrogen-bridged Fe-Cu atom pairs in FeCu DAC, offer a unique advantage compared to metal clusters. These dual-site catalysts feature highly dispersed Fe and Cu atomic structures in the cluster region, which can enhance catalytic activity and selectivity. In the case of FeCu DAC, the presence of Fe-Cu pairs on the carbon substrate, devoid of any crystallized iron or copper nanoparticles, provides a more efficient exposure of active sites and mass transfer of electrolytes during the catalytic process. This innovative material has shown superior performance in electroreduction reactions compared to single-atom congeners and other single-site catalysts.",
+      "retrieved_context": [
+        {
+          "doc_id": "a22e6e93-53a7-4216-ad9a-1bcff0f59889",
+          "text": "# Results and Discussion\n\nThe X- ray diffraction (XRD) patterns of the various catalysts revealed only the characteristic diffraction peaks of graphene, proving that no crystalline metal was generated, indicating the absence of Fe- or Cu- related crystal particles (Figure S6). In line with the STEM images of FeCu DAC, this offers definitive proof of the presence of highly dispersed Fe and Cu atomic structures in the cluster region. From the  $\\mathbf{N}_2$  adsorption/desorption isotherm and pore distribution in Figure S9, the specific area of FeCu DAC was found to be large  $(687.5\\mathrm{m}^2\\mathrm{g}^{- 1})$  with numerous pores having a size of  $40\\mathrm{nm}$  both of which are advantageous for exposure of the active sites and mass transfer of the electrolytes during the catalytic process.[12]"
+        },
+        {
+          "doc_id": "c60a3d24-0616-4574-a298-4c352bacb196",
+          "text": "# 4.2 Catalyst characterization\n\nX- ray diffraction (XRD) patterns of catalysts were recorded on Rigaku Ultima IV X- ray diffractometer with  $\\mathrm{CuK}\\alpha$  radiation ( $40\\mathrm{kV}$  and  $30\\mathrm{mA}$ ) at a scanning speed of  $2\\theta = 10.0^{\\circ} / \\mathrm{min}$  from  $20^{\\circ}$  to  $80^{\\circ}$ , and at a scanning speed of  $2\\theta = 0.6^{\\circ} / \\mathrm{min}$  from  $32^{\\circ}$  to  $42^{\\circ}$ . The surface areas and pore volumes of the calcined catalysts were measured by means of  $\\mathrm{N}_2$  physisorption on a Micromeritics ASAP 2020 Plus instrument. Pd loadings of catalysts were determined by inductively coupled plasma- optical emission spectrometry (ICP- OES) on an Agilent 720ES system. X- ray photoelectron spectra (XPS) were recorded with a Thermo Scientific K- Alpha instrument (Physical Electronics) using Al  $\\mathrm{K}_{\\alpha}$  radiation. The binding energy was calibrated by using the  $\\mathrm{C_{1s}}$  photoelectron peak at  $284.8\\mathrm{eV}$ . High- resolution transmission electron microscope (HRTEM), high- angle annular dark- field scanning transmission electron microscopy (HAADF- STEM), and the energy dispersive spectrometer (EDS) was performed on a Phillips Analytical FEI Talos electron microscope operated at an acceleration voltage of  $200\\mathrm{kV}$ .\n\nThe Pd dispersion of the catalysts was measured by CO pulse chemisorption, which was also conducted on a handmade instrument. The samples ( $80\\mathrm{mg}$ ) were first pre- treated at  $300^{\\circ}\\mathrm{C}$  for  $60\\mathrm{min}$  in He. Subsequently, the temperature was lowered to  $50^{\\circ}\\mathrm{C}$  in He flow. Pulses of  $1\\%$  CO/He were introduced to the catalyst until uptake saturation was obtained. The CO consumption was monitored by TCD. The dispersion of Pd was calculated assuming a CO/Pd stoichiometric ratio of  $1^{[44]}$ . The detailed calculation method of the Pd dispersion can be found in the Supporting Information.\n\nIn- situ diffuse reflectance infrared Fourier transformed spectroscopy (DRIFTS) analysis was employed to investigate the adsorption behavior of CO molecule on Pd species of the catalysts, as well as monitoring the dynamic change of the surface species on the catalysts during the reaction process. DRIFTS spectra were recorded using a ThermoFisher IS50"
+        },
+        {
+          "doc_id": "fa62cea9-a9c8-4111-bb45-d3caf5056a0e",
+          "text": "# Introduction\n\nthe initial proton- coupled electron transfer at the Fe site strongly restricts the practical applicability of Fe- N- C SACs.[11] The construction of atom- pair structures has recently been considered an efficient method for modifying the activity of the catalytic sites, owing to cooperative electron modulation and the capability to overcome the limitations on the catalytic performance. However, because of a lack of intricate control mechanisms and thorough understanding of the structure of atom- pairs, the concept remains in its infancy and requires urgent advancement.\n\nIn this study, we strategically incorporate single Cu atoms into the microscopic structure of FeNC and finely adjust the 3d electronic configuration of the Fe site to augment its activity. However, Cu is considered an inert metal, and its presence can inhibit the competitive HER. In this regard, a nitrogen- bridged Fe- Cu atom pair was designed for achieving high- efficiency  $\\mathrm{NO}_2\\mathrm{RR}$  where the more electronegative Cu species is expected to raise the d- orbital energy level of the Fe active site, thereby strongly promoting the rate of the  $\\mathrm{NO}_2\\mathrm{RR}$ . In terms of the catalytic activity and selectivity, the as- developed two- atom center- site catalyst outperforms the single- atom congeners and previously investigated SACs. The innovative material, is utilized in a simple  $\\mathrm{Zn - NO}_2$  battery device for the selective electroreduction of nitrogen oxyanions and synthesis of  $\\mathrm{NH}_3$ .\n\n# Results and Discussion\n\nBy using a straightforward liquid- phase deposition technique, completely exposed nitrogen- bridged Fe- Cu pairs were effectively created with theoretical loadings of Fe:  $1.69\\mathrm{wt}\\%$  and Cu:  $1.89\\mathrm{wt}\\%$  (Table S1). The morphology and structure of FeCu DAC was initially investigated using aberration- corrected high- angle annular dark- field scanning transmission electron microscopy (HAADF- STEM). As highlighted by the orange ovals, the densely distributed bright dots represent the Fe- Cu atom pairs. As depicted in Figure 1a, ultrasmall Fe- Cu pairs were completely exposed and evenly dispersed on the carbon substrate, devoid of any crystallized iron or copper nanoparticles. The dispersion of several spot pairs with two distinct contrasts on the carbon matrix can be observed in the atomic- resolution HAADF- STEM images, which points to the presence of numerous Fe- Cu diatomic pairs in the matrix. The magnified HAADF- STEM images (Figure 1b) show several colored spots with distinctive contrast and brightness owing to the differing Z- axis contrasts of Fe and Cu, which were clustered together to generate atomic groups, each of which included an Fe atom and a neighboring Cu atom. Moreover, the corresponding energy dispersive spectroscopy (EDS) mapping of FeCu DAC (Figure 1f) show the simultaneous presence of iron and copper species within cluster regions on the surface, indicating that the Fe- Cu pairs are mainly composed of completely exposed and widely dispersed Fe and Cu atoms."
+        }
+      ],
+      "response_claims": [
+        [
+          "Dual-site catalysts",
+          "include",
+          "nitrogen-bridged Fe-Cu atom pairs"
+        ],
+        [
+          "FeCu DAC",
+          "is a type of",
+          "dual-site catalyst"
+        ],
+        [
+          "Dual-site catalysts",
+          "offer",
+          "unique advantage compared to metal clusters"
+        ],
+        [
+          "Dual-site catalysts",
+          "feature",
+          "highly dispersed Fe and Cu atomic structures"
+        ],
+        [
+          "Highly dispersed Fe and Cu atomic structures",
+          "located in",
+          "cluster region"
+        ],
+        [
+          "Highly dispersed Fe and Cu atomic structures",
+          "can enhance",
+          "catalytic activity and selectivity"
+        ],
+        [
+          "FeCu DAC",
+          "has",
+          "Fe-Cu pairs on carbon substrate"
+        ],
+        [
+          "Fe-Cu pairs on carbon substrate",
+          "are devoid of",
+          "crystallized iron or copper nanoparticles"
+        ],
+        [
+          "Fe-Cu pairs on carbon substrate",
+          "provide",
+          "efficient exposure of active sites"
+        ],
+        [
+          "Efficient exposure of active sites",
+          "enhances",
+          "mass transfer of electrolytes"
+        ],
+        [
+          "Innovative material",
+          "has shown",
+          "superior performance in electroreduction reactions"
+        ],
+        [
+          "Innovative material",
+          "compared to",
+          "single-atom congeners"
+        ],
+        [
+          "Innovative material",
+          "compared to",
+          "other single-site catalysts"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "Dual-site catalysts",
+          "include",
+          "Fe\u2013Cu atomic pairs"
+        ],
+        [
+          "Fe\u2013Cu atomic pairs",
+          "show",
+          "synergistic effects"
+        ],
+        [
+          "Dual-site catalysts",
+          "outperform",
+          "single-atom analogs"
+        ],
+        [
+          "Dual-site catalysts",
+          "improve",
+          "selectivity for electrocatalytic reduction of nitrogen-based pollutants"
+        ],
+        [
+          "Dual-site catalysts",
+          "improve",
+          "efficiency for electrocatalytic reduction of nitrogen-based pollutants"
+        ]
+      ],
+      "answer2response": [
+        "Neutral",
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Entailment",
+        "Neutral"
+      ],
+      "response2answer": [
+        "Entailment",
+        "Neutral",
+        "Entailment",
+        "Entailment",
+        "Entailment"
+      ],
+      "retrieved2response": [
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 0.9230769230769231,
+        "precision": 0.46153846153846156,
+        "recall": 0.8,
+        "f1": 0.5853658536585367,
+        "claim_recall": 1.0,
+        "context_precision": 0.3333333333333333,
+        "noise_sensitivity_in_relevant": 0.46153846153846156,
+        "noise_sensitivity_in_irrelevant": 0.07692307692307693,
+        "hallucination": 0.0,
+        "self_knowledge": 0.07692307692307693,
+        "context_utilization": 0.8
+      }
+    },
+    {
+      "query_id": "3",
+      "query": "What pore size was found in FeCu DAC?",
+      "gt_answer": "40 nm",
+      "response": "The pore size found in FeCu DAC was 40nm.",
+      "retrieved_context": [
+        {
+          "doc_id": "e672e5ec-d07a-4b96-b587-ce55b2f4f0eb",
+          "text": "# Results and Discussion\n\nThe electronic structure and local configuration of FeCu DAC were investigated using X- ray photoelectron spectroscopy (XPS) and synchrotron X- ray absorption fine- structure (XAFS) spectroscopy. The high- resolution N is XPS profile of FeCu DAC definitively proved the existence of oxidized N  $(402.6\\mathrm{eV})$ , graphitic N  $(400.9\\mathrm{eV})$ , and pyridinic N  $(398.3\\mathrm{eV})$  (Figure S12). Notably, the spectrum of the metal- containing samples indicated the presence of other N species with a peak at  $399.9\\mathrm{eV}$ , attributed to pyrrolic metal- N coordination.[13] Additional information the electronic interactions was acquired using X- ray absorption near edge structure (XANES) spectroscopy. Figure 2a shows the XANES spectrum at the Fe K- edge for FeCu DAC, FePc (iron phthalocyanine, with Fe- N groups), and FeO, as well as that of  $\\mathrm{Fe}_2\\mathrm{O}_3$  and Fe foil. The absorption edge position of FeCu DAC was between those of FePc and FeO, indicating that the average valence state of Fe was approximately  $+2$ . The local configuration around Fe was investigated using the Fourier transform (FT) of the extended X- ray absorption fine structure (EXAFS) spectrum at the Fe K- edge (Figure 2c). The spectrum of FeCu DAC exhibits a maximum peak at  $1.53\\mathrm{\\AA}$ , matching the Fe- N first- shell coordination. There is no signal of the metallic Fe- Fe bond at  $2.12\\mathrm{\\AA}$  for FeCu DAC, again confirming the high dispersion of the metal atom. Excitingly, a distinct scattering path was observed at  $3.65\\mathrm{\\AA}$  in the spectrum of FeCu DAC, which is neither from Fe- N  $(1.53\\mathrm{\\AA})$  nor from metallic Fe- Fe  $(2.12\\mathrm{\\AA})$ . From EXAFS curve- fitting analysis, it is deduced that such a path could be reasonably attributed to the contribution of Fe- N- Cu (Figure 2e). The Cu K- edge XANES spectrum was examined to provide additional structural details. Cu is in an average valence state that is positively charged (Figure 2b), where the edge position was close to that of the  $2+$  valence state of CuPc (copper phthalocyanine, with Cu- N groups). The Cu K- edge FT- EXAFS spectrum of FeCu DAC (Figure 2d), showed a main peak at  $1.56\\mathrm{\\AA}$ , which is obviously different from the dominant peak at  $2.24\\mathrm{\\AA}$  for Cu foil originating from the Cu- Cu bond. Furthermore, a tiny peak was also observed at  $3.47\\mathrm{\\AA}$  in the spectrum of FeCu DAC at the Cu K- edge, similar to that observed at the Fe K- edge, the presence of which offers compelling proof of the Fe- N- Cu bond. Wavelet transform (WT) analysis, which enables high- resolution visualisation of the R- space, was executed to further confirm the existence of the Fe- N- Cu path (Figure 2g). The WT contour plot of Fe foil, shows an intensity maximum at  $7.17\\mathrm{\\AA}^{- 1}$  attributed to the Fe- Fe contribution, whereas no maximum was observed in the spectrum of FeCu DAC, demonstrating the absence of crystalline metal clusters in"
+        },
+        {
+          "doc_id": "a22e6e93-53a7-4216-ad9a-1bcff0f59889",
+          "text": "# Results and Discussion\n\nThe X- ray diffraction (XRD) patterns of the various catalysts revealed only the characteristic diffraction peaks of graphene, proving that no crystalline metal was generated, indicating the absence of Fe- or Cu- related crystal particles (Figure S6). In line with the STEM images of FeCu DAC, this offers definitive proof of the presence of highly dispersed Fe and Cu atomic structures in the cluster region. From the  $\\mathbf{N}_2$  adsorption/desorption isotherm and pore distribution in Figure S9, the specific area of FeCu DAC was found to be large  $(687.5\\mathrm{m}^2\\mathrm{g}^{- 1})$  with numerous pores having a size of  $40\\mathrm{nm}$  both of which are advantageous for exposure of the active sites and mass transfer of the electrolytes during the catalytic process.[12]"
+        },
+        {
+          "doc_id": "435f9da8-81e9-43a3-8f77-bb0ec105cbd3",
+          "text": "# Results and Discussion\n\n![](images/5c2d10a1d50b8a31a83755b057087d554c5534031263f043523daec95ac963f8.jpg)  \nFigure 1. (a) Aberration-corrected HAADF-STEM images of FeCu DAC. Fe-Cu atom pairs are highlighted by the orange ovals. (b) and (c) Enlargement of the green box in image a. (d) and (e) 3D intensity surface plot and range for the image. (f) EDS mapping of FeCu DAC.\n\nFeCu DAC. The maximum WT intensity caused by coordination of the light atom appeared at around  $6.56\\mathrm{\\AA}^{- 1}$  for FeCu DAC, matching the Fe- N scattering path. Identically, the intensity maximum observed in the WT contour plot of FeCu DAC at the Cu K- edge, which cannot be attributed to  $\\mathrm{Cu - Cu}$  or  $\\mathrm{Cu - N}$  paths, is thought to arise from the  $\\mathrm{Cu - N - Fe}$  contribution. Overall, we modeled the fitted XANES spectra were modelled to the  $\\mathrm{FeCuN}_7$  structure (Figure 2f, inset). Almost all of the characteristics of the experimental spectra data were accurately reproduced, indicating the reasonable existence of the  $\\mathrm{FeCuN}_7$  configuration."
+        }
+      ],
+      "response_claims": [
+        [
+          "FeCu DAC",
+          "has pore size",
+          "40nm"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "FeCu DAC",
+          "pore size",
+          "40 nm"
+        ]
+      ],
+      "answer2response": [
+        "Entailment"
+      ],
+      "response2answer": [
+        "Entailment"
+      ],
+      "retrieved2response": [
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "claim_recall": 1.0,
+        "context_precision": 0.3333333333333333,
+        "noise_sensitivity_in_relevant": 0.0,
+        "noise_sensitivity_in_irrelevant": 0.0,
+        "hallucination": 0.0,
+        "self_knowledge": 0.0,
+        "context_utilization": 1.0
+      }
+    },
+    {
+      "query_id": "4",
+      "query": "Which atom links iron and copper in this material?",
+      "gt_answer": "Nitrogen",
+      "response": "The atom that links iron and copper in this material is nitrogen (N).",
+      "retrieved_context": [
+        {
+          "doc_id": "e672e5ec-d07a-4b96-b587-ce55b2f4f0eb",
+          "text": "# Results and Discussion\n\nThe electronic structure and local configuration of FeCu DAC were investigated using X- ray photoelectron spectroscopy (XPS) and synchrotron X- ray absorption fine- structure (XAFS) spectroscopy. The high- resolution N is XPS profile of FeCu DAC definitively proved the existence of oxidized N  $(402.6\\mathrm{eV})$ , graphitic N  $(400.9\\mathrm{eV})$ , and pyridinic N  $(398.3\\mathrm{eV})$  (Figure S12). Notably, the spectrum of the metal- containing samples indicated the presence of other N species with a peak at  $399.9\\mathrm{eV}$ , attributed to pyrrolic metal- N coordination.[13] Additional information the electronic interactions was acquired using X- ray absorption near edge structure (XANES) spectroscopy. Figure 2a shows the XANES spectrum at the Fe K- edge for FeCu DAC, FePc (iron phthalocyanine, with Fe- N groups), and FeO, as well as that of  $\\mathrm{Fe}_2\\mathrm{O}_3$  and Fe foil. The absorption edge position of FeCu DAC was between those of FePc and FeO, indicating that the average valence state of Fe was approximately  $+2$ . The local configuration around Fe was investigated using the Fourier transform (FT) of the extended X- ray absorption fine structure (EXAFS) spectrum at the Fe K- edge (Figure 2c). The spectrum of FeCu DAC exhibits a maximum peak at  $1.53\\mathrm{\\AA}$ , matching the Fe- N first- shell coordination. There is no signal of the metallic Fe- Fe bond at  $2.12\\mathrm{\\AA}$  for FeCu DAC, again confirming the high dispersion of the metal atom. Excitingly, a distinct scattering path was observed at  $3.65\\mathrm{\\AA}$  in the spectrum of FeCu DAC, which is neither from Fe- N  $(1.53\\mathrm{\\AA})$  nor from metallic Fe- Fe  $(2.12\\mathrm{\\AA})$ . From EXAFS curve- fitting analysis, it is deduced that such a path could be reasonably attributed to the contribution of Fe- N- Cu (Figure 2e). The Cu K- edge XANES spectrum was examined to provide additional structural details. Cu is in an average valence state that is positively charged (Figure 2b), where the edge position was close to that of the  $2+$  valence state of CuPc (copper phthalocyanine, with Cu- N groups). The Cu K- edge FT- EXAFS spectrum of FeCu DAC (Figure 2d), showed a main peak at  $1.56\\mathrm{\\AA}$ , which is obviously different from the dominant peak at  $2.24\\mathrm{\\AA}$  for Cu foil originating from the Cu- Cu bond. Furthermore, a tiny peak was also observed at  $3.47\\mathrm{\\AA}$  in the spectrum of FeCu DAC at the Cu K- edge, similar to that observed at the Fe K- edge, the presence of which offers compelling proof of the Fe- N- Cu bond. Wavelet transform (WT) analysis, which enables high- resolution visualisation of the R- space, was executed to further confirm the existence of the Fe- N- Cu path (Figure 2g). The WT contour plot of Fe foil, shows an intensity maximum at  $7.17\\mathrm{\\AA}^{- 1}$  attributed to the Fe- Fe contribution, whereas no maximum was observed in the spectrum of FeCu DAC, demonstrating the absence of crystalline metal clusters in"
+        },
+        {
+          "doc_id": "fa62cea9-a9c8-4111-bb45-d3caf5056a0e",
+          "text": "# Introduction\n\nthe initial proton- coupled electron transfer at the Fe site strongly restricts the practical applicability of Fe- N- C SACs.[11] The construction of atom- pair structures has recently been considered an efficient method for modifying the activity of the catalytic sites, owing to cooperative electron modulation and the capability to overcome the limitations on the catalytic performance. However, because of a lack of intricate control mechanisms and thorough understanding of the structure of atom- pairs, the concept remains in its infancy and requires urgent advancement.\n\nIn this study, we strategically incorporate single Cu atoms into the microscopic structure of FeNC and finely adjust the 3d electronic configuration of the Fe site to augment its activity. However, Cu is considered an inert metal, and its presence can inhibit the competitive HER. In this regard, a nitrogen- bridged Fe- Cu atom pair was designed for achieving high- efficiency  $\\mathrm{NO}_2\\mathrm{RR}$  where the more electronegative Cu species is expected to raise the d- orbital energy level of the Fe active site, thereby strongly promoting the rate of the  $\\mathrm{NO}_2\\mathrm{RR}$ . In terms of the catalytic activity and selectivity, the as- developed two- atom center- site catalyst outperforms the single- atom congeners and previously investigated SACs. The innovative material, is utilized in a simple  $\\mathrm{Zn - NO}_2$  battery device for the selective electroreduction of nitrogen oxyanions and synthesis of  $\\mathrm{NH}_3$ .\n\n# Results and Discussion\n\nBy using a straightforward liquid- phase deposition technique, completely exposed nitrogen- bridged Fe- Cu pairs were effectively created with theoretical loadings of Fe:  $1.69\\mathrm{wt}\\%$  and Cu:  $1.89\\mathrm{wt}\\%$  (Table S1). The morphology and structure of FeCu DAC was initially investigated using aberration- corrected high- angle annular dark- field scanning transmission electron microscopy (HAADF- STEM). As highlighted by the orange ovals, the densely distributed bright dots represent the Fe- Cu atom pairs. As depicted in Figure 1a, ultrasmall Fe- Cu pairs were completely exposed and evenly dispersed on the carbon substrate, devoid of any crystallized iron or copper nanoparticles. The dispersion of several spot pairs with two distinct contrasts on the carbon matrix can be observed in the atomic- resolution HAADF- STEM images, which points to the presence of numerous Fe- Cu diatomic pairs in the matrix. The magnified HAADF- STEM images (Figure 1b) show several colored spots with distinctive contrast and brightness owing to the differing Z- axis contrasts of Fe and Cu, which were clustered together to generate atomic groups, each of which included an Fe atom and a neighboring Cu atom. Moreover, the corresponding energy dispersive spectroscopy (EDS) mapping of FeCu DAC (Figure 1f) show the simultaneous presence of iron and copper species within cluster regions on the surface, indicating that the Fe- Cu pairs are mainly composed of completely exposed and widely dispersed Fe and Cu atoms."
+        },
+        {
+          "doc_id": "435f9da8-81e9-43a3-8f77-bb0ec105cbd3",
+          "text": "# Results and Discussion\n\n![](images/5c2d10a1d50b8a31a83755b057087d554c5534031263f043523daec95ac963f8.jpg)  \nFigure 1. (a) Aberration-corrected HAADF-STEM images of FeCu DAC. Fe-Cu atom pairs are highlighted by the orange ovals. (b) and (c) Enlargement of the green box in image a. (d) and (e) 3D intensity surface plot and range for the image. (f) EDS mapping of FeCu DAC.\n\nFeCu DAC. The maximum WT intensity caused by coordination of the light atom appeared at around  $6.56\\mathrm{\\AA}^{- 1}$  for FeCu DAC, matching the Fe- N scattering path. Identically, the intensity maximum observed in the WT contour plot of FeCu DAC at the Cu K- edge, which cannot be attributed to  $\\mathrm{Cu - Cu}$  or  $\\mathrm{Cu - N}$  paths, is thought to arise from the  $\\mathrm{Cu - N - Fe}$  contribution. Overall, we modeled the fitted XANES spectra were modelled to the  $\\mathrm{FeCuN}_7$  structure (Figure 2f, inset). Almost all of the characteristics of the experimental spectra data were accurately reproduced, indicating the reasonable existence of the  $\\mathrm{FeCuN}_7$  configuration."
+        }
+      ],
+      "response_claims": [
+        [
+          "nitrogen",
+          "links",
+          "iron"
+        ],
+        [
+          "nitrogen",
+          "links",
+          "copper"
+        ],
+        [
+          "nitrogen",
+          "is in",
+          "this material"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "Nitrogen",
+          "links",
+          "iron"
+        ],
+        [
+          "Nitrogen",
+          "links",
+          "copper"
+        ]
+      ],
+      "answer2response": [
+        "Neutral",
+        "Neutral",
+        "Entailment"
+      ],
+      "response2answer": [
+        "Entailment",
+        "Entailment"
+      ],
+      "retrieved2response": [
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 1.0,
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1": 0.5,
+        "claim_recall": 1.0,
+        "context_precision": 0.6666666666666666,
+        "noise_sensitivity_in_relevant": 0.6666666666666666,
+        "noise_sensitivity_in_irrelevant": 0.0,
+        "hallucination": 0.0,
+        "self_knowledge": 0.0,
+        "context_utilization": 1.0
+      }
+    },
+    {
+      "query_id": "5",
+      "query": "Which atomic arrangement reflects FeCuN7 structure?",
+      "gt_answer": "Fe\u2013N\u2013Cu configuration",
+      "response": "The atomic arrangement that reflects the FeCuN7 structure is the coordination of Fe, Cu, and N atoms in a specific configuration. This structure was modeled based on the experimental data obtained from X-ray absorption fine-structure (XAFS) spectroscopy and wavelet transform (WT) analysis. The FeCuN7 structure involves the coordination of seven atoms, specifically Fe, Cu, and N atoms in a specific arrangement, as indicated by the XANES spectra data and WT contour plots in the study.",
+      "retrieved_context": [
+        {
+          "doc_id": "e672e5ec-d07a-4b96-b587-ce55b2f4f0eb",
+          "text": "# Results and Discussion\n\nThe electronic structure and local configuration of FeCu DAC were investigated using X- ray photoelectron spectroscopy (XPS) and synchrotron X- ray absorption fine- structure (XAFS) spectroscopy. The high- resolution N is XPS profile of FeCu DAC definitively proved the existence of oxidized N  $(402.6\\mathrm{eV})$ , graphitic N  $(400.9\\mathrm{eV})$ , and pyridinic N  $(398.3\\mathrm{eV})$  (Figure S12). Notably, the spectrum of the metal- containing samples indicated the presence of other N species with a peak at  $399.9\\mathrm{eV}$ , attributed to pyrrolic metal- N coordination.[13] Additional information the electronic interactions was acquired using X- ray absorption near edge structure (XANES) spectroscopy. Figure 2a shows the XANES spectrum at the Fe K- edge for FeCu DAC, FePc (iron phthalocyanine, with Fe- N groups), and FeO, as well as that of  $\\mathrm{Fe}_2\\mathrm{O}_3$  and Fe foil. The absorption edge position of FeCu DAC was between those of FePc and FeO, indicating that the average valence state of Fe was approximately  $+2$ . The local configuration around Fe was investigated using the Fourier transform (FT) of the extended X- ray absorption fine structure (EXAFS) spectrum at the Fe K- edge (Figure 2c). The spectrum of FeCu DAC exhibits a maximum peak at  $1.53\\mathrm{\\AA}$ , matching the Fe- N first- shell coordination. There is no signal of the metallic Fe- Fe bond at  $2.12\\mathrm{\\AA}$  for FeCu DAC, again confirming the high dispersion of the metal atom. Excitingly, a distinct scattering path was observed at  $3.65\\mathrm{\\AA}$  in the spectrum of FeCu DAC, which is neither from Fe- N  $(1.53\\mathrm{\\AA})$  nor from metallic Fe- Fe  $(2.12\\mathrm{\\AA})$ . From EXAFS curve- fitting analysis, it is deduced that such a path could be reasonably attributed to the contribution of Fe- N- Cu (Figure 2e). The Cu K- edge XANES spectrum was examined to provide additional structural details. Cu is in an average valence state that is positively charged (Figure 2b), where the edge position was close to that of the  $2+$  valence state of CuPc (copper phthalocyanine, with Cu- N groups). The Cu K- edge FT- EXAFS spectrum of FeCu DAC (Figure 2d), showed a main peak at  $1.56\\mathrm{\\AA}$ , which is obviously different from the dominant peak at  $2.24\\mathrm{\\AA}$  for Cu foil originating from the Cu- Cu bond. Furthermore, a tiny peak was also observed at  $3.47\\mathrm{\\AA}$  in the spectrum of FeCu DAC at the Cu K- edge, similar to that observed at the Fe K- edge, the presence of which offers compelling proof of the Fe- N- Cu bond. Wavelet transform (WT) analysis, which enables high- resolution visualisation of the R- space, was executed to further confirm the existence of the Fe- N- Cu path (Figure 2g). The WT contour plot of Fe foil, shows an intensity maximum at  $7.17\\mathrm{\\AA}^{- 1}$  attributed to the Fe- Fe contribution, whereas no maximum was observed in the spectrum of FeCu DAC, demonstrating the absence of crystalline metal clusters in"
+        },
+        {
+          "doc_id": "435f9da8-81e9-43a3-8f77-bb0ec105cbd3",
+          "text": "# Results and Discussion\n\n![](images/5c2d10a1d50b8a31a83755b057087d554c5534031263f043523daec95ac963f8.jpg)  \nFigure 1. (a) Aberration-corrected HAADF-STEM images of FeCu DAC. Fe-Cu atom pairs are highlighted by the orange ovals. (b) and (c) Enlargement of the green box in image a. (d) and (e) 3D intensity surface plot and range for the image. (f) EDS mapping of FeCu DAC.\n\nFeCu DAC. The maximum WT intensity caused by coordination of the light atom appeared at around  $6.56\\mathrm{\\AA}^{- 1}$  for FeCu DAC, matching the Fe- N scattering path. Identically, the intensity maximum observed in the WT contour plot of FeCu DAC at the Cu K- edge, which cannot be attributed to  $\\mathrm{Cu - Cu}$  or  $\\mathrm{Cu - N}$  paths, is thought to arise from the  $\\mathrm{Cu - N - Fe}$  contribution. Overall, we modeled the fitted XANES spectra were modelled to the  $\\mathrm{FeCuN}_7$  structure (Figure 2f, inset). Almost all of the characteristics of the experimental spectra data were accurately reproduced, indicating the reasonable existence of the  $\\mathrm{FeCuN}_7$  configuration."
+        },
+        {
+          "doc_id": "fa62cea9-a9c8-4111-bb45-d3caf5056a0e",
+          "text": "# Introduction\n\nthe initial proton- coupled electron transfer at the Fe site strongly restricts the practical applicability of Fe- N- C SACs.[11] The construction of atom- pair structures has recently been considered an efficient method for modifying the activity of the catalytic sites, owing to cooperative electron modulation and the capability to overcome the limitations on the catalytic performance. However, because of a lack of intricate control mechanisms and thorough understanding of the structure of atom- pairs, the concept remains in its infancy and requires urgent advancement.\n\nIn this study, we strategically incorporate single Cu atoms into the microscopic structure of FeNC and finely adjust the 3d electronic configuration of the Fe site to augment its activity. However, Cu is considered an inert metal, and its presence can inhibit the competitive HER. In this regard, a nitrogen- bridged Fe- Cu atom pair was designed for achieving high- efficiency  $\\mathrm{NO}_2\\mathrm{RR}$  where the more electronegative Cu species is expected to raise the d- orbital energy level of the Fe active site, thereby strongly promoting the rate of the  $\\mathrm{NO}_2\\mathrm{RR}$ . In terms of the catalytic activity and selectivity, the as- developed two- atom center- site catalyst outperforms the single- atom congeners and previously investigated SACs. The innovative material, is utilized in a simple  $\\mathrm{Zn - NO}_2$  battery device for the selective electroreduction of nitrogen oxyanions and synthesis of  $\\mathrm{NH}_3$ .\n\n# Results and Discussion\n\nBy using a straightforward liquid- phase deposition technique, completely exposed nitrogen- bridged Fe- Cu pairs were effectively created with theoretical loadings of Fe:  $1.69\\mathrm{wt}\\%$  and Cu:  $1.89\\mathrm{wt}\\%$  (Table S1). The morphology and structure of FeCu DAC was initially investigated using aberration- corrected high- angle annular dark- field scanning transmission electron microscopy (HAADF- STEM). As highlighted by the orange ovals, the densely distributed bright dots represent the Fe- Cu atom pairs. As depicted in Figure 1a, ultrasmall Fe- Cu pairs were completely exposed and evenly dispersed on the carbon substrate, devoid of any crystallized iron or copper nanoparticles. The dispersion of several spot pairs with two distinct contrasts on the carbon matrix can be observed in the atomic- resolution HAADF- STEM images, which points to the presence of numerous Fe- Cu diatomic pairs in the matrix. The magnified HAADF- STEM images (Figure 1b) show several colored spots with distinctive contrast and brightness owing to the differing Z- axis contrasts of Fe and Cu, which were clustered together to generate atomic groups, each of which included an Fe atom and a neighboring Cu atom. Moreover, the corresponding energy dispersive spectroscopy (EDS) mapping of FeCu DAC (Figure 1f) show the simultaneous presence of iron and copper species within cluster regions on the surface, indicating that the Fe- Cu pairs are mainly composed of completely exposed and widely dispersed Fe and Cu atoms."
+        }
+      ],
+      "response_claims": [
+        [
+          "FeCuN7 structure",
+          "reflects",
+          "coordination of Fe, Cu, and N atoms"
+        ],
+        [
+          "FeCuN7 structure",
+          "modeled based on",
+          "experimental data"
+        ],
+        [
+          "experimental data",
+          "obtained from",
+          "X-ray absorption fine-structure (XAFS) spectroscopy"
+        ],
+        [
+          "experimental data",
+          "obtained from",
+          "wavelet transform (WT) analysis"
+        ],
+        [
+          "FeCuN7 structure",
+          "involves",
+          "coordination of seven atoms"
+        ],
+        [
+          "coordination of seven atoms",
+          "includes",
+          "Fe atoms"
+        ],
+        [
+          "coordination of seven atoms",
+          "includes",
+          "Cu atoms"
+        ],
+        [
+          "coordination of seven atoms",
+          "includes",
+          "N atoms"
+        ],
+        [
+          "FeCuN7 structure",
+          "indicated by",
+          "XANES spectra data"
+        ],
+        [
+          "FeCuN7 structure",
+          "indicated by",
+          "WT contour plots"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "FeCuN7 structure",
+          "reflects",
+          "Fe\u2013N\u2013Cu configuration"
+        ]
+      ],
+      "answer2response": [
+        "Neutral",
+        "Neutral",
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral"
+      ],
+      "response2answer": [
+        "Neutral"
+      ],
+      "retrieved2response": [
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Neutral"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 0.9,
+        "precision": 0.2,
+        "recall": 0.0,
+        "f1": 0.0,
+        "claim_recall": 1.0,
+        "context_precision": 0.6666666666666666,
+        "noise_sensitivity_in_relevant": 0.7,
+        "noise_sensitivity_in_irrelevant": 0.0,
+        "hallucination": 0.1,
+        "self_knowledge": 0.0,
+        "context_utilization": 0.0
+      }
+    },
+    {
+      "query_id": "6",
+      "query": "Can you discuss the significance of the XANES and EXAFS data, especially the fitted structure of the Fe and Cu sites in FeCu DAC, in understanding the catalytic mechanism for NO2- reduction to ammonia?",
+      "gt_answer": "The XANES and EXAFS data, including the fitted structures of Fe and Cu sites in FeCu DAC, reveal the atomic environment and coordination, which are key to understanding how the catalyst selectively enables NO2- reduction to ammonia through the synergy of Fe and Cu active centers.",
+      "response": "The XANES (X-ray Absorption Near Edge Structure) and EXAFS (Extended X-ray Absorption Fine Structure) data, along with the fitted structure of the Fe and Cu sites in FeCu DAC, are crucial in understanding the catalytic mechanism for NO2- reduction to ammonia. These data provide insights into the electronic structure and local configuration of FeCu DAC, revealing the coordination environment and interactions of Fe and Cu atoms within the catalyst.\n\nSpecifically, the XANES spectra at the Fe and Cu edges give information about the average valence states of Fe and Cu in FeCu DAC, indicating their oxidation states and electronic properties. The EXAFS analysis further elucidates the coordination environment around Fe and Cu atoms, showing the distances between the metal atoms and their neighboring ligands. The fitted structure of the Fe and Cu sites in FeCu DAC confirms the presence of Fe-N and Fe-Cu bonds, highlighting the specific atomic arrangements within the catalyst.\n\nBy understanding the electronic interactions, valence states, and coordination geometries of Fe and Cu in FeCu DAC, researchers can infer how these structural features influence the catalytic activity for NO2- reduction to ammonia. The presence of Fe-Cu bonds and specific atomic arrangements can facilitate electron redistribution, promote catalytic conversion of intermediates, and lower energy barriers for key reaction steps, ultimately enhancing the electrocatalytic performance of FeCu DAC in converting NO2- to NH3. Therefore, the XANES and EXAFS data, along with the fitted structure of the Fe and Cu sites, play a crucial role in elucidating the catalytic mechanism and optimizing the design of Fe-based active sites for efficient NO2- reduction to produce ammonia.",
+      "retrieved_context": [
+        {
+          "doc_id": "a0b7e6b7-fd03-4c5a-af6d-2baa43f12106",
+          "text": "# Results and Discussion\n\nTo examine the electrocatalytic activity of various catalysts for the  $\\mathrm{NO}_2\\mathrm{RR}$ , initial screening tests were carried out in  $\\mathrm{Ar}_2$ - saturated  $0.1\\mathrm{M}$  KOH solution. First, linear sweep voltammetry (LSV) data were acquired in KOH electrolyte with and without  $\\mathrm{NaNO}_2$  to investigate the catalytic performance of FeCu DAC for nitrite reduction (Figure 3a). The noticeably increased current density at the same potential indicates that  $\\mathrm{NO}_2^-$  ions can be efficiently depleted by FeCu DAC. The ammonia yield rate was determined in the  $\\mathrm{KOH / NaNO}_2$  electrolyte by maintaining a different potential for  $1\\mathrm{h}$  each time, and the synthesized  $\\mathrm{NH}_3$  products were quantified using ultraviolet- visible (UV/Vis) spectrophotometry. As shown in Figure 3b, FeCu DAC exhibited excellent selectivity and a remarkable yield rate for  $\\mathrm{NH}_3$  conversion via the electrocatalysis of  $\\mathrm{NO}_2^-$ .  $\\mathrm{NH}_3$  production was observed at  $- 0.4\\mathrm{V}$  vs. RHE from the beginning of the reaction, with a FE of  $95.11\\%$ , corresponding to a yield rate of  $16,250\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$ . The  $\\mathrm{NH}_3$  selectivity reached a maximum of  $99.88\\%$  at  $- 0.6\\mathrm{V}$ , representing a yield rate of  $24,526\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$ . A significant partial  $\\mathrm{NH}_3$  FE of  $96.74\\%$  was obtained at  $- 0.8\\mathrm{V}$ , delivering a superior yield rate of  $29,382\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$ . The FE and yield rate of FeCu DAC were orders of magnitude higher than those in previous research (Figure 3c) because of the drastically different kinetic energy barriers to\n\n![](images/7d716648842797e7fff166161e4e64b4956ecffb7a3c21a3d66f2cdf93bc1299.jpg)  \nFigure 2. XANES spectra of (a) Fe-K-edge and (b) Cu-K-edge. FT of  $1^{\\circ}$  weighted (c) Fe K-edge and (d) Cu K-edge EXAFS data for FeCu DAC. (e) and (f) R-space curve-fitting of FeCu DAC. Inset illustrates the fitted structure of the Fe and Cu site in FeCu DAC. The grey, purple, blue, and green spheres represent C, N, Fe, and Cu atoms, respectively. (g) WT for the  $k^2$ -weighted Fe K-edge and Cu K-edge EXAFS signals."
+        },
+        {
+          "doc_id": "6fbc8971-31ee-4d7d-9bca-93066cff6678",
+          "text": "# Results and Discussion\n\n![](images/6dce335e952a41eb899d9c60e0cd99d0a750bf9624102e26b4b76905631832b1.jpg)  \nFigure 4. PDOS of Fe in (a)  $\\mathsf{FeN}_4$  and (b)  $\\mathsf{FeCuN}_7$ . ELF analysis for (c)  $\\mathsf{FeN}_4$  and (d)  $\\mathsf{FeCuN}_7$ . (Maturation level changes from Min value (-0.00685309) to Max (0.00685309). The isosurface level is 0.00685309 electron/bohr $^{-3}$ . (e) and (f) Charge density difference for  $\\mathsf{FeN}_4$  and  $\\mathsf{FeCuN}_7$ , respectively. The electron accumulation and depletion areas are indicated by yellow and blue, respectively. (g) Calculated Gibbs free energy diagrams for electrochemical reduction from nitrite to ammonia on  $\\mathsf{FeN}_4$  and  $\\mathsf{FeCuN}_7$  sites under the condition of  $\\mathsf{U} = 0 \\mathsf{V}$ .\n\ndetermining step for both the  $\\mathrm{FeN}_4$  and  $\\mathrm{FeCuN}_7$ . Furthermore, the barrier for transition- state (TS) formation during  $\\mathrm{^*NO}$  and HNO dissociation was also reduced on the  $\\mathrm{FeCuN}_7$ . It was also found that energy changes from  $\\mathrm{^*NO}_2$  to  $\\mathrm{^*N}$  were an exothermic process, which means that  $\\mathrm{NO}_2^-$  can be adsorbed on the  $\\mathrm{FeCuN}_7$  surface spontaneously. Then, the  $\\mathrm{^*NO}_2$  was cleaved step by step to form  $\\mathrm{^*N}$ , which was then transformed into  $\\mathrm{^*NH}_4$  through a series of endothermic and exothermic processes. Furthermore, as shown in Figure S27, under alkaline conditions,  $\\mathrm{FeN}_4$  need to overcome higher number of energy barriers compared to  $\\mathrm{FeCuN}_7$  during water dissociation, thereby impeding hydrogen production. Consequently, the preference for  $\\mathrm{NO}_2\\mathrm{RR}$  lies with  $\\mathrm{FeCuN}_7$  over  $\\mathrm{FeN}_4$ . In short, the incorporation of the  $\\mathrm{Cu}$  atom modified the electronic property of the Fe atom and thus reduced the thermodynamic energy barriers of key steps for  $\\mathrm{NO}_2\\mathrm{RR}$ . This particular Fe- Cu configuration stimulates the electron redistribution of Fe to promote catalytic conversion of the intermediates, ultimately accelerating the electrocatalytic  $\\mathrm{NO}_2\\mathrm{RR}$ . These findings provide crucial directions for future efforts to modify or redesign Fe- based active sites using multiple strategies.\n\n# Conclusion"
+        },
+        {
+          "doc_id": "e672e5ec-d07a-4b96-b587-ce55b2f4f0eb",
+          "text": "# Results and Discussion\n\nThe electronic structure and local configuration of FeCu DAC were investigated using X- ray photoelectron spectroscopy (XPS) and synchrotron X- ray absorption fine- structure (XAFS) spectroscopy. The high- resolution N is XPS profile of FeCu DAC definitively proved the existence of oxidized N  $(402.6\\mathrm{eV})$ , graphitic N  $(400.9\\mathrm{eV})$ , and pyridinic N  $(398.3\\mathrm{eV})$  (Figure S12). Notably, the spectrum of the metal- containing samples indicated the presence of other N species with a peak at  $399.9\\mathrm{eV}$ , attributed to pyrrolic metal- N coordination.[13] Additional information the electronic interactions was acquired using X- ray absorption near edge structure (XANES) spectroscopy. Figure 2a shows the XANES spectrum at the Fe K- edge for FeCu DAC, FePc (iron phthalocyanine, with Fe- N groups), and FeO, as well as that of  $\\mathrm{Fe}_2\\mathrm{O}_3$  and Fe foil. The absorption edge position of FeCu DAC was between those of FePc and FeO, indicating that the average valence state of Fe was approximately  $+2$ . The local configuration around Fe was investigated using the Fourier transform (FT) of the extended X- ray absorption fine structure (EXAFS) spectrum at the Fe K- edge (Figure 2c). The spectrum of FeCu DAC exhibits a maximum peak at  $1.53\\mathrm{\\AA}$ , matching the Fe- N first- shell coordination. There is no signal of the metallic Fe- Fe bond at  $2.12\\mathrm{\\AA}$  for FeCu DAC, again confirming the high dispersion of the metal atom. Excitingly, a distinct scattering path was observed at  $3.65\\mathrm{\\AA}$  in the spectrum of FeCu DAC, which is neither from Fe- N  $(1.53\\mathrm{\\AA})$  nor from metallic Fe- Fe  $(2.12\\mathrm{\\AA})$ . From EXAFS curve- fitting analysis, it is deduced that such a path could be reasonably attributed to the contribution of Fe- N- Cu (Figure 2e). The Cu K- edge XANES spectrum was examined to provide additional structural details. Cu is in an average valence state that is positively charged (Figure 2b), where the edge position was close to that of the  $2+$  valence state of CuPc (copper phthalocyanine, with Cu- N groups). The Cu K- edge FT- EXAFS spectrum of FeCu DAC (Figure 2d), showed a main peak at  $1.56\\mathrm{\\AA}$ , which is obviously different from the dominant peak at  $2.24\\mathrm{\\AA}$  for Cu foil originating from the Cu- Cu bond. Furthermore, a tiny peak was also observed at  $3.47\\mathrm{\\AA}$  in the spectrum of FeCu DAC at the Cu K- edge, similar to that observed at the Fe K- edge, the presence of which offers compelling proof of the Fe- N- Cu bond. Wavelet transform (WT) analysis, which enables high- resolution visualisation of the R- space, was executed to further confirm the existence of the Fe- N- Cu path (Figure 2g). The WT contour plot of Fe foil, shows an intensity maximum at  $7.17\\mathrm{\\AA}^{- 1}$  attributed to the Fe- Fe contribution, whereas no maximum was observed in the spectrum of FeCu DAC, demonstrating the absence of crystalline metal clusters in"
+        }
+      ],
+      "response_claims": [
+        [
+          "XANES",
+          "is",
+          "X-ray Absorption Near Edge Structure"
+        ],
+        [
+          "EXAFS",
+          "is",
+          "Extended X-ray Absorption Fine Structure"
+        ],
+        [
+          "XANES and EXAFS data",
+          "are crucial in understanding",
+          "catalytic mechanism for NO2- reduction to ammonia"
+        ],
+        [
+          "fitted structure of Fe and Cu sites",
+          "is part of",
+          "FeCu DAC"
+        ],
+        [
+          "FeCu DAC",
+          "provides insights into",
+          "electronic structure and local configuration"
+        ],
+        [
+          "FeCu DAC",
+          "reveals",
+          "coordination environment and interactions of Fe and Cu atoms"
+        ],
+        [
+          "XANES spectra",
+          "give information about",
+          "average valence states of Fe and Cu"
+        ],
+        [
+          "average valence states of Fe and Cu",
+          "indicate",
+          "oxidation states and electronic properties"
+        ],
+        [
+          "EXAFS analysis",
+          "elucidates",
+          "coordination environment around Fe and Cu atoms"
+        ],
+        [
+          "EXAFS analysis",
+          "shows",
+          "distances between metal atoms and neighboring ligands"
+        ],
+        [
+          "fitted structure of Fe and Cu sites",
+          "confirms",
+          "presence of Fe-N and Fe-Cu bonds"
+        ],
+        [
+          "Fe-N and Fe-Cu bonds",
+          "highlight",
+          "specific atomic arrangements within the catalyst"
+        ],
+        [
+          "understanding electronic interactions",
+          "can infer",
+          "influence on catalytic activity for NO2- reduction to ammonia"
+        ],
+        [
+          "presence of Fe-Cu bonds",
+          "can facilitate",
+          "electron redistribution"
+        ],
+        [
+          "FeCu DAC",
+          "enhances",
+          "electrocatalytic performance in converting NO2- to NH3"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "XANES and EXAFS data",
+          "reveal",
+          "atomic environment and coordination"
+        ],
+        [
+          "atomic environment and coordination",
+          "key to understanding",
+          "catalyst selective enablement of NO2- reduction to ammonia"
+        ],
+        [
+          "catalyst",
+          "enables",
+          "NO2- reduction to ammonia"
+        ],
+        [
+          "FeCu DAC",
+          "contains",
+          "Fe and Cu sites"
+        ],
+        [
+          "Fe and Cu sites",
+          "synergize",
+          "catalytic mechanism"
+        ]
+      ],
+      "answer2response": [
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Entailment"
+      ],
+      "response2answer": [
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Neutral"
+      ],
+      "retrieved2response": [
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 1.0,
+        "precision": 0.6,
+        "recall": 0.8,
+        "f1": 0.6857142857142857,
+        "claim_recall": 1.0,
+        "context_precision": 1.0,
+        "noise_sensitivity_in_relevant": 0.4,
+        "noise_sensitivity_in_irrelevant": 0.0,
+        "hallucination": 0.0,
+        "self_knowledge": 0.0,
+        "context_utilization": 0.8
+      }
+    },
+    {
+      "query_id": "7",
+      "query": "Having worked with Zn-NO2 batteries before, I'm curious how the catalyst-supported carbon cloth cathode and Zn plate anode design impacts the electrochemical NO2RR and overall catalytic effectiveness in this battery configuration?",
+      "gt_answer": "The catalyst-supported carbon cloth cathode paired with a Zn plate anode in a Zn-NO2 battery creates an efficient setup for electrochemical NO2RR, as the catalyst on carbon cloth offers a high surface area and good electron transport, while the Zn anode is inexpensive and provides a stable counter electrode; this combination enhances the overall catalytic effectiveness for ammonia production.",
+      "response": "The catalyst-supported carbon cloth cathode and Zn plate anode design significantly impacts the electrochemical NO2RR and overall catalytic effectiveness in the Zn-NO2 battery configuration. In the study, a highly efficient dual-atom catalyst with Fe-Cu atomic pair sites (FeCu DAC) was used, which exhibited exceptional catalytic activity and selectivity in the Zn-NO2 battery. The FeCu DAC achieved a record-breaking power density of 23.6 mWcm^-1 and a maximum NH3 Faradaic Efficiency (FE) of 92.23% at 20mAcm^-2. This design allowed for high energy output and efficient NH3 production, demonstrating the effectiveness of the catalyst-supported carbon cloth cathode and Zn plate anode in enhancing the electrochemical NO2RR and overall catalytic performance of the Zn-NO2 battery.",
+      "retrieved_context": [
+        {
+          "doc_id": "696e57b3-d166-4bce-8410-bc7a1602d94e",
+          "text": "# Results and Discussion\n\nsurmount. Moreover, the ammonia- generating performance of the  $\\mathrm{FeCuN}_7$  active site is outstanding compared to that of other  $\\mathrm{NO}_2\\mathrm{RR}$  systems that typically employ bulk or nanocluster metal catalysts. To investigate the active sites on FeCu DAC, a control experiment was performed with Fe and Cu atoms supported on a carbon substrate for comparison with FeCu DAC (Figure S19). The Fe and Cu SACs exhibited much lower  $\\mathrm{NH}_3$  activity than FeCu DAC. Additionally, commercial FePc and CuPc displayed inferior catalytic performance compared to that of Fe SAC and Cu SAC, respectively. The endurance of FeCu DAC in the  $\\mathrm{NO}_2\\mathrm{RR}$  was evaluated in eight consecutive electrochemical cycles using a H- cell reactor (Figure S20). The  $\\mathrm{NH}_3$  yield rate and  $\\mathrm{NH}_3$  FE fluctuated between cycles, but remained stable in each cycle, indicating the outstanding stability of FeCu DAC.\n\nIn light of these evidences, a  $\\mathrm{Zn - NO}_2$  battery was constructed and a series of electrocatalytic experiments was performed to comprehensively evaluate the effectiveness of the catalysts for the electrochemical  $\\mathrm{NO}_2\\mathrm{RR}$  in a  $\\mathrm{Zn}$ - based battery using a catalyst- supported carbon cloth as the cathode and an inexpensive  $\\mathrm{Zn}$  plate as the anode.[14] As demonstrated by the photograph of the  $\\mathrm{Zn - NO}_2$  battery in"
+        },
+        {
+          "doc_id": "0eeff9f7-ca99-4098-9592-bc69796aac8a",
+          "text": "# Nitrogen-bridged Fe-Cu Atomic Pair Sites for Efficient Electrochemical Ammonia Production and Electricity Generation with  $\\mathbf{Zn - NO}_2$  Batteries\n\nZhenghui  $B_i^+$ , Jiao  $H_u^+$ , Ming  $X_u^+$ , Hua Zhang, Yingtang Zhou,* and Guangzhi  $H_u^*$\n\nAbstract The development of environmentally sustainable and highly efficient technologies for ammonia production is crucial for the future advancement of carbon- neutral energy systems. The nitrite reduction reaction  $(\\mathrm{NO}_2\\mathrm{RR})$  for generating  $\\mathrm{NH}_3$  is a promising alternative to the low- efficiency nitrogen reduction reaction (NRR), owing to the low  $\\mathrm{N} = \\mathrm{O}$  bond energy and high solubility of nitrite. In this study, we designed a highly efficient dual- atom catalyst with Fe- Cu atomic pair sites (termed FeCu DAC), and the as- developed FeCu DAC was able to afford a remarkable  $\\mathrm{NH}_3$  yield of  $24,526\\mu \\mathrm{g}\\mathrm{h}^{- 1}$ $\\mathrm{mg_{cat.}^{- 1}}$  at  $- 0.6\\mathrm{V}$  with a Faradaic Efficiency (FE) for  $\\mathrm{NH}_3$  production of  $99.88\\%$ . The FeCu DAC also exhibited exceptional catalytic activity and selectivity in a  $\\mathrm{Zn - NO}_2$  battery, achieving a record- breaking power density of  $23.6\\mathrm{mWcm}^{- 1}$  and maximum  $\\mathrm{NH}_3$  FE of  $92.23\\%$  at  $20\\mathrm{mAcm}^{- 2}$ . Theoretical simulation demonstrated that the incorporation of the  $\\mathrm{Cu}$  atom changed the energy of the Fe 3d orbital and lowered the energy barrier, thereby accelerating the  $\\mathrm{NO}_2\\mathrm{RR}$ . This study not only demonstrates the potential of galvanic nitrite- based cells for expanding the field of  $\\mathrm{Zn}$ - based batteries, but also provides fundamental interpretation for the synergistic effect in highly dispersed dual- atom catalysts.\n\n# Introduction"
+        },
+        {
+          "doc_id": "a021e5f0-7b18-4d13-b6a1-2138279e47ce",
+          "text": "# Results and Discussion\n\n![](images/c1702bfbe3c11e852864aa9e4d73475ec07163b78b5c9803299d674cc1699df1.jpg)  \nFigure 3. (a) LSV curves of Fe SAC, Cu SAC, and FeCu DAC in aqueous 0.1 M KOH solution with and without 0.1 M  $\\mathrm{NaNO_2}$ . (b)  $\\mathrm{NH_3}$  yield rate and  $\\mathrm{NH_3}$  FE of FeCu DAC at different potentials evaluated by UV/Vis spectrophotometry. (c) Comparison of the  $\\mathrm{NH_3}$  yield rate and FE of FeCu DAC for the  $\\mathrm{NO_2RR}$  with those of reported catalysts (see Table S3 for detailed references). (d) Open circuit voltage of the FeCu DAC-based  $\\mathrm{Zn - NO_2}$  battery. (e)  $\\mathrm{NH_3}$  yield rate and  $\\mathrm{NH_3}$  FE of  $\\mathrm{ZnNO_2}$  battery at different current densities. (f) Voltage and specific capacity of the FeCu DAC-based  $\\mathrm{ZnNO_2}$  battery at current densities of 5, 10, and  $20\\mathrm{mAcm}^{-2}$  during the discharging procedure. (g) Discharging curves of  $\\mathrm{Zn - NO_2}$  battery at different current densities. (h) Discharge polarization curves and corresponding power density of  $\\mathrm{Zn - NO_2}$  battery utilizing the FeCu DAC and Fe SAC catalyst cathodes. (i) Long-term stability test of  $\\mathrm{Zn - NO_2}$  battery for  $\\mathrm{NH_3}$  production and corresponding  $\\mathrm{NH_3}$  yield rate and FE at  $20\\mathrm{mAcm}^{-2}$ .\n\n$\\mathrm{Zn - NO_2}$  battery were determined in a long- term test (Figure 3i). As anticipated, the battery exhibited an ultrahigh current efficiency of  $92.23\\%$  at a steady current density of  $20\\mathrm{mAcm}^{- 2}$  with a  $\\mathrm{NH_3}$  yield rate of  $9,749\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$ . Additionally, the long- term experiment demonstrated the sustained  $\\mathrm{NH_3}$  yield and FE with a slight variation at a stable current density of  $20\\mathrm{mAcm}^{- 2}$ , indicating the long- term durability of the  $\\mathrm{Zn - NO_2}$  battery for producing  $\\mathrm{NH_3}$ . Overall, we effectively designed and demonstrated a  $\\mathrm{Zn}$ - based battery that can simultaneously achieve high energy output and efficient  $\\mathrm{NH_3}$  production."
+        }
+      ],
+      "response_claims": [
+        [
+          "catalyst-supported carbon cloth cathode",
+          "is part of",
+          "Zn-NO2 battery configuration"
+        ],
+        [
+          "Zn plate anode",
+          "is part of",
+          "Zn-NO2 battery configuration"
+        ],
+        [
+          "catalyst-supported carbon cloth cathode and Zn plate anode design",
+          "impacts",
+          "electrochemical NO2RR"
+        ],
+        [
+          "catalyst-supported carbon cloth cathode and Zn plate anode design",
+          "impacts",
+          "overall catalytic effectiveness"
+        ],
+        [
+          "Fe-Cu atomic pair sites",
+          "is used in",
+          "Zn-NO2 battery"
+        ],
+        [
+          "FeCu DAC",
+          "exhibited",
+          "exceptional catalytic activity"
+        ],
+        [
+          "FeCu DAC",
+          "exhibited",
+          "selectivity in Zn-NO2 battery"
+        ],
+        [
+          "FeCu DAC",
+          "achieved",
+          "record-breaking power density of 23.6 mWcm^-1"
+        ],
+        [
+          "FeCu DAC",
+          "achieved",
+          "maximum NH3 Faradaic Efficiency of 92.23% at 20mAcm^-2"
+        ],
+        [
+          "catalyst-supported carbon cloth cathode and Zn plate anode design",
+          "allows for",
+          "high energy output"
+        ],
+        [
+          "catalyst-supported carbon cloth cathode and Zn plate anode design",
+          "allows for",
+          "efficient NH3 production"
+        ],
+        [
+          "catalyst-supported carbon cloth cathode and Zn plate anode design",
+          "demonstrates",
+          "effectiveness in enhancing electrochemical NO2RR"
+        ],
+        [
+          "catalyst-supported carbon cloth cathode and Zn plate anode design",
+          "demonstrates",
+          "effectiveness in enhancing overall catalytic performance"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "catalyst-supported carbon cloth cathode",
+          "paired with",
+          "Zn plate anode"
+        ],
+        [
+          "Zn-NO2 battery",
+          "creates",
+          "efficient setup for electrochemical NO2RR"
+        ],
+        [
+          "catalyst on carbon cloth",
+          "offers",
+          "high surface area"
+        ],
+        [
+          "catalyst on carbon cloth",
+          "provides",
+          "good electron transport"
+        ],
+        [
+          "Zn anode",
+          "is",
+          "inexpensive"
+        ],
+        [
+          "Zn anode",
+          "provides",
+          "stable counter electrode"
+        ],
+        [
+          "combination of cathode and anode",
+          "enhances",
+          "overall catalytic effectiveness for ammonia production"
+        ]
+      ],
+      "answer2response": [
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Entailment"
+      ],
+      "response2answer": [
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Entailment"
+      ],
+      "retrieved2response": [
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Entailment",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 1.0,
+        "precision": 0.6153846153846154,
+        "recall": 0.42857142857142855,
+        "f1": 0.5052631578947369,
+        "claim_recall": 0.5714285714285714,
+        "context_precision": 1.0,
+        "noise_sensitivity_in_relevant": 0.38461538461538464,
+        "noise_sensitivity_in_irrelevant": 0.0,
+        "hallucination": 0.0,
+        "self_knowledge": 0.0,
+        "context_utilization": 0.75
+      }
+    },
+    {
+      "query_id": "8",
+      "query": "I'm trying to improve Zn-NO2 battery systems, and I noticed your work mentions a peak power density of 23.6 mW cm^-2 and Zn utilization ratios above 90%. Can you walk me through what factors contributed most to achieving such high power density and utilization in your setup?",
+      "gt_answer": "The high power density and Zn utilization ratios were primarily achieved by carefully selecting the electrolyte and electrode materials, specifically using 1 M KOH at the anode and 0.1 M KOH + 0.1 M NaNO2 at the cathode, separated by a proton exchange membrane. The tailored FeCu DAC catalyst at the cathode also played a significant role, enhancing NO2^- reduction efficiency and enabling elevated current densities with minimal Zn loss, resulting in peak performance metrics.",
+      "response": "The high peak power density of 23.6 mW cm^-2 and Zn utilization ratios above 90% in the Zn-NO2 battery system were achieved through several key factors in the setup:\n\n1. **FeCu DAC Catalyst:** The FeCu DAC catalyst with Fe-Cu atomic pair sites played a crucial role in enhancing the efficiency of the system. This catalyst demonstrated exceptional catalytic activity and selectivity, leading to high Faradaic Efficiency (FE) for NH3 production and improved power density.\n\n2. **Nitrite Reduction Reaction (NO2RR):** The use of the nitrite reduction reaction for generating NH3 provided a promising alternative to traditional nitrogen reduction reactions. The low N=O bond energy and high solubility of nitrite contributed to the efficiency of the system.\n\n3. **Optimized Electrolyte Composition:** The specific composition of the electrolyte, with 1M KOH for the anode and 0.1M KOH + 0.1M NaNO2 for the cathode, played a role in driving the electrocatalytic reduction of NO2 to NH3. This optimized electrolyte setup contributed to the high performance of the battery.\n\n4. **Stability and Durability:** The battery exhibited excellent stability over 6 hours and demonstrated sustained NH3 yield and FE with slight variations, indicating long-term durability. This stability factor is crucial for maintaining high performance over extended periods.\n\n5. **Current Density Optimization:** The system was optimized for different current densities, with specific capacities and utilization ratios determined at various output current densities. This optimization strategy likely contributed to achieving high Zn utilization ratios above 90%.\n\nOverall, the combination of an efficient catalyst, appropriate electrolyte composition, stability, and current density optimization were key factors that contributed to the high power density and Zn utilization ratios in the Zn-NO2 battery system described in the study.",
+      "retrieved_context": [
+        {
+          "doc_id": "594c3afa-eb40-4b09-af36-61d7673768ad",
+          "text": "# Results and Discussion\n\nFigure 3d, the anode with the  $1\\mathrm{M}$  KOH electrolyte and the cathode with  $0.1\\mathrm{M}$ $\\mathrm{KOH} + 0.1\\mathrm{M}$ $\\mathrm{NaNO}_2$  were directly separated by a proton exchange membrane. The  $\\mathrm{Zn - NO}_2$  system electrocatalytically reduces  $\\mathrm{NO}_2$  to  $\\mathrm{NH}_3$ , driven by dissolution of the  $\\mathrm{Zn}$  plate during the discharge process. The measured open- circuit voltage of this  $\\mathrm{Zn - NO}_2$  battery was  $1.463\\mathrm{V}$ , with excellent stability over  $6\\mathrm{h}$ . The output current increased progressively as the negative voltage increased, and the representative power density reached a peak value of  $23.6\\mathrm{mWcm}^{- 2}$  (Figure 3e). However, the Fe SAC- based counterpart afforded a lower maximum power density of only  $13.9\\mathrm{mWcm}^{- 2}$ . As determined from the discharge curves, at output current densities of 5, 10, and  $20\\mathrm{mAcm}^{- 2}$ , the  $\\mathrm{Zn - NO}_2$  battery equipped with the FeCu DAC provided specific capacitances of 744.9, 753.7, and  $759.4\\mathrm{mAhg}^{- 1}\\mathrm{Zn}$  normalized to the mass of  $\\mathrm{Zn}$  consumed, corresponding to  $\\mathrm{Zn}$  utilization ratios of  $90.8\\%$ ,  $91.9\\%$ , and  $92.6\\%$ , respectively (Figure 3f). Upon discharging for  $1\\mathrm{h}$  at different current densities (Figure 3g and 3h), the  $\\mathrm{Zn}$ - based battery achieved high  $\\mathrm{NH}_3$  FE of  $89.27\\%$  and a high  $\\mathrm{NH}_3$  yield of  $9,435\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$  at  $20\\mathrm{mAcm}^{- 2}$ , determined from the calibration curve for the specified  $\\mathrm{NH}_3$  concentrations (Figure S22). The current efficiency and  $\\mathrm{NH}_3$  yield rate of the"
+        },
+        {
+          "doc_id": "a021e5f0-7b18-4d13-b6a1-2138279e47ce",
+          "text": "# Results and Discussion\n\n![](images/c1702bfbe3c11e852864aa9e4d73475ec07163b78b5c9803299d674cc1699df1.jpg)  \nFigure 3. (a) LSV curves of Fe SAC, Cu SAC, and FeCu DAC in aqueous 0.1 M KOH solution with and without 0.1 M  $\\mathrm{NaNO_2}$ . (b)  $\\mathrm{NH_3}$  yield rate and  $\\mathrm{NH_3}$  FE of FeCu DAC at different potentials evaluated by UV/Vis spectrophotometry. (c) Comparison of the  $\\mathrm{NH_3}$  yield rate and FE of FeCu DAC for the  $\\mathrm{NO_2RR}$  with those of reported catalysts (see Table S3 for detailed references). (d) Open circuit voltage of the FeCu DAC-based  $\\mathrm{Zn - NO_2}$  battery. (e)  $\\mathrm{NH_3}$  yield rate and  $\\mathrm{NH_3}$  FE of  $\\mathrm{ZnNO_2}$  battery at different current densities. (f) Voltage and specific capacity of the FeCu DAC-based  $\\mathrm{ZnNO_2}$  battery at current densities of 5, 10, and  $20\\mathrm{mAcm}^{-2}$  during the discharging procedure. (g) Discharging curves of  $\\mathrm{Zn - NO_2}$  battery at different current densities. (h) Discharge polarization curves and corresponding power density of  $\\mathrm{Zn - NO_2}$  battery utilizing the FeCu DAC and Fe SAC catalyst cathodes. (i) Long-term stability test of  $\\mathrm{Zn - NO_2}$  battery for  $\\mathrm{NH_3}$  production and corresponding  $\\mathrm{NH_3}$  yield rate and FE at  $20\\mathrm{mAcm}^{-2}$ .\n\n$\\mathrm{Zn - NO_2}$  battery were determined in a long- term test (Figure 3i). As anticipated, the battery exhibited an ultrahigh current efficiency of  $92.23\\%$  at a steady current density of  $20\\mathrm{mAcm}^{- 2}$  with a  $\\mathrm{NH_3}$  yield rate of  $9,749\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$ . Additionally, the long- term experiment demonstrated the sustained  $\\mathrm{NH_3}$  yield and FE with a slight variation at a stable current density of  $20\\mathrm{mAcm}^{- 2}$ , indicating the long- term durability of the  $\\mathrm{Zn - NO_2}$  battery for producing  $\\mathrm{NH_3}$ . Overall, we effectively designed and demonstrated a  $\\mathrm{Zn}$ - based battery that can simultaneously achieve high energy output and efficient  $\\mathrm{NH_3}$  production."
+        },
+        {
+          "doc_id": "0eeff9f7-ca99-4098-9592-bc69796aac8a",
+          "text": "# Nitrogen-bridged Fe-Cu Atomic Pair Sites for Efficient Electrochemical Ammonia Production and Electricity Generation with  $\\mathbf{Zn - NO}_2$  Batteries\n\nZhenghui  $B_i^+$ , Jiao  $H_u^+$ , Ming  $X_u^+$ , Hua Zhang, Yingtang Zhou,* and Guangzhi  $H_u^*$\n\nAbstract The development of environmentally sustainable and highly efficient technologies for ammonia production is crucial for the future advancement of carbon- neutral energy systems. The nitrite reduction reaction  $(\\mathrm{NO}_2\\mathrm{RR})$  for generating  $\\mathrm{NH}_3$  is a promising alternative to the low- efficiency nitrogen reduction reaction (NRR), owing to the low  $\\mathrm{N} = \\mathrm{O}$  bond energy and high solubility of nitrite. In this study, we designed a highly efficient dual- atom catalyst with Fe- Cu atomic pair sites (termed FeCu DAC), and the as- developed FeCu DAC was able to afford a remarkable  $\\mathrm{NH}_3$  yield of  $24,526\\mu \\mathrm{g}\\mathrm{h}^{- 1}$ $\\mathrm{mg_{cat.}^{- 1}}$  at  $- 0.6\\mathrm{V}$  with a Faradaic Efficiency (FE) for  $\\mathrm{NH}_3$  production of  $99.88\\%$ . The FeCu DAC also exhibited exceptional catalytic activity and selectivity in a  $\\mathrm{Zn - NO}_2$  battery, achieving a record- breaking power density of  $23.6\\mathrm{mWcm}^{- 1}$  and maximum  $\\mathrm{NH}_3$  FE of  $92.23\\%$  at  $20\\mathrm{mAcm}^{- 2}$ . Theoretical simulation demonstrated that the incorporation of the  $\\mathrm{Cu}$  atom changed the energy of the Fe 3d orbital and lowered the energy barrier, thereby accelerating the  $\\mathrm{NO}_2\\mathrm{RR}$ . This study not only demonstrates the potential of galvanic nitrite- based cells for expanding the field of  $\\mathrm{Zn}$ - based batteries, but also provides fundamental interpretation for the synergistic effect in highly dispersed dual- atom catalysts.\n\n# Introduction"
+        }
+      ],
+      "response_claims": [
+        [
+          "Zn-NO2 battery system",
+          "has",
+          "peak power density of 23.6 mW cm^-2"
+        ],
+        [
+          "Zn-NO2 battery system",
+          "has",
+          "Zn utilization ratios above 90%"
+        ],
+        [
+          "FeCu DAC Catalyst",
+          "enhances",
+          "efficiency of Zn-NO2 battery system"
+        ],
+        [
+          "FeCu DAC Catalyst",
+          "contains",
+          "Fe-Cu atomic pair sites"
+        ],
+        [
+          "FeCu DAC Catalyst",
+          "demonstrates",
+          "exceptional catalytic activity"
+        ],
+        [
+          "FeCu DAC Catalyst",
+          "improves",
+          "Faradaic Efficiency (FE) for NH3 production"
+        ],
+        [
+          "Nitrite Reduction Reaction (NO2RR)",
+          "generates",
+          "NH3"
+        ],
+        [
+          "Nitrite Reduction Reaction (NO2RR)",
+          "provides",
+          "alternative to traditional nitrogen reduction reactions"
+        ],
+        [
+          "Nitrite Reduction Reaction (NO2RR)",
+          "benefits from",
+          "low N=O bond energy"
+        ],
+        [
+          "Nitrite Reduction Reaction (NO2RR)",
+          "benefits from",
+          "high solubility of nitrite"
+        ],
+        [
+          "Electrolyte composition",
+          "includes",
+          "1M KOH for anode"
+        ],
+        [
+          "Electrolyte composition",
+          "includes",
+          "0.1M KOH + 0.1M NaNO2 for cathode"
+        ],
+        [
+          "Optimized electrolyte composition",
+          "drives",
+          "electrocatalytic reduction of NO2 to NH3"
+        ],
+        [
+          "Battery",
+          "exhibits",
+          "excellent stability over 6 hours"
+        ],
+        [
+          "Battery",
+          "demonstrates",
+          "sustained NH3 yield"
+        ],
+        [
+          "Battery",
+          "demonstrates",
+          "sustained Faradaic Efficiency (FE)"
+        ],
+        [
+          "Current density optimization",
+          "contributes to",
+          "high Zn utilization ratios above 90%"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "high power density",
+          "achieved by",
+          "carefully selecting electrolyte and electrode materials"
+        ],
+        [
+          "electrolyte",
+          "used at anode",
+          "1 M KOH"
+        ],
+        [
+          "electrolyte",
+          "used at cathode",
+          "0.1 M KOH + 0.1 M NaNO2"
+        ],
+        [
+          "proton exchange membrane",
+          "separates",
+          "anode and cathode"
+        ],
+        [
+          "FeCu DAC catalyst",
+          "used at cathode",
+          "tailored"
+        ],
+        [
+          "FeCu DAC catalyst",
+          "enhances",
+          "NO2^- reduction efficiency"
+        ],
+        [
+          "elevated current densities",
+          "achieved with",
+          "minimal Zn loss"
+        ],
+        [
+          "peak performance metrics",
+          "result from",
+          "high power density and Zn utilization ratios"
+        ]
+      ],
+      "answer2response": [
+        "Entailment",
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Neutral",
+        "Entailment"
+      ],
+      "response2answer": [
+        "Neutral",
+        "Entailment",
+        "Entailment",
+        "Neutral",
+        "Neutral",
+        "Entailment",
+        "Neutral",
+        "Entailment"
+      ],
+      "retrieved2response": [
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Contradiction"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Entailment"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Neutral",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Neutral",
+          "Neutral",
+          "Neutral"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 1.0,
+        "precision": 0.35294117647058826,
+        "recall": 0.5,
+        "f1": 0.41379310344827586,
+        "claim_recall": 0.75,
+        "context_precision": 1.0,
+        "noise_sensitivity_in_relevant": 0.6470588235294118,
+        "noise_sensitivity_in_irrelevant": 0.0,
+        "hallucination": 0.0,
+        "self_knowledge": 0.0,
+        "context_utilization": 0.6666666666666666
+      }
+    },
+    {
+      "query_id": "9",
+      "query": "What is the current efficiency percentage of the Zn-NO2 battery when operating at a current density of 20 mA cm^-2?",
+      "gt_answer": "The Zn-NO2 battery exhibits a current efficiency of 92.23% at a current density of 20 mA cm^-2.",
+      "response": "The current efficiency percentage of the Zn-NO2 battery when operating at a current density of 20 mA cm^-2 is 92.23%.",
+      "retrieved_context": [
+        {
+          "doc_id": "594c3afa-eb40-4b09-af36-61d7673768ad",
+          "text": "# Results and Discussion\n\nFigure 3d, the anode with the  $1\\mathrm{M}$  KOH electrolyte and the cathode with  $0.1\\mathrm{M}$ $\\mathrm{KOH} + 0.1\\mathrm{M}$ $\\mathrm{NaNO}_2$  were directly separated by a proton exchange membrane. The  $\\mathrm{Zn - NO}_2$  system electrocatalytically reduces  $\\mathrm{NO}_2$  to  $\\mathrm{NH}_3$ , driven by dissolution of the  $\\mathrm{Zn}$  plate during the discharge process. The measured open- circuit voltage of this  $\\mathrm{Zn - NO}_2$  battery was  $1.463\\mathrm{V}$ , with excellent stability over  $6\\mathrm{h}$ . The output current increased progressively as the negative voltage increased, and the representative power density reached a peak value of  $23.6\\mathrm{mWcm}^{- 2}$  (Figure 3e). However, the Fe SAC- based counterpart afforded a lower maximum power density of only  $13.9\\mathrm{mWcm}^{- 2}$ . As determined from the discharge curves, at output current densities of 5, 10, and  $20\\mathrm{mAcm}^{- 2}$ , the  $\\mathrm{Zn - NO}_2$  battery equipped with the FeCu DAC provided specific capacitances of 744.9, 753.7, and  $759.4\\mathrm{mAhg}^{- 1}\\mathrm{Zn}$  normalized to the mass of  $\\mathrm{Zn}$  consumed, corresponding to  $\\mathrm{Zn}$  utilization ratios of  $90.8\\%$ ,  $91.9\\%$ , and  $92.6\\%$ , respectively (Figure 3f). Upon discharging for  $1\\mathrm{h}$  at different current densities (Figure 3g and 3h), the  $\\mathrm{Zn}$ - based battery achieved high  $\\mathrm{NH}_3$  FE of  $89.27\\%$  and a high  $\\mathrm{NH}_3$  yield of  $9,435\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$  at  $20\\mathrm{mAcm}^{- 2}$ , determined from the calibration curve for the specified  $\\mathrm{NH}_3$  concentrations (Figure S22). The current efficiency and  $\\mathrm{NH}_3$  yield rate of the"
+        },
+        {
+          "doc_id": "a021e5f0-7b18-4d13-b6a1-2138279e47ce",
+          "text": "# Results and Discussion\n\n![](images/c1702bfbe3c11e852864aa9e4d73475ec07163b78b5c9803299d674cc1699df1.jpg)  \nFigure 3. (a) LSV curves of Fe SAC, Cu SAC, and FeCu DAC in aqueous 0.1 M KOH solution with and without 0.1 M  $\\mathrm{NaNO_2}$ . (b)  $\\mathrm{NH_3}$  yield rate and  $\\mathrm{NH_3}$  FE of FeCu DAC at different potentials evaluated by UV/Vis spectrophotometry. (c) Comparison of the  $\\mathrm{NH_3}$  yield rate and FE of FeCu DAC for the  $\\mathrm{NO_2RR}$  with those of reported catalysts (see Table S3 for detailed references). (d) Open circuit voltage of the FeCu DAC-based  $\\mathrm{Zn - NO_2}$  battery. (e)  $\\mathrm{NH_3}$  yield rate and  $\\mathrm{NH_3}$  FE of  $\\mathrm{ZnNO_2}$  battery at different current densities. (f) Voltage and specific capacity of the FeCu DAC-based  $\\mathrm{ZnNO_2}$  battery at current densities of 5, 10, and  $20\\mathrm{mAcm}^{-2}$  during the discharging procedure. (g) Discharging curves of  $\\mathrm{Zn - NO_2}$  battery at different current densities. (h) Discharge polarization curves and corresponding power density of  $\\mathrm{Zn - NO_2}$  battery utilizing the FeCu DAC and Fe SAC catalyst cathodes. (i) Long-term stability test of  $\\mathrm{Zn - NO_2}$  battery for  $\\mathrm{NH_3}$  production and corresponding  $\\mathrm{NH_3}$  yield rate and FE at  $20\\mathrm{mAcm}^{-2}$ .\n\n$\\mathrm{Zn - NO_2}$  battery were determined in a long- term test (Figure 3i). As anticipated, the battery exhibited an ultrahigh current efficiency of  $92.23\\%$  at a steady current density of  $20\\mathrm{mAcm}^{- 2}$  with a  $\\mathrm{NH_3}$  yield rate of  $9,749\\mu \\mathrm{g}\\mathrm{h}^{- 1}\\mathrm{mg}_{\\mathrm{cat.}}^{- 1}$ . Additionally, the long- term experiment demonstrated the sustained  $\\mathrm{NH_3}$  yield and FE with a slight variation at a stable current density of  $20\\mathrm{mAcm}^{- 2}$ , indicating the long- term durability of the  $\\mathrm{Zn - NO_2}$  battery for producing  $\\mathrm{NH_3}$ . Overall, we effectively designed and demonstrated a  $\\mathrm{Zn}$ - based battery that can simultaneously achieve high energy output and efficient  $\\mathrm{NH_3}$  production."
+        },
+        {
+          "doc_id": "0eeff9f7-ca99-4098-9592-bc69796aac8a",
+          "text": "# Nitrogen-bridged Fe-Cu Atomic Pair Sites for Efficient Electrochemical Ammonia Production and Electricity Generation with  $\\mathbf{Zn - NO}_2$  Batteries\n\nZhenghui  $B_i^+$ , Jiao  $H_u^+$ , Ming  $X_u^+$ , Hua Zhang, Yingtang Zhou,* and Guangzhi  $H_u^*$\n\nAbstract The development of environmentally sustainable and highly efficient technologies for ammonia production is crucial for the future advancement of carbon- neutral energy systems. The nitrite reduction reaction  $(\\mathrm{NO}_2\\mathrm{RR})$  for generating  $\\mathrm{NH}_3$  is a promising alternative to the low- efficiency nitrogen reduction reaction (NRR), owing to the low  $\\mathrm{N} = \\mathrm{O}$  bond energy and high solubility of nitrite. In this study, we designed a highly efficient dual- atom catalyst with Fe- Cu atomic pair sites (termed FeCu DAC), and the as- developed FeCu DAC was able to afford a remarkable  $\\mathrm{NH}_3$  yield of  $24,526\\mu \\mathrm{g}\\mathrm{h}^{- 1}$ $\\mathrm{mg_{cat.}^{- 1}}$  at  $- 0.6\\mathrm{V}$  with a Faradaic Efficiency (FE) for  $\\mathrm{NH}_3$  production of  $99.88\\%$ . The FeCu DAC also exhibited exceptional catalytic activity and selectivity in a  $\\mathrm{Zn - NO}_2$  battery, achieving a record- breaking power density of  $23.6\\mathrm{mWcm}^{- 1}$  and maximum  $\\mathrm{NH}_3$  FE of  $92.23\\%$  at  $20\\mathrm{mAcm}^{- 2}$ . Theoretical simulation demonstrated that the incorporation of the  $\\mathrm{Cu}$  atom changed the energy of the Fe 3d orbital and lowered the energy barrier, thereby accelerating the  $\\mathrm{NO}_2\\mathrm{RR}$ . This study not only demonstrates the potential of galvanic nitrite- based cells for expanding the field of  $\\mathrm{Zn}$ - based batteries, but also provides fundamental interpretation for the synergistic effect in highly dispersed dual- atom catalysts.\n\n# Introduction"
+        }
+      ],
+      "response_claims": [
+        [
+          "Zn-NO2 battery",
+          "current efficiency percentage at 20 mA cm^-2",
+          "92.23%"
+        ]
+      ],
+      "gt_answer_claims": [
+        [
+          "Zn-NO2 battery",
+          "exhibits",
+          "current efficiency of 92.23%"
+        ],
+        [
+          "Zn-NO2 battery",
+          "operating at",
+          "current density of 20 mA cm^-2"
+        ]
+      ],
+      "answer2response": [
+        "Entailment"
+      ],
+      "response2answer": [
+        "Entailment",
+        "Entailment"
+      ],
+      "retrieved2response": [
+        [
+          "Neutral",
+          "Entailment",
+          "Entailment"
+        ]
+      ],
+      "retrieved2answer": [
+        [
+          "Neutral",
+          "Entailment",
+          "Entailment"
+        ],
+        [
+          "Entailment",
+          "Entailment",
+          "Entailment"
+        ]
+      ],
+      "metrics": {
+        "faithfulness": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "claim_recall": 1.0,
+        "context_precision": 1.0,
+        "noise_sensitivity_in_relevant": 0.0,
+        "noise_sensitivity_in_irrelevant": 0.0,
+        "hallucination": 0.0,
+        "self_knowledge": 0.0,
+        "context_utilization": 1.0
+      }
+    }
+  ],
+  "metrics": {
+    "overall_metrics": {
+      "precision": 65.6,
+      "recall": 75.3,
+      "f1": 66.9
+    },
+    "retriever_metrics": {
+      "claim_recall": 93.2,
+      "context_precision": 76.7
+    },
+    "generator_metrics": {
+      "context_utilization": 80.2,
+      "noise_sensitivity_in_relevant": 32.6,
+      "noise_sensitivity_in_irrelevant": 0.8,
+      "hallucination": 1.0,
+      "self_knowledge": 0.8,
+      "faithfulness": 98.2
+    }
+  }
+}
