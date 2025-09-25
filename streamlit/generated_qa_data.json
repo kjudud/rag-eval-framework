@@ -5,10 +5,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Can you tell me the record-breaking power density reached by FeCu DAC in a Zn-NO2 battery?",
+        "question": "Can you tell me what the highest electricity output was that this new battery setup was able to reach?",
         "answer": "23.6 mW cm^-2",
-        "user_categories": "expert",
-        "question_categories": "factoid, direct, verbose-and-natural, similar-to-document, english",
+        "user_categories": "novice",
+        "question_categories": "factoid, direct, verbose-and-natural, distance-from-document, english",
         "document_id": "0eeff9f7-ca99-4098-9592-bc69796aac8a"
       }
     ]
@@ -19,10 +19,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Do you recall the N≡N bond cleavage energy?",
-        "answer": "The cleavage energy of the N≡N bond is 941 kJ mol⁻¹.",
-        "user_categories": "expert",
-        "question_categories": "factoid, with-premise, concise-and-natural, similar-to-document, english",
+        "question": "What is the Haber-Bosch process used for?",
+        "answer": "The Haber-Bosch process is used for synthesizing ammonia (NH3), which is a primary raw material for manufacturing nitrogen-based fertilizers.",
+        "user_categories": "novice",
+        "question_categories": "open-ended, direct, concise-and-natural, similar-to-document, english",
         "document_id": "38cd2550-3d21-4d74-ac45-c068cbbdb7a1"
       }
     ]
@@ -33,10 +33,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "How does mixing metals improve chemical reactions?",
-        "answer": "Mixing metals like iron and copper can change how electrons behave during a reaction, making some chemical processes faster or more efficient.",
-        "user_categories": "novice",
-        "question_categories": "open-ended, direct, concise-and-natural, distance-from-document, english",
+        "question": "Which element hinders the hydrogen evolution reaction here?",
+        "answer": "Copper (Cu) inhibits the competitive hydrogen evolution reaction.",
+        "user_categories": "expert",
+        "question_categories": "factoid, direct, concise-and-natural, distance-from-document, english",
         "document_id": "fa62cea9-a9c8-4111-bb45-d3caf5056a0e"
       }
     ]
@@ -47,10 +47,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "What's the BET surface area for FeCu DAC?",
-        "answer": "687.5 m²/g",
+        "question": "I'm checking catalyst morphology, what was the FeCu DAC specific area?",
+        "answer": "687.5 m² g⁻¹",
         "user_categories": "expert",
-        "question_categories": "factoid, direct, concise-and-natural, distance-from-document, english",
+        "question_categories": "factoid, with-premise, concise-and-natural, similar-to-document, english",
         "document_id": "a22e6e93-53a7-4216-ad9a-1bcff0f59889"
       }
     ]
@@ -61,10 +61,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Since I don't know much about chemical bonds, can someone help me understand what it means when researchers find certain connections between metals and other elements in new materials, especially if these connections are different than what's in regular metals?",
-        "answer": "When researchers discover unusual bonds, like those between iron, nitrogen, and copper, instead of the usual metal-to-metal bonds, it shows that the atoms are interacting in a unique way. This can lead to new properties or functions for the material, like making it more active in chemical reactions or more stable.",
-        "user_categories": "novice",
-        "question_categories": "open-ended, with-premise, verbose-and-natural, distance-from-document, english",
+        "question": "methods for directly proving absence of metal cluster aggregation in bimetallic heterogeneous systems",
+        "answer": "Advanced spectroscopic and analytical techniques, such as Fourier-transform analysis of extended X-ray absorption fine structure (EXAFS) and wavelet transform (WT) contour plotting, are used to demonstrate the absence of metal cluster aggregation. The lack of characteristic signals corresponding to metallic bonds (e.g., Fe-Fe or Cu-Cu) and the presence of scattering paths indicative of heterobimetallic linkages (e.g., Fe-N-Cu) confirm high metal dispersion and the prevention of crystalline cluster formation in bimetallic heterogeneous catalysts.",
+        "user_categories": "expert",
+        "question_categories": "open-ended, direct, long-search-query, distance-from-document, english",
         "document_id": "e672e5ec-d07a-4b96-b587-ce55b2f4f0eb"
       }
     ]
@@ -75,10 +75,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "FeCu DAC aberration-corrected HAADF-STEM significance",
-        "answer": "Aberration-corrected HAADF-STEM images of FeCu DAC highlight Fe-Cu atom pairs and provide insight into the atomic structure and coordination, crucial for understanding the local environment and chemical configuration in these dual-atom catalysts.",
+        "question": "In the analysis of the WT contour plot of FeCu DAC at the Cu K-edge, which specific scattering contribution was identified that could not be attributed to Cu-Cu or Cu-N paths?",
+        "answer": "The intensity maximum in the WT contour plot of FeCu DAC at the Cu K-edge is thought to arise from the Cu-N-Fe contribution.",
         "user_categories": "expert",
-        "question_categories": "open-ended, direct, short-search-query, similar-to-document, english",
+        "question_categories": "factoid, direct, verbose-and-natural, similar-to-document, english",
         "document_id": "435f9da8-81e9-43a3-8f77-bb0ec105cbd3"
       }
     ]
@@ -89,10 +89,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "I need some exact numbers for my project, do you know what the highest NH3 yield rate achieved by FeCu DAC was during the electrocatalysis of NO2-?",
-        "answer": "The highest NH3 yield rate was 29,382 μg h^-1 mg_cat.^-1 at -0.8 V.",
+        "question": "What is the highest percentage of ammonia selectivity achieved when using the dual-metal catalyst, and at which applied voltage does this occur?",
+        "answer": "99.88% ammonia selectivity at -0.6 V vs. RHE.",
         "user_categories": "expert",
-        "question_categories": "factoid, with-premise, verbose-and-natural, similar-to-document, english",
+        "question_categories": "factoid, direct, verbose-and-natural, distance-from-document, english",
         "document_id": "a0b7e6b7-fd03-4c5a-af6d-2baa43f12106"
       }
     ]
@@ -103,10 +103,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "key factor influencing longevity of FeCuDAC under sequential electrochemical usage",
-        "answer": "The outstanding stability of FeCuDAC was indicated by stable NH3 yield rate and FE in each of eight consecutive electrochemical cycles.",
+        "question": "How might the integration of heterogeneous catalysts into rechargeable metal-ion batteries influence their long-term stability and reaction efficiency, particularly when the electrode materials are based on interconnected carbon networks?",
+        "answer": "Integrating heterogeneous catalysts into rechargeable metal-ion batteries can create more stable and efficient catalytic sites, and interconnected carbon networks improve electron conductivity and mechanical stability, leading to enhanced durability and catalytic performance over repeated cycles.",
         "user_categories": "expert",
-        "question_categories": "factoid, direct, long-search-query, distance-from-document, english",
+        "question_categories": "open-ended, direct, verbose-and-natural, distance-from-document, english",
         "document_id": "696e57b3-d166-4bce-8410-bc7a1602d94e"
       }
     ]
@@ -117,10 +117,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Zn NO2 battery with FeCu DAC cathode specific capacitance and Zn utilization ratios at varying current densities comparison",
-        "answer": "The Zn-NO2 battery equipped with the FeCu DAC provided specific capacitances of 744.9, 753.7, and 759.4 mAh g−1 Zn at output current densities of 5, 10, and 20 mA cm−2, corresponding to Zn utilization ratios of 90.8%, 91.9%, and 92.6%, respectively.",
-        "user_categories": "expert",
-        "question_categories": "open-ended, direct, long-search-query, similar-to-document, english",
+        "question": "I'm always interested in what makes batteries work better, so could someone explain why the FeCu DAC in the Zn-NO2 battery led to higher power density and zinc utilization compared to the Fe SAC-based battery?",
+        "answer": "The FeCu DAC catalyst in the Zn-NO2 battery provided higher power density and greater zinc utilization compared to the Fe SAC-based version due to its more efficient catalytic properties. This means it allowed the battery to convert more of the zinc and produce more power during discharge, leading to better overall performance.",
+        "user_categories": "novice",
+        "question_categories": "open-ended, with-premise, verbose-and-natural, similar-to-document, english",
         "document_id": "594c3afa-eb40-4b09-af36-61d7673768ad"
       }
     ]
@@ -131,10 +131,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "What current efficiency did the Zn-NO2 battery achieve at a current density of 20 mA cm^-2 in the long-term stability test?",
-        "answer": "92.23%",
-        "user_categories": "expert",
-        "question_categories": "factoid, direct, verbose-and-natural, similar-to-document, english",
+        "question": "How does this special battery make fertilizer?",
+        "answer": "The Zn-NO2 battery can create ammonia, a key ingredient in fertilizer, during its operation by producing NH3 as a product.",
+        "user_categories": "novice",
+        "question_categories": "open-ended, direct, concise-and-natural, distance-from-document, english",
         "document_id": "a021e5f0-7b18-4d13-b6a1-2138279e47ce"
       }
     ]
@@ -145,10 +145,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Need help, what's the ΔG for *N to *NH on FeCuN7?",
-        "answer": "The ΔG for *N to *NH on FeCuN7 is 0.49 eV.",
+        "question": "What effect does pairing different metals have on catalysis?",
+        "answer": "Pairing different metals can shift electronic states and change adsorption properties, resulting in reduced reaction energy barriers and potentially improved catalytic activity.",
         "user_categories": "expert",
-        "question_categories": "factoid, with-premise, concise-and-natural, similar-to-document, english",
+        "question_categories": "open-ended, direct, concise-and-natural, distance-from-document, english",
         "document_id": "55b48de7-aaf4-429c-b29c-c5a1d3eb6405"
       }
     ]
@@ -159,10 +159,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Remind me, what's the role of copper in Fe catalysts?",
-        "answer": "Copper incorporation reduces the thermodynamic energy barriers and modifies the electronic properties of Fe atoms, thereby promoting NO2RR catalysis.",
-        "user_categories": "expert",
-        "question_categories": "factoid, with-premise, concise-and-natural, distance-from-document, english",
+        "question": "I'm interested in easy ways to make cleaning stuff safer, any ideas?",
+        "answer": "Adding a bit of copper to iron in special materials helps speed up the cleaning process for certain chemicals, making it more efficient and safer.",
+        "user_categories": "novice",
+        "question_categories": "open-ended, with-premise, concise-and-natural, distance-from-document, english",
         "document_id": "6fbc8971-31ee-4d7d-9bca-93066cff6678"
       }
     ]
@@ -173,10 +173,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Zn-NO2 battery system with FeCu DAC cathode simultaneous ammonia production and electricity generation performance",
-        "answer": "The Zn-NO2 battery system utilizing a FeCu DAC cathode and a metal Zn anode is capable of producing ammonia and generating electricity simultaneously. The constructed battery exhibits a power density of 23.6 mW cm−2 and achieves a high NH3 faradaic efficiency of 92.23% at 20 mA cm−2, demonstrating both electrochemical and energy-conversion advantages.",
+        "question": "Which battery type enables ammonia and power co-generation?",
+        "answer": "Zn-NO2 battery",
         "user_categories": "expert",
-        "question_categories": "open-ended, direct, long-search-query, similar-to-document, english",
+        "question_categories": "factoid, direct, concise-and-natural, distance-from-document, english",
         "document_id": "8ebd2591-eeba-4957-93c4-c0ac52fec1d4"
       }
     ]
@@ -187,10 +187,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Have you seen any promising new strategies for designing catalysts at the nano scale that could revolutionize efficiency in artificial photosynthesis?",
-        "answer": "Yes, recent trends involve engineering catalyst interfaces and utilizing atomically dispersed metal sites, which can significantly enhance reaction selectivity and efficiency. For example, modulating the coordination environment around active sites at the nano level has shown a lot of potential in improving the conversion rates and stability in artificial photosynthesis systems.",
+        "question": "What recent advances involve Nat. Nanotechnol. 2022 discoveries?",
+        "answer": "Recent advances detailed in Nat. Nanotechnol. 2022 include novel nanostructured materials and innovative applications in energy and catalysis.",
         "user_categories": "expert",
-        "question_categories": "open-ended, direct, verbose-and-natural, distance-from-document, english",
+        "question_categories": "open-ended, direct, concise-and-natural, similar-to-document, english",
         "document_id": "4aa515c7-77d3-48af-b32a-89c171378614"
       }
     ]
@@ -201,10 +201,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Can you explain some recent advancements in integrating photoelectrochemical and electrocatalytic processes for converting CO2 into value-added chemicals, particularly using tandem cell designs or specialized nanomaterials?",
-        "answer": "Recent advancements include the development of tandem cell designs that couple light absorption with electrochemical CO2 reduction, as well as the use of nanostructured materials to increase active surface area and enhance charge separation. These strategies have led to improved conversion efficiencies and better selectivity for target products like ethylene and ethanol.",
+        "question": "I'm digging into CO2 electroreduction, thoughts on Cu-based catalysts?",
+        "answer": "Cu-based catalysts have shown unique ability to facilitate multi-carbon product formation in CO2 electroreduction, making them a key focus for improved selectivity and efficiency in recent research.",
         "user_categories": "expert",
-        "question_categories": "open-ended, direct, verbose-and-natural, similar-to-document, english",
+        "question_categories": "open-ended, with-premise, concise-and-natural, similar-to-document, english",
         "document_id": "b851c91b-b173-4381-947b-20c88cee6110"
       }
     ]
@@ -215,10 +215,10 @@
     "title": "13.md",
     "generated_qa_pairs": [
       {
-        "question": "Could you explain how the interfacial phenomena between electrodes and electrolytes are being addressed in next-generation lithium-ion battery research, especially in terms of cycle life and safety improvements?",
-        "answer": "In next-generation lithium-ion battery research, interfacial engineering strategies such as surface coating of electrodes, formation of stable solid electrolyte interphases, and the use of functional additives in electrolytes are being explored. These approaches mitigate side reactions, suppress dendrite growth, and enhance interfacial stability, thus significantly improving cycle life and operational safety of lithium-ion batteries.",
+        "question": "Energy Environ Sci 2021 14 3938 main topic",
+        "answer": "The main topic is energy storage materials.",
         "user_categories": "expert",
-        "question_categories": "open-ended, direct, verbose-and-natural, similar-to-document, english",
+        "question_categories": "factoid, direct, short-search-query, similar-to-document, english",
         "document_id": "77b25949-40c4-4e2e-bbc4-e2a13504b5f3"
       }
     ]
@@ -229,10 +229,10 @@
     "title": "键的极性.md",
     "generated_qa_pairs": [
       {
-        "question": "criteria for symmetric electron density in homonuclear diatomic structures",
-        "answer": "In homonuclear diatomic molecules, the atoms have identical tendencies to attract electron pairs, resulting in equal sharing of electrons, a uniform electron density, and no permanent dipole moment; these are the hallmark characteristics for such molecular structures.",
+        "question": "Which molecules have nonpolar covalent bonds?",
+        "answer": "Diatomic molecules formed by identical atoms, like H₂.",
         "user_categories": "expert",
-        "question_categories": "open-ended, with-premise, long-search-query, distance-from-document, english",
+        "question_categories": "factoid, direct, concise-and-natural, similar-to-document, english",
         "document_id": "235df23a-4192-40a5-ba6c-285a0ef16077"
       }
     ]
@@ -243,10 +243,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "I focus on industrial rates. What's the ammonia production rate at 366 mA cm^-2?",
-        "answer": "27.84 mg h^-1 cm^-2.",
+        "question": "achieved ammonia production rate and operational stability using Cu single atom catalysts for NO3RR at industrial level current density",
+        "answer": "An average ammonia production rate of 27.84 mg h^-1 cm^-2 at an industrial level current density of 366 mA cm^-2 is achieved, with catalytic activity retained after more than 2000 hours of operation.",
         "user_categories": "expert",
-        "question_categories": "factoid, with-premise, concise-and-natural, similar-to-document, english",
+        "question_categories": "factoid, direct, long-search-query, similar-to-document, english",
         "document_id": "7787c474-9030-458b-ad39-dd650c13def9"
       }
     ]
@@ -257,10 +257,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "Cu-cis-N2O2 SAC ammonia production rate",
-        "answer": "2784 mg·h⁻¹·cm⁻² at 366 mA·cm⁻²",
+        "question": "Which adjustment to the neighboring atom types around the catalytic metal atom results in a more polarized active site, improving nitrate conversion efficiency?",
+        "answer": "Substituting nitrogen atoms with oxygen or sulfur as neighboring atoms increases site polarity and improves nitrate conversion efficiency.",
         "user_categories": "expert",
-        "question_categories": "factoid, direct, short-search-query, similar-to-document, english",
+        "question_categories": "factoid, direct, verbose-and-natural, distance-from-document, english",
         "document_id": "2ce84812-4d8b-4226-a349-e30658df74b5"
       }
     ]
@@ -271,10 +271,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "Cu-cis-N2O2 catalyst NO3- accumulation ability",
-        "answer": "The Cu-cis-N2O2 catalyst shows the highest NO3- accumulation ability, particularly at the O side, as indicated by sharp concentration of NO3- in the radial distribution analysis.",
-        "user_categories": "expert",
-        "question_categories": "open-ended, direct, short-search-query, similar-to-document, english",
+        "question": "ways to speed up chemical reactions with design",
+        "answer": "Altering the symmetrical arrangement of atoms surrounding single metal atoms (such as copper) on a catalyst can make chemical reactions happen faster by making it easier for important molecules to form during the process.",
+        "user_categories": "novice",
+        "question_categories": "open-ended, with-premise, short-search-query, distance-from-document, english",
         "document_id": "baed8dd5-4e56-41a3-955e-993f11c84f8f"
       }
     ]
@@ -285,10 +285,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "What is the calculated activation energy in electron volts for the transformation from nitric oxide to the ONH intermediate during catalytic reduction on copper-based single-atom catalysts?",
-        "answer": "1.23 eV",
-        "user_categories": "expert",
-        "question_categories": "factoid, direct, verbose-and-natural, distance-from-document, english",
+        "question": "Why is the ONH pathway more favorable than the NOH pathway?",
+        "answer": "The ONH pathway has a lower energy barrier (0.39 eV) compared to the NOH pathway (1.23 eV), making it more energetically favorable during the reduction process.",
+        "user_categories": "novice",
+        "question_categories": "open-ended, direct, concise-and-natural, similar-to-document, english",
         "document_id": "7fbb96d6-2748-44fa-a525-cfc3f4a53b68"
       }
     ]
@@ -299,10 +299,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "How does the energy barrier for the release of toxic NO2- ions during the reaction compare among Cu-cis-N2O2, Cu-trans-N2O2, and Cu-N4 sites, and how does this impact the overall catalytic efficiency?",
-        "answer": "The energy barrier for toxic NO2- release is much higher for Cu-cis-N2O2 (2.60 eV) compared to Cu-trans-N2O2 (-2.20 eV) and Cu-N4 (1.36 eV), which hinders the release on Cu-cis-N2O2 and can affect catalytic selectivity and byproduct formation.",
+        "question": "As someone who often works with coordination chemistry, can you tell me how the coordination symmetry breaking induced by substituting O atoms distorts the Cu 3d orbital splitting and how this affects the stabilization of *ONH intermediates specifically on Cu-cis-N2O2 sites?",
+        "answer": "Substitution with O atoms as opposed to all-N coordination distorts the coordination environment around the Cu center, leading to symmetry breaking that alters the 3d orbital splitting. On Cu-cis-N2O2 sites, this effect further stabilizes *ONH intermediates, which is also promoted by the formation of a π complex, as indicated by the calculated lower ΔG and the zoomed-in configuration analysis.",
         "user_categories": "expert",
-        "question_categories": "open-ended, direct, verbose-and-natural, similar-to-document, english",
+        "question_categories": "open-ended, with-premise, verbose-and-natural, similar-to-document, english",
         "document_id": "ebe6eb1c-7a11-4756-9780-4bd5f7a5f2bd"
       }
     ]
@@ -313,10 +313,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "radial distribution function peak positions for nitrate anion near metal ion",
-        "answer": "Radial distribution functions show specific peak positions indicating the spatial distribution of nitrate anions around metal ions, derived from molecular dynamics simulation data.",
+        "question": "configuration of copper complexes in oxidizer solution",
+        "answer": "cis and trans forms were examined in KNO3 solution.",
         "user_categories": "expert",
-        "question_categories": "factoid, direct, long-search-query, distance-from-document, english",
+        "question_categories": "factoid, direct, short-search-query, distance-from-document, english",
         "document_id": "c61b247b-e193-4460-bf28-c2a04510aaa3"
       }
     ]
@@ -327,10 +327,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "How does swapping certain ligands in copper-based single-atom catalysts impact both the electronic configuration around the copper center and the resulting catalytic efficiency?",
-        "answer": "Replacing nitrogen ligands with oxygen in copper-based single-atom catalysts alters the electronic environment of the copper atom, leading to changes in d-orbital occupancy and symmetry, which can modulate both activity and stability depending on the degree and pattern of substitution.",
-        "user_categories": "expert",
-        "question_categories": "open-ended, direct, verbose-and-natural, distance-from-document, english",
+        "question": "How does increasing O atoms affect catalytic activity?",
+        "answer": "Increasing the number of coordinating O atoms gradually decreases the energy barrier, which indicates an increase in catalytic activity of the Cu-based single-atom catalysts.",
+        "user_categories": "novice",
+        "question_categories": "open-ended, direct, concise-and-natural, similar-to-document, english",
         "document_id": "1e24f444-55ca-4c6c-9092-3f7c0fa26133"
       }
     ]
@@ -341,10 +341,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "What orbital symmetry is associated with the LUMO of ONH that facilitates its interaction with the dx2-y2 orbital of Cu-cis-N2O2?",
-        "answer": "The LUMO of ONH has pi* symmetry, facilitating its interaction with the dx2-y2 orbital of Cu-cis-N2O2.",
+        "question": "Curious about how Cu-cis-N2O2 facilitates NH3 formation?",
+        "answer": "Cu-cis-N2O2 enables NH3 formation by providing a symmetry and energy-matched Cu d_x2-y2 orbital that interacts with the ONH π* orbital, weakening the O-N bond and facilitating hydrogenation.",
         "user_categories": "expert",
-        "question_categories": "factoid, direct, verbose-and-natural, similar-to-document, english",
+        "question_categories": "open-ended, with-premise, concise-and-natural, similar-to-document, english",
         "document_id": "749643c9-7143-4890-b49a-608052699aa6"
       }
     ]
@@ -355,10 +355,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "final Cu loading in SAC as determined by ICP-AES analysis",
-        "answer": "about 5.04 wt%",
+        "question": "optimization of Cu-to-Salen molar ratio in single-atom catalysts",
+        "answer": "Decreasing the Cu-to-Salen molar ratio in the reactants reduces the copper nanoparticle content in the carbonized catalyst, and at 3% no copper nanoparticles are formed, which is optimal for preparing isolated Cu single-atom sites.",
         "user_categories": "expert",
-        "question_categories": "factoid, direct, long-search-query, similar-to-document, english",
+        "question_categories": "open-ended, with-premise, short-search-query, similar-to-document, english",
         "document_id": "571f7956-78b9-4917-9f9e-f0efa3e0b2af"
       }
     ]
@@ -369,10 +369,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "What's the charge of copper found here?",
-        "answer": "1.84.",
+        "question": "Cu K edge XANES absorption threshold position of Cu cis N2O2 SAC compared to Cu2O and CuO",
+        "answer": "The energy absorption threshold of Cu cis N2O2 SAC is located between those of Cu2O and CuO.",
         "user_categories": "novice",
-        "question_categories": "factoid, direct, concise-and-natural, distance-from-document, english",
+        "question_categories": "factoid, direct, long-search-query, similar-to-document, english",
         "document_id": "d6337dcb-36bc-4ea0-8d0a-2a9513e01a4e"
       }
     ]
@@ -383,10 +383,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "Can you elaborate on how the wavelet transform (WT) of EXAFS data specifically helped to distinguish between the coordination environments in CuPc, Salen-Cu, and Cu-cis-N2O2 SAC?",
-        "answer": "The wavelet transform (WT) of EXAFS data provides insight into the local coordination environment by simultaneously analyzing both the radial and k-space information, allowing for the identification of distinct scattering atoms around the central copper site. In this case, intense WT signals at specific values indicated unique coordination environments for CuPc, Salen-Cu, and Cu-cis-N2O2 SAC, helping to differentiate between Cu-N4, Cu-N2O2, and Cu-O4 type structures.",
-        "user_categories": "expert",
-        "question_categories": "open-ended, direct, verbose-and-natural, similar-to-document, english",
+        "question": "how many oxygen atoms bonded to copper in single site salen structure",
+        "answer": "Two oxygen atoms",
+        "user_categories": "novice",
+        "question_categories": "factoid, direct, long-search-query, distance-from-document, english",
         "document_id": "f397669c-2433-450d-8b87-eb9b1ac7fa90"
       }
     ]
@@ -397,10 +397,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "optimal operation voltage for ammonia production",
-        "answer": "-1.6 V",
-        "user_categories": "novice",
-        "question_categories": "factoid, direct, short-search-query, similar-to-document, english",
+        "question": "What voltage was optimal for ammonia production?",
+        "answer": "-1.6 V.",
+        "user_categories": "expert",
+        "question_categories": "factoid, direct, concise-and-natural, similar-to-document, english",
         "document_id": "4f032d93-eb68-4cc7-b9d9-feec8151010f"
       }
     ]
@@ -411,10 +411,10 @@
     "title": "15.md",
     "generated_qa_pairs": [
       {
-        "question": "I saw that NH3 formation rate is mentioned at -1.6V, can you tell me what the NH3 formation rate actually is at that potential?",
-        "answer": "The NH3 formation rate at -1.6V is a measured value indicating how much ammonia is produced during the experiment, but the exact number isn't specified in the provided text.",
-        "user_categories": "novice",
-        "question_categories": "factoid, with-premise, verbose-and-natural, similar-to-document, english",
+        "question": "NH3 formation rate and FE at each given potential over Cu cis N2O2 single atom catalyst",
+        "answer": "Both the NH3 formation rate and faradaic efficiency (FE) are measured for the Cu-cis-N2O2 single atom catalyst at each specific applied potential.",
+        "user_categories": "expert",
+        "question_categories": "factoid, direct, long-search-query, similar-to-document, english",
         "document_id": "52331c98-f035-41d0-95bc-d24f3652cd36"
       }
     ]

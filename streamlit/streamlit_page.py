@@ -4,6 +4,63 @@ from io import StringIO
 import subprocess
 import os
 import sys
+import time
+import requests
+
+class RAGAPIClient:
+    """RAG API 클라이언트 클래스"""
+    
+    def __init__(self, base_url: str, timeout: int = 30):
+        self.base_url = base_url.rstrip('/')
+        self.timeout = timeout
+        self.session = requests.Session()
+        self.session.headers.update({
+            'Content-Type': 'application/json',
+            'User-Agent': 'RAG-Eval-Framework/1.0'
+        })
+    
+    def health_check(self):
+        """API 서버 헬스 체크"""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/health",
+                timeout=self.timeout
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"헬스 체크 실패: {str(e)}")
+    
+    def get_config(self):
+        """API 설정 정보 조회"""
+        try:
+            response = self.session.get(
+                f"{self.base_url}/api/rag/config",
+                timeout=self.timeout
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"설정 정보 조회 실패: {str(e)}")
+    
+    def batch_query(self, questions: list, top_k: int = 3):
+        """배치 질의응답"""
+        try:
+            payload = {
+                "queries": questions,
+                "top_k": top_k
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/api/rag/batch",
+                json=payload,
+                timeout=self.timeout * len(questions)
+            )
+            response.raise_for_status()
+            return response.json()
+            
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"배치 질의응답 실패: {str(e)}")
 
 # 페이지 레이아웃 설정
 st.set_page_config(
@@ -86,7 +143,7 @@ st.markdown(
 st.sidebar.subheader('🔬 RAG 평가 pipeline')
 page = st.sidebar.radio(
     "페이지를 선택하세요",
-    ["1️⃣ Step: Benchmark Generation", "2️⃣ Step: RAG 실행", "3️⃣ Step: Evaluation"],
+    ["1️⃣ Step: Benchmark Generation", "2️⃣ Step: RAG 실행", "3️⃣ Step: Evaluation", "🧪 API 테스트"],
     index=0
 )
 
@@ -399,123 +456,186 @@ if page == "1️⃣ Step: Benchmark Generation":
 
 elif page == "2️⃣ Step: RAG 실행":
     st.subheader('RAG 실행')
-    st.write('RAG 시스템을 실행하여 질문에 대한 답변을 생성합니다')
+    st.write('참가자의 RAG API를 호출하여 질문에 대한 답변을 생성합니다')
     
     # RAG 실행 섹션
-    st.subheader("🤖 RAG 시스템 실행")
+    st.subheader("🤖 RAG API 호출")
     
-    # 설정 옵션
+    # API 설정 옵션
+    st.subheader("⚙️ API 설정")
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        num_questions = st.number_input("테스트할 질문 개수:", min_value=1, max_value=50, value=10)
+        api_url = st.text_input(
+            "API 서버 URL:",
+            value="http://localhost:5000",
+            help="참가자의 RAG API 서버 주소"
+        )
+        
+        # API 연결 테스트
+        if st.button("🔗 API 연결 테스트", type="secondary"):
+            try:
+                client = RAGAPIClient(api_url)
+                health = client.health_check()
+                st.success(f"✅ API 연결 성공!\n상태: {health.get('status', 'unknown')}")
+                
+                # API 설정 정보 표시
+                config = client.get_config()
+                st.info(f"📋 API 버전: {config.get('api_version', 'unknown')}")
+                
+            except Exception as e:
+                st.error(f"❌ API 연결 실패: {str(e)}")
+                
+                # WSL 환경에서의 문제 해결 가이드 표시
+                st.warning("🔧 WSL 환경에서의 문제 해결 방법:")
+                st.markdown("""
+                1. **API 서버가 실행 중인지 확인:**
+                   ```bash
+                   python academic_rag_api.py
+                   ```
+                
+                2. **포트가 사용 중인지 확인:**
+                   ```bash
+                   netstat -tlnp | grep :5000
+                   ```
+                
+                3. **WSL IP 주소 확인:**
+                   ```bash
+                   hostname -I
+                   ```
+                
+                4. **방화벽 설정 확인:**
+                   - Windows 방화벽에서 포트 5000 허용
+                   - WSL에서 포트 포워딩 설정
+                """)
     
     with col2:
-        chunks_file = st.selectbox(
-            "사용할 청크 파일:",
-            ["uploaded_files/academic_chunks_sample_mini.json", "datamorgana/data/academic_chunks_sample.json"],
-            help="업로드된 파일 또는 기본 파일을 선택하세요"
-        )
+        num_questions = st.number_input("테스트할 질문 개수:", min_value=1, max_value=50, value=10)
+        top_k = st.number_input("검색할 문서 개수:", min_value=1, max_value=10, value=3)
     
     # QA 파일 경로 표시
     qa_file = "generated_qa_data.json"
     st.info(f"📁 QA 파일: `{qa_file}` (Step 1에서 생성된 파일 사용)")
     
-    col1, col2 = st.columns([1, 1])
-    
-    with col1:
-        if st.button("🔍 RAG 실행", type="primary"):
-            # 진행상황 표시를 위한 컨테이너
-            progress_container = st.container()
-            
-            with progress_container:
-                progress_bar = st.progress(0)
-                status_text = st.empty()
-            
-            try:
-                # RAG 시스템 실행 (academic_rag.py 사용)
-                cmd = [
-                    sys.executable, 
-                    "../academic_rag.py",
-                    "--chunks_file", chunks_file,
-                    "--qa_file", qa_file,
-                    "--output_file", "results_for_eval.json",
-                    "--num_questions", str(num_questions)
-                ]
+    # 파일 존재 확인
+    if not os.path.exists(qa_file):
+        st.error(f"❌ QA 파일을 찾을 수 없습니다: `{qa_file}`")
+        st.write("먼저 Step 1에서 QA 데이터를 생성해주세요.")
+    else:
+        col1, col2 = st.columns([1, 1])
+        
+        with col1:
+            if st.button("🔍 RAG API 호출 (배치)", type="primary"):
+                # 진행상황 표시를 위한 컨테이너
+                progress_container = st.container()
                 
-                process = subprocess.Popen(
-                    cmd,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True, 
-                    cwd=".",
-                    bufsize=0,  # unbuffered
-                    universal_newlines=True
-                )
+                with progress_container:
+                    progress_bar = st.progress(0)
+                    status_text = st.empty()
                 
-                # 실시간 출력 처리
-                import threading
-                import queue
-                
-                def read_output(pipe, q):
-                    for line in iter(pipe.readline, ''):
-                        q.put(line)
-                    pipe.close()
-                
-                # 출력을 읽는 스레드 시작
-                output_queue = queue.Queue()
-                output_thread = threading.Thread(target=read_output, args=(process.stdout, output_queue))
-                output_thread.daemon = True
-                output_thread.start()
-                
-                while True:
-                    # 프로세스가 종료되었는지 확인
-                    if process.poll() is not None:
-                        break
-                        
-                    try:
-                        # 큐에서 출력 읽기 (타임아웃 0.5초)
-                        output = output_queue.get(timeout=0.5)
-                        if output:
-                            # PROGRESS:숫자:메시지 형식 파싱
-                            if output.startswith("PROGRESS:"):
-                                try:
-                                    parts = output.strip().split(":", 2)
-                                    if len(parts) == 3:
-                                        progress_value = int(parts[1]) / 100.0
-                                        message = parts[2]
-                                        progress_bar.progress(progress_value)
-                                        status_text.text(f"진행률: {int(progress_value * 100)}% - {message}")
-                                except Exception as e:
-                                    pass
-                            else:
-                                # 일반 로그 출력
-                                status_text.text(f"실행 중... {output.strip()}")
-                    except queue.Empty:
-                        # 큐가 비어있으면 계속 대기
-                        continue
-                
-                # 프로세스 완료 대기
-                return_code = process.wait()
-                
-                if return_code == 0:
-                    progress_bar.progress(1.0)
-                    status_text.text("✅ RAG 실행이 완료되었습니다!")
-                    st.success("✅ RAG 실행이 완료되었습니다!")
-                    st.session_state['rag_completed'] = True
-                else:
-                    stderr_output = process.stderr.read()
-                    st.error(f"❌ RAG 실행 중 오류가 발생했습니다:")
-                    st.code(stderr_output)
+                try:
+                    # RAG API 클라이언트 초기화
+                    status_text.text("API 클라이언트 초기화 중...")
+                    progress_bar.progress(0.05)
+                    client = RAGAPIClient(api_url)
                     
-            except Exception as e:
-                st.error(f"❌ 실행 중 오류가 발생했습니다: {str(e)}")
+                    # QA 데이터 로드
+                    status_text.text("QA 데이터 로드 중...")
+                    progress_bar.progress(0.1)
+                    
+                    with open(qa_file, 'r', encoding='utf-8') as f:
+                        qa_data = json.load(f)
+                    
+                    # 질문 추출
+                    questions = []
+                    gt_answers = []
+                    document_ids = []
+                    
+                    for item in qa_data:
+                        if 'generated_qa_pairs' in item:
+                            for qa_pair in item['generated_qa_pairs']:
+                                if 'question' in qa_pair:
+                                    questions.append(qa_pair['question'])
+                                    gt_answers.append(qa_pair.get('answer', ''))
+                                    document_ids.append(qa_pair.get('document_id', ''))
+                        elif 'question' in item:
+                            questions.append(item['question'])
+                            gt_answers.append(item.get('answer', ''))
+                            document_ids.append(item.get('document_id', ''))
+                    
+                    # 질문 수 제한
+                    if num_questions < len(questions):
+                        questions = questions[:num_questions]
+                        gt_answers = gt_answers[:num_questions]
+                        document_ids = document_ids[:num_questions]
+                    
+                    status_text.text(f"총 {len(questions)}개 질문을 배치로 처리 중...")
+                    progress_bar.progress(0.2)
+                    
+                    # 배치 API 호출
+                    batch_response = client.batch_query(questions, top_k)
+                    batch_results = batch_response.get('results', [])
+                    
+                    progress_bar.progress(0.9)
+                    status_text.text("결과 변환 중...")
+                    
+                    # 결과를 기존 형식에 맞게 변환
+                    results = []
+                    for i, (question, gt_answer, doc_id) in enumerate(zip(questions, gt_answers, document_ids)):
+                        if i < len(batch_results):
+                            batch_result = batch_results[i]
+                            result = {
+                                'query_id': str(i),
+                                'query': question,
+                                'gt_answer': gt_answer,
+                                'response': batch_result.get('answer', ''),
+                                'retrieved_context': batch_result.get('retrieved_documents', []),
+                                'metadata': batch_result.get('metadata', {})
+                            }
+                        else:
+                            # 배치 결과가 부족한 경우
+                            result = {
+                                'query_id': str(i),
+                                'query': question,
+                                'gt_answer': gt_answer,
+                                'response': '처리 실패',
+                                'retrieved_context': [],
+                                'metadata': {'error': '배치 처리 결과 없음'}
+                            }
+                        results.append(result)
+                    
+                    # 결과를 파일로 저장
+                    status_text.text("결과 저장 중...")
+                    output_data = {
+                        'results': results,
+                        'metadata': {
+                            'total_questions': len(questions),
+                            'processed_questions': len(results),
+                            'api_url': api_url,
+                            'top_k': top_k,
+                            'batch_processing': True,
+                            'timestamp': time.time()
+                        }
+                    }
+                    
+                    with open("results_for_eval.json", 'w', encoding='utf-8') as f:
+                        json.dump(output_data, f, ensure_ascii=False, indent=2)
+                    
+                    progress_bar.progress(1.0)
+                    status_text.text("✅ RAG API 배치 호출이 완료되었습니다!")
+                    st.success(f"✅ RAG API 배치 호출이 완료되었습니다! ({len(results)}개 질문 처리)")
+                    st.session_state['rag_completed'] = True
+                    
+                except Exception as e:
+                    st.error(f"❌ RAG API 호출 중 오류가 발생했습니다: {str(e)}")
+                    import traceback
+                    st.code(traceback.format_exc())
     
-    with col2:
-        if st.button("🗑️ 결과 초기화"):
-            if 'rag_completed' in st.session_state:
-                del st.session_state['rag_completed']
-            st.rerun()
+        with col2:
+            if st.button("🗑️ 결과 초기화"):
+                if 'rag_completed' in st.session_state:
+                    del st.session_state['rag_completed']
+                st.rerun()
     
     # RAG 실행 결과 표시
     if 'rag_completed' in st.session_state and st.session_state['rag_completed']:
@@ -630,7 +750,7 @@ elif page == "3️⃣ Step: Evaluation":
                         sys.executable, 
                         "../RAGChecker/quick_start.py",
                         "--input_file", f"../{input_file}",
-                        "--output_file", "result_rag-framework.json",
+                        "--output_file", "../RAGChecker/results/result_rag-framework.json",
                         "--metrics", metrics,
                         "--extractor_name", model_name,
                         "--checker_name", model_name
@@ -816,3 +936,279 @@ elif page == "3️⃣ Step: Evaluation":
             
             if st.button("🔄 파일 목록 새로고침"):
                 st.rerun()
+
+elif page == "🧪 API 테스트":
+    st.subheader('API 테스트')
+    st.write('참가자의 RAG API를 직접 테스트할 수 있습니다')
+    
+    # API 테스트 섹션
+    st.subheader("🔗 API 연결 테스트")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        api_url = st.text_input(
+            "API 서버 URL:",
+            value="http://localhost:5000",
+            help="테스트할 RAG API 서버 주소"
+        )
+    
+    with col2:
+        if st.button("🔍 연결 테스트", type="primary"):
+            try:
+                client = RAGAPIClient(api_url)
+                
+                # 헬스 체크
+                with st.spinner("API 연결 확인 중..."):
+                    health = client.health_check()
+                
+                st.success("✅ API 연결 성공!")
+                
+                # API 정보 표시
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.metric("상태", health.get('status', 'unknown'))
+                    st.metric("메시지", health.get('message', 'N/A'))
+                
+                with col2:
+                    config = client.get_config()
+                    st.metric("API 버전", config.get('api_version', 'unknown'))
+                    st.metric("지원 언어", ", ".join(config.get('supported_languages', [])))
+                
+                # 지원 엔드포인트 표시
+                st.subheader("📋 지원 엔드포인트")
+                endpoints = config.get('supported_endpoints', [])
+                for endpoint in endpoints:
+                    st.write(f"• `{endpoint}`")
+                
+            except Exception as e:
+                st.error(f"❌ API 연결 실패: {str(e)}")
+                st.code(str(e))
+    
+    # 단일 질의 테스트
+    st.subheader("💬 단일 질의 테스트")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        test_question = st.text_input(
+            "테스트 질문:",
+            value="인공지능이란 무엇인가요?",
+            help="API에 전송할 테스트 질문"
+        )
+    
+    with col2:
+        test_top_k = st.number_input("검색 문서 수:", min_value=1, max_value=10, value=3)
+    
+    if st.button("🚀 질의 테스트", type="primary"):
+        if not test_question.strip():
+            st.warning("질문을 입력해주세요.")
+        else:
+            try:
+                client = RAGAPIClient(api_url)
+                
+                with st.spinner("질의 처리 중..."):
+                    # 단일 질의는 배치 API를 사용하되 질문 1개만 전송
+                    response = client.batch_query([test_question], test_top_k)
+                    single_result = response.get('results', [{}])[0]
+                
+                st.success("✅ 질의 처리 완료!")
+                
+                # 결과 표시
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.subheader("📝 질문")
+                    st.write(test_question)
+                    
+                    st.subheader("🤖 생성된 답변")
+                    st.write(single_result.get('answer', 'N/A'))
+                
+                with col2:
+                    st.subheader("📊 메타데이터")
+                    metadata = single_result.get('metadata', {})
+                    st.metric("처리 시간", f"{metadata.get('processing_time', 0):.2f}초")
+                    st.metric("검색 문서 수", metadata.get('num_retrieved', 0))
+                    st.metric("모델", metadata.get('model', 'N/A'))
+                
+                # 검색된 문서 표시
+                st.subheader("📚 검색된 문서")
+                retrieved_docs = single_result.get('retrieved_documents', [])
+                
+                if retrieved_docs:
+                    for i, doc in enumerate(retrieved_docs):
+                        with st.expander(f"문서 {i+1} (ID: {doc.get('doc_id', 'N/A')})"):
+                            st.write(f"**제목:** {doc.get('title', 'N/A')}")
+                            st.write(f"**내용:** {doc.get('text', 'N/A')}")
+                            if 'distance' in doc:
+                                st.write(f"**유사도:** {doc['distance']:.4f}")
+                else:
+                    st.info("검색된 문서가 없습니다.")
+                
+                # 전체 응답 JSON 표시
+                with st.expander("📄 전체 응답 (JSON)"):
+                    st.json(single_result)
+                
+            except Exception as e:
+                st.error(f"❌ 질의 처리 실패: {str(e)}")
+                st.code(str(e))
+    
+    # 배치 테스트
+    st.subheader("📦 배치 질의 테스트")
+    
+    # 샘플 질문들
+    sample_questions = [
+        "인공지능이란 무엇인가요?",
+        "머신러닝과 딥러닝의 차이점은 무엇인가요?",
+        "자연어처리 기술에 대해 설명해주세요.",
+        "RAG 기술의 장점은 무엇인가요?",
+        "AI 모델의 학습 과정은 어떻게 이루어지나요?"
+    ]
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        batch_questions = st.text_area(
+            "배치 질문 (한 줄에 하나씩):",
+            value="\n".join(sample_questions),
+            height=150,
+            help="여러 질문을 한 번에 테스트할 수 있습니다"
+        )
+    
+    with col2:
+        batch_top_k = st.number_input("검색 문서 수:", min_value=1, max_value=10, value=3, key="batch_top_k")
+    
+    if st.button("🚀 배치 테스트", type="primary"):
+        questions_list = [q.strip() for q in batch_questions.split('\n') if q.strip()]
+        
+        if not questions_list:
+            st.warning("질문을 입력해주세요.")
+        else:
+            try:
+                client = RAGAPIClient(api_url)
+                
+                with st.spinner(f"{len(questions_list)}개 질문 처리 중..."):
+                    response = client.batch_query(questions_list, batch_top_k)
+                
+                st.success(f"✅ 배치 처리 완료! ({len(questions_list)}개 질문)")
+                
+                # 배치 결과 요약
+                summary = response.get('summary', {})
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric("총 질문 수", summary.get('total_queries', 0))
+                with col2:
+                    st.metric("총 처리 시간", f"{summary.get('total_processing_time', 0):.2f}초")
+                with col3:
+                    st.metric("평균 처리 시간", f"{summary.get('average_processing_time', 0):.2f}초")
+                
+                # 개별 결과 표시
+                st.subheader("📋 개별 결과")
+                results = response.get('results', [])
+                
+                for i, result in enumerate(results):
+                    with st.expander(f"질문 {i+1}: {result.get('query', 'N/A')[:50]}..."):
+                        st.write(f"**질문:** {result.get('query', 'N/A')}")
+                        st.write(f"**답변:** {result.get('answer', 'N/A')}")
+                        
+                        # 검색된 문서 표시
+                        retrieved_docs = result.get('retrieved_documents', [])
+                        if retrieved_docs:
+                            st.write("**검색된 문서:**")
+                            for j, doc in enumerate(retrieved_docs[:2]):  # 최대 2개만 표시
+                                st.write(f"- {doc.get('title', 'N/A')} (유사도: {doc.get('distance', 0):.4f})")
+                        
+                        # 메타데이터
+                        metadata = result.get('metadata', {})
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.metric("처리 시간", f"{metadata.get('processing_time', 0):.2f}초")
+                        with col2:
+                            st.metric("검색 문서 수", metadata.get('num_retrieved', 0))
+                
+                # 전체 응답 다운로드
+                st.download_button(
+                    label="📥 배치 결과 다운로드",
+                    data=json.dumps(response, ensure_ascii=False, indent=2),
+                    file_name="batch_test_results.json",
+                    mime="application/json"
+                )
+                
+            except Exception as e:
+                st.error(f"❌ 배치 처리 실패: {str(e)}")
+                st.code(str(e))
+    
+    # Academic RAG API 서버 시작 가이드
+    st.subheader("🛠️ 로컬 테스트 가이드")
+    
+    with st.expander("📖 Academic RAG API 서버 사용법"):
+        st.markdown("""
+        **1. Academic RAG API 서버 시작:**
+        ```bash
+        cd streamlit
+        python academic_rag_api.py
+        ```
+        
+        **2. 서버 확인:**
+        - 브라우저에서 http://localhost:5000/health 접속
+        - 또는 위의 "연결 테스트" 버튼 클릭
+        
+        **3. API 엔드포인트:**
+        - `GET /health` - 헬스 체크
+        - `POST /api/rag/query` - 단일 질의응답
+        - `POST /api/rag/batch` - 배치 질의응답 (권장)
+        - `GET /api/rag/config` - API 설정 정보
+        
+        **4. 환경 변수 설정 (선택사항):**
+        ```bash
+        export CHUNKS_FILE="datamorgana/data/academic_chunks_sample.json"
+        export MILVUS_DB_PATH="./academic_milvus.db"
+        ```
+        
+        **5. 실제 API 연동:**
+        - 참가자의 실제 API URL을 입력하여 테스트
+        - API 스펙이 위의 Academic RAG API와 호환되어야 함
+        """)
+    
+    # API 스펙 정보
+    with st.expander("📋 API 스펙 정보"):
+        st.markdown("""
+        **단일 질의응답 API:**
+        ```json
+        POST /api/rag/query
+        {
+            "query": "질문 내용",
+            "top_k": 3
+        }
+        ```
+        
+        **배치 질의응답 API:**
+        ```json
+        POST /api/rag/batch
+        {
+            "queries": ["질문1", "질문2", "질문3"],
+            "top_k": 3
+        }
+        ```
+        
+        **응답 형식:**
+        ```json
+        {
+            "query": "질문",
+            "answer": "답변",
+            "retrieved_documents": [
+                {
+                    "id": "doc_id",
+                    "text": "문서 내용",
+                    "metadata": {"source": "출처"}
+                }
+            ],
+            "metadata": {
+                "processing_time": 1.23,
+                "num_retrieved": 3,
+                "model": "model_name"
+            }
+        }
+        ```
+        """)
