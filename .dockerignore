@@ -1,0 +1,68 @@
+# Git 관련
+.git
+.gitignore
+
+# Docker 관련
+Dockerfile
+docker-compose*.yml
+.dockerignore
+*.tar
+
+# Python 관련
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# 환경 변수
+.env
+env.example
+
+# 스크립트 파일
+docker-start.sh
+start_services.sh
+load_and_run.sh
+
+# 문서 파일
+README.md
+DOCKER_README.md
+*.md
+
+# IDE 관련
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS 관련
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 임시 파일
+*.tmp
+*.temp
+*.lock
+
+# 데이터베이스 파일 (필요시 제외)
+*.db
+*.db.lock

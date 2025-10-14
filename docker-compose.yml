@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  rag-app:
+    image: rag-eval-framework:v1.0
+    container_name: rag-eval-framework
+    ports:
+      - "5000:5000"  # Baseline RAG API
+      - "8501:8501"  # Streamlit
+    environment:
+      - PYTHONPATH=/app
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    # volumes:
+    #   - .:/app
+    working_dir: /app
+    command: >
+      bash -c "
+        echo 'Starting API server...' &&
+        python academic_rag_api.py &
+        API_PID=$! &&
+        echo 'Waiting for API to start...' &&
+        sleep 10 &&
+        echo 'Starting Streamlit app...' &&
+        cd streamlit &&
+        streamlit run streamlit_page.py --server.port=8501 --server.address=0.0.0.0 --server.headless=true &
+        STREAMLIT_PID=$! &&
+        echo 'Both services started!' &&
+        echo 'API: http://localhost:5000' &&
+        echo 'Streamlit: http://localhost:8501' &&
+        wait $API_PID $STREAMLIT_PID
+      "
+    restart: unless-stopped

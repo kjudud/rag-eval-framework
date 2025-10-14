@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  rag-app:
+    image: rag-eval-framework:latest
+    container_name: rag-eval-framework
+    ports:
+      - "5000:5000"  # Baseline RAG API
+      - "8501:8501"  # Streamlit
+    environment:
+      - PYTHONPATH=/app
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - academic_data:/app/academic_milvus.db
+      - upload_data:/app/uploaded_files
+    # volumes:
+    #   - .:/app  # 전체 코드 마운트, 개발용 볼륨 마운트 (로컬에서의 실시간 코드 수정 반영 가능)
+    restart: unless-stopped
+
+volumes:
+  academic_data:
+    driver: local
+  upload_data:
+    driver: local

@@ -384,3 +384,5 @@ if __name__ == '__main__':
     
     # WSL 환경에서의 포트 바인딩 설정
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
+    # local환경에서 실행시 localhost
+    # app.run(host='localhost', port=5000, debug=True, threaded=True)
