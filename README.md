@@ -10,17 +10,7 @@
 pip install -r requirements.txt
 ```
 
-### 2. WSL 환경 설정 (WSL 사용자만)
-
-```bash
-# 포트 포워딩 설정 (Windows 관리자 권한 필요)
-./setup_wsl_ports.sh
-
-# 연결 테스트
-python test_connection.py
-```
-
-### 3. Academic RAG API 서버 시작
+### 2. Academic RAG API 서버 시작
 
 ```bash
 python academic_rag_api.py
@@ -29,7 +19,7 @@ python academic_rag_api.py
 서버가 `http://localhost:5000`에서 실행됩니다.
 (상황에 맞게 주소, 포트 변경)
 
-### 4. Streamlit 앱 시작
+### 3. Streamlit 앱 시작
 
 ```bash
 cd streamlit
@@ -40,6 +30,9 @@ streamlit run streamlit_page.py
 (상황에 맞게 주소, 포트 변경)
 
 ## 📋 사용법
+
+![End-to-End RAG 평가 프레임워크](assets/page_sample.png)
+![RAG 평가 다이어그램](assets/diagram.png)
 
 ### Step 1: Benchmark Generation
 1. JSON 형식의 corpus 파일을 업로드합니다
@@ -178,23 +171,6 @@ RAG-eval-framework/
 2. **메모리 사용량**: Milvus 벡터 DB와 임베딩 생성으로 인한 메모리 사용량이 높을 수 있습니다
 3. **처리 시간**: 배치 처리 시에도 각 질문마다 개별적으로 처리되므로 시간이 소요됩니다
 4. **네트워크 연결**: OpenAI API 호출을 위한 인터넷 연결이 필요합니다
-
-## 🔧 문제 해결
-
-### API 연결 실패
-1. API 서버가 실행 중인지 확인
-2. 포트 설정 확인
-3. 방화벽 설정 확인
-
-### RAGChecker 실행 실패
-1. 의존성 설치 확인
-2. 파일 경로 확인
-3. 권한 설정 확인
-
-### 메모리 부족
-1. 배치 크기 줄이기
-2. 시스템 메모리 확인
-3. 다른 프로세스 종료
 
 ## 📄 라이선스
 
