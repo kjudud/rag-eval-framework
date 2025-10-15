@@ -167,6 +167,77 @@ if page == "1️⃣ Step: Benchmark Generation":
         key="config_uploader"
     )
 
+    #corpus ,config 파일 json 형식 샘플
+    st.markdown("---")
+    st.markdown("### 📋 JSON 파일 형식 가이드")
+    
+    # 좌우 컬럼으로 구분
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("#### 📄 Corpus 파일 형식")
+        st.markdown("**academic_chunks_sample_mini.json**")
+        st.code('''
+[
+  {
+    "id": "unique-identifier",
+    "content": "문서의 실제 내용...",
+    "title": "문서 제목"
+  },
+  {
+    "id": "another-identifier", 
+    "content": "다른 문서 내용...",
+    "title": "다른 문서 제목"
+  }
+]
+        ''', language='json')
+        
+    with col2:
+        st.markdown("#### ⚙️ Config 파일 형식")
+        st.markdown("**datamorgana_config_template.json**")
+        st.code('''
+{
+  "user_categorizations": [
+    {
+      "name": "expertise",
+      "categories": [
+        {
+          "name": "expert",
+          "probability": 0.7,
+          "description": "전문가 사용자"
+        },
+        {
+          "name": "novice", 
+          "probability": 0.3,
+          "description": "초보 사용자"
+        }
+      ]
+    }
+  ],
+  "question_categorizations": [
+    {
+      "name": "factuality",
+      "categories": [
+        {
+          "name": "factoid",
+          "probability": 0.6,
+          "description": "구체적인 사실을 묻는 질문"
+        },
+        {
+          "name": "open-ended",
+          "probability": 0.4,
+          "description": "자유로운 답변을 요구하는 질문"
+        }
+      ]
+    }
+  ]
+}
+        ''', language='json')
+    
+    st.info("💡 **사용법**: 위 형식을 참고하여 JSON 파일을 준비한 후 업로드하세요.")
+    st.markdown("---")
+    
+    
     if uploaded_file is not None:
         try:
             # JSON 파일 읽기
@@ -512,6 +583,70 @@ elif page == "2️⃣ Step: RAG 실행":
     with col2:
         num_questions = st.number_input("테스트할 질문 개수:", min_value=1, max_value=50, value=10)
         top_k = st.number_input("검색할 문서 개수:", min_value=1, max_value=10, value=3)
+    
+    # API 정의 표시
+    st.markdown("---")
+    st.markdown("### 🔌 API 형식 가이드")
+    
+    # 좌우 컬럼으로 구분
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("#### 📤 배치 쿼리 요청 형식")
+        st.code('''
+POST /batch_query
+Content-Type: application/json
+
+{
+  "questions": [
+    "질문 1",
+    "질문 2", 
+    "질문 3"
+  ],
+  "top_k": 3
+}
+        ''', language='json')
+        
+    with col2:
+        st.markdown("#### 📥 배치 쿼리 응답 형식")
+        st.code('''
+{
+  "results": [
+    {
+      "query_id": "0",
+      "query": "질문 내용",
+      "gt_answer": "정답",
+      "response": "시스템 응답",
+      "retrieved_context": [
+        {
+          "distance": 0.7262771129608154,
+          "doc_id": "문서 ID",
+          "text": "검색된 문서 내용...",
+          "title": "문서 제목"
+        }
+      ],
+      "metadata": {
+        "model": "gpt-3.5-turbo",
+        "num_retrieved": 3,
+        "processing_time": 2.14,
+        "query_index": 0,
+        "timestamp": 1758269337.2524438
+      }
+    }
+  ],
+  "metadata": {
+    "total_questions": 3,
+    "processed_questions": 3,
+    "api_url": "http://localhost:5000",
+    "top_k": 3,
+    "batch_processing": true,
+    "timestamp": 1758269340.597136
+  }
+}
+        ''', language='json')
+    
+    st.info("💡 **사용법**: 위 형식을 참고하여 API 요청/응답을 확인하세요.")
+    st.markdown("---")
     
     # QA 파일 경로 표시
     qa_file = "generated_qa_data.json"
