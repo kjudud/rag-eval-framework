@@ -11,7 +11,16 @@ import logging
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai import OpenAI
-from pymilvus import MilvusClient
+from pymilvus import (
+    connections,
+    utility,
+    FieldSchema,
+    CollectionSchema,
+    DataType,
+    Collection,
+    AnnSearchRequest,
+    WeightedRanker,
+)
 import uuid
 import threading
 from typing import List, Dict, Any
@@ -31,8 +40,8 @@ class AcademicRAGSystem:
         self.milvus_db_path = milvus_db_path
         self.collection_name = "academic_chunks"
         self.openai_client = None
-        self.milvus_client = None
         self.embedding_dim = None
+        self.collection = None
         self.is_initialized = False
         
     def initialize(self):
@@ -42,10 +51,9 @@ class AcademicRAGSystem:
             
             # 클라이언트 초기화
             self.openai_client = OpenAI()
-            self.milvus_client = MilvusClient(uri=self.milvus_db_path)
             
             # 임베딩 차원 확인
-            test_embedding = self.emb_text("This is a test")
+            test_embedding = self.emb_dense("This is a test")
             self.embedding_dim = len(test_embedding)
             logger.info(f"임베딩 차원: {self.embedding_dim}")
             
@@ -68,13 +76,34 @@ class AcademicRAGSystem:
             logger.error(f"RAG 시스템 초기화 실패: {str(e)}")
             raise
     
-    def emb_text(self, text: str):
-        """텍스트를 임베딩으로 변환"""
+    def emb_dense(self, text: str):
+        """텍스트를 dense embedding으로 변환"""
         return (
             self.openai_client.embeddings.create(input=text, model="text-embedding-3-small")
             .data[0]
             .embedding
         )
+    
+    def emb_sparse(self, text: str):
+        """텍스트를 sparse vector로 변환 (간단한 TF-IDF 방식)"""
+        import re
+        from collections import Counter
+        
+        # 텍스트 전처리
+        words = re.findall(r'\b\w+\b', text.lower())
+        
+        # 단어 빈도 계산
+        word_counts = Counter(words)
+        total_words = len(words)
+        
+        # TF-IDF 계산 (간단한 TF만 사용)
+        sparse_dict = {}
+        for word, count in word_counts.items():
+            if len(word) > 2:  # 2글자 이상만 사용
+                tf = count / total_words
+                sparse_dict[hash(word) % 10000] = tf  # 해시를 인덱스로 사용
+        
+        return sparse_dict
     
     def load_json(self, file_path: str):
         """학술 논문 청크 데이터 로드"""
@@ -85,16 +114,40 @@ class AcademicRAGSystem:
     
     def create_milvus_collection(self):
         """Milvus 컬렉션 생성"""
-        if self.milvus_client.has_collection(self.collection_name):
-            self.milvus_client.drop_collection(self.collection_name)
-            logger.info(f"기존 컬렉션 '{self.collection_name}'을 삭제했습니다.")
+        # Milvus 연결
+        connections.connect("default", uri=self.milvus_db_path)
         
-        self.milvus_client.create_collection(
-            collection_name=self.collection_name,
-            dimension=self.embedding_dim,
-            metric_type="IP",
-            consistency_level="Bounded",
-        )
+        dense_dim = self.embedding_dim
+        
+        self.fields = [
+            # Primary key field
+            FieldSchema(name="id", dtype=DataType.INT64, is_primary=True),
+            # Dense vector field for embeddings
+            FieldSchema(name="dense_vector", dtype=DataType.FLOAT_VECTOR, dim=dense_dim),
+            # Sparse vector field for hybrid search
+            FieldSchema(name="sparse_vector", dtype=DataType.SPARSE_FLOAT_VECTOR),
+            # Content field
+            FieldSchema(name="content", dtype=DataType.VARCHAR, max_length=10000),
+            # Title field
+            FieldSchema(name="title", dtype=DataType.VARCHAR, max_length=1000),
+            # Original ID field
+            FieldSchema(name="original_id", dtype=DataType.VARCHAR, max_length=100),
+        ]
+        self.schema = CollectionSchema(self.fields)
+
+        if utility.has_collection(self.collection_name):
+            Collection(self.collection_name).drop()
+        self.collection = Collection(self.collection_name, self.schema, consistency_level="Bounded")
+
+        # Dense vector index
+        dense_index = {"index_type": "AUTOINDEX", "metric_type": "IP"}
+        self.collection.create_index("dense_vector", dense_index)
+        
+        # Sparse vector index
+        sparse_index = {"index_type": "SPARSE_INVERTED_INDEX", "metric_type": "IP"}
+        self.collection.create_index("sparse_vector", sparse_index)
+        self.collection.load()
+        
         logger.info(f"새로운 컬렉션 '{self.collection_name}'을 생성했습니다.")
     
     def insert_chunks_to_milvus(self, json_list: List[Dict]):
@@ -102,43 +155,61 @@ class AcademicRAGSystem:
         data = []
         
         for i, chunk in enumerate(json_list):
-            # content를 임베딩으로 변환
-            embedding = self.emb_text(chunk['content'])
+            # content를 dense embedding으로 변환
+            dense_embedding = self.emb_dense(chunk['content'])            
+            # content를 sparse vector로 변환
+            sparse_vector = self.emb_sparse(chunk['content'])
             
-            # 데이터 준비 - 정수 ID 사용
+            # 데이터 준비 - 새로운 스키마에 맞게 수정
             data.append({
                 "id": i,
-                "vector": embedding,
+                "dense_vector": dense_embedding,
+                "sparse_vector": sparse_vector,
                 "content": chunk['content'],
                 "title": chunk['title'],
                 "original_id": chunk['id']
             })
         
         # Milvus에 삽입
-        self.milvus_client.insert(collection_name=self.collection_name, data=data)
+        self.collection.insert(data)
+        self.collection.flush()
         logger.info(f"총 {len(data)}개의 청크를 Milvus에 삽입했습니다.")
     
-    def search_similar_chunks(self, question: str, limit: int = 3):
-        """유사한 청크 검색"""
-        # 질문을 임베딩으로 변환
-        question_embedding = self.emb_text(question)
+    def search_similar_chunks(self, question: str, limit: int = 3, sparse_weight: float = 0.3, dense_weight: float = 0.7):
+        """Hybrid search (dense + sparse vector) using AnnSearchRequest and WeightedRanker"""
+        # 질문을 dense embedding으로 변환
+        question_dense_embedding = self.emb_dense(question)
         
-        # 검색 실행
-        search_results = self.milvus_client.search(
-            collection_name=self.collection_name,
-            data=[question_embedding],
-            limit=limit,
-            search_params={"metric_type": "IP", "params": {}},
-            output_fields=["content", "title", "id", "original_id"]
+        # 질문을 sparse vector로 변환
+        question_sparse_vector = self.emb_sparse(question)
+        
+        # Dense vector search request
+        dense_search_params = {"metric_type": "IP", "params": {}}
+        dense_req = AnnSearchRequest(
+            [question_dense_embedding], "dense_vector", dense_search_params, limit=limit
         )
         
-        return search_results[0]
+        # Sparse vector search request
+        sparse_search_params = {"metric_type": "IP", "params": {}}
+        sparse_req = AnnSearchRequest(
+            [question_sparse_vector], "sparse_vector", sparse_search_params, limit=limit
+        )
+        
+        # Weighted ranker for hybrid search
+        rerank = WeightedRanker(sparse_weight, dense_weight)
+        
+        # Hybrid search 실행
+        results = self.collection.hybrid_search(
+            [sparse_req, dense_req], rerank=rerank, limit=limit, output_fields=["content"]
+        )[0]
+        
+        return results
     
     def generate_answer(self, question: str, retrieved_chunks: List[Dict]):
         """검색된 청크를 바탕으로 답변 생성"""
         # 검색된 청크들을 컨텍스트로 결합
         context = "\n\n".join([
-            f"[출처: {chunk['entity']['title']}]\n{chunk['entity']['content']}"
+            f"[출처: Unknown]\n{chunk['entity']['content']}"
             for chunk in retrieved_chunks
         ])
         
@@ -174,16 +245,16 @@ class AcademicRAGSystem:
         
         start_time = time.time()
         
-        # 유사한 청크 검색
+        # Hybrid search 실행
         retrieved_chunks = self.search_similar_chunks(question, top_k)
         
         # 검색된 컨텍스트를 결과 형식에 맞게 저장
         retrieved_context = []
         for chunk in retrieved_chunks:
             retrieved_context.append({
-                "doc_id": chunk['entity']['original_id'],
+                "doc_id": chunk['id'],  # 자동 생성된 ID 사용
                 "text": chunk['entity']['content'],
-                "title": chunk['entity']['title'],
+                "title": "Unknown",  # title 정보 없음
                 "distance": chunk['distance']
             })
         
