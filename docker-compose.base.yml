@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  rag-app:
+    image: python:3.11-slim  # 공식 베이스 이미지 (예: python:3.11-slim)
+    container_name: rag-eval-framework
+    ports:
+      - "5000:5000"  # Baseline RAG API
+      - "8501:8501"  # Streamlit
+    environment:
+      - PYTHONPATH=/app
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      bash -c "
+        pip install -r requirements.txt
+        tail -f /dev/null
+      "
+    restart: no

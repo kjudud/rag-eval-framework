@@ -1,7 +1,5 @@
 #!/bin/bash
-
 # RAG Eval Framework Docker 이미지 로드 및 실행 스크립트
-# 사용법: ./load_and_run.sh [이미지파일명]
 
 set -e  # 오류 발생 시 스크립트 중단
 
@@ -29,13 +27,27 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# 이미지 파일명 확인
+# 버전 확인
 if [ $# -eq 0 ]; then
-    IMAGE_FILE="rag-eval-framework-v1.0.tar"
-    print_warning "이미지 파일명이 지정되지 않았습니다. 기본값 사용: $IMAGE_FILE"
+    # 최신 버전 찾기
+    LATEST_VERSION=$(ls rag-eval-framework-v*.tar.gz 2>/dev/null | \
+        sed 's/rag-eval-framework-v\(.*\)\.tar\.gz/\1/' | \
+        sort -V | \
+        tail -1)
+    
+    if [ -z "$LATEST_VERSION" ]; then
+        print_error "rag-eval-framework 이미지 파일을 찾을 수 없습니다."
+        exit 1
+    fi
+    
+    VERSION="$LATEST_VERSION"
+    print_info "최신 버전 발견: $VERSION"
 else
-    IMAGE_FILE="$1"
+    VERSION="$1"
 fi
+
+# 이미지 파일명 생성
+IMAGE_FILE="rag-eval-framework-v$VERSION.tar.gz"
 
 # 이미지 파일 존재 확인
 if [ ! -f "$IMAGE_FILE" ]; then
@@ -44,6 +56,7 @@ if [ ! -f "$IMAGE_FILE" ]; then
 fi
 
 print_info "=== RAG Eval Framework Docker 이미지 로드 및 실행 ==="
+print_info "선택된 버전: $VERSION"
 
 # 1. 기존 컨테이너 중지 및 제거
 print_info "기존 컨테이너 정리 중..."
@@ -76,10 +89,10 @@ if [ -z "$OPENAI_API_KEY" ]; then
     print_info "env.example 파일을 참고하여 환경 변수를 설정하세요."
     print_info "예: export OPENAI_API_KEY=your_api_key_here"
 fi
-
+export VERSION="$VERSION"  # 환경변수로 설정
 # 5. Docker Compose로 실행
 print_info "Docker Compose로 서비스 시작 중..."
-if docker-compose up -d; then
+if docker compose up -d; then
     print_success "서비스 시작 완료"
 else
     print_error "서비스 시작 실패"
@@ -93,9 +106,11 @@ docker ps
 
 # 7. 접속 정보 출력
 print_success "=== 서비스 실행 완료 ==="
+print_success "실행된 버전: $VERSION"
 echo -e "${GREEN}API 서버:${NC} http://localhost:5000"
 echo -e "${GREEN}Streamlit 웹 인터페이스:${NC} http://localhost:8501"
 echo ""
 print_info "로그 확인: docker logs rag-eval-framework"
-print_info "서비스 중지: docker-compose down"
-print_info "서비스 재시작: docker-compose restart"
+print_info "컨테이너 중지: docker stop rag-eval-framework"
+print_info "컨테이너 제거: docker rm rag-eval-framework"
+print_info "컨테이너 재시작: docker restart rag-eval-framework"

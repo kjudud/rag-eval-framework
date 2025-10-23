@@ -1,11 +1,13 @@
 version: '3.8'
 services:
   rag-app:
-    image: rag-eval-framework:v1.0
+    image: rag-eval-framework:v${VERSION:-latest}
+    env_file:
+      - .env
     container_name: rag-eval-framework
     ports:
-      - "5000:5000"  # Baseline RAG API
-      - "8501:8501"  # Streamlit
+      - "0.0.0.0:20500:5000"  # Baseline RAG API
+      - "0.0.0.0:20501:8501"  # Streamlit
     environment:
       - PYTHONPATH=/app
       - OPENAI_API_KEY=${OPENAI_API_KEY}

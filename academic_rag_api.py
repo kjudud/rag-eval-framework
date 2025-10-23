@@ -200,7 +200,7 @@ class AcademicRAGSystem:
         
         # Hybrid search 실행
         results = self.collection.hybrid_search(
-            [sparse_req, dense_req], rerank=rerank, limit=limit, output_fields=["content"]
+            [sparse_req, dense_req], rerank=rerank, limit=limit, output_fields=["content", "title"]
         )[0]
         
         return results
@@ -209,7 +209,7 @@ class AcademicRAGSystem:
         """검색된 청크를 바탕으로 답변 생성"""
         # 검색된 청크들을 컨텍스트로 결합
         context = "\n\n".join([
-            f"[출처: Unknown]\n{chunk['entity']['content']}"
+            f"[출처: {chunk['entity']['title']}]\n{chunk['entity']['content']}"
             for chunk in retrieved_chunks
         ])
         
@@ -254,7 +254,7 @@ class AcademicRAGSystem:
             retrieved_context.append({
                 "doc_id": chunk['id'],  # 자동 생성된 ID 사용
                 "text": chunk['entity']['content'],
-                "title": "Unknown",  # title 정보 없음
+                "title": chunk['entity']['title'],
                 "distance": chunk['distance']
             })
         
@@ -333,8 +333,8 @@ def get_rag_system():
         with initialization_lock:
             if rag_system is None:
                 # 환경변수에서 설정 읽기
-                chunks_file = os.getenv('CHUNKS_FILE', './datamorgana/data/academic_chunks_sample_mini.json')
-                milvus_db_path = os.getenv('MILVUS_DB_PATH', './academic_milvus.db')
+                chunks_file = './uploaded_files/academic_chunks_sample_mini.json'
+                milvus_db_path = './academic_milvus.db'
                 
                 rag_system = AcademicRAGSystem(chunks_file, milvus_db_path)
                 rag_system.initialize()

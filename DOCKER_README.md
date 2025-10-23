@@ -20,72 +20,33 @@ nano .env
 
 ```bash
 # 모든 서비스 시작
-docker-compose up -d
-
-# 로그 확인
-docker-compose logs -f
-
-# 특정 서비스 로그만 확인
-docker-compose logs -f rag-api
-docker-compose logs -f streamlit-app
-```
+docker compose up -d
 
 ### 3. 서비스 접속
-
 - **API 서버**: http://localhost:5000
 - **Streamlit 웹 인터페이스**: http://localhost:8501
 - **Milvus (선택사항)**: localhost:19530
 
 ## 🛠️ 서비스 관리
-
-### 서비스 상태 확인
-
-```bash
-# 실행 중인 서비스 확인
-docker-compose ps
-
-# 서비스 상태 확인
-docker-compose ps --services
-```
-
 ### 서비스 재시작
 
 ```bash
 # 모든 서비스 재시작
-docker-compose restart
+docker compose restart
 
 # 특정 서비스만 재시작
-docker-compose restart rag-api
-docker-compose restart streamlit-app
+docker compose restart rag-api
+docker compose restart streamlit-app
 ```
 
 ### 서비스 중지
 
 ```bash
 # 모든 서비스 중지
-docker-compose down
+docker compose down
 
 # 볼륨까지 삭제하며 중지
-docker-compose down -v
-```
-
-## 📁 볼륨 및 데이터
-
-### 데이터 영속성
-
-- `academic_milvus.db`: Milvus 벡터 데이터베이스 파일
-- `uploaded_files/`: 업로드된 파일들
-- `results_for_eval.json`: 평가 결과 파일
-- `milvus_data`: Milvus 데이터 볼륨 (외부 Milvus 사용 시)
-
-### 데이터 백업
-
-```bash
-# 데이터베이스 백업
-docker-compose exec rag-api cp /app/academic_milvus.db /app/backup_milvus.db
-
-# 전체 프로젝트 백업
-docker-compose exec rag-api tar -czf /app/backup.tar.gz /app
+docker compose down -v
 ```
 
 ## 🔧 설정 옵션
@@ -118,7 +79,6 @@ services:
 ```
 
 ### 환경 변수 추가
-
 `docker-compose.yml`의 `environment` 섹션에 추가할 수 있습니다:
 
 ```yaml
@@ -134,10 +94,10 @@ environment:
 1. **API 서버 연결 실패**
    ```bash
    # API 서버 로그 확인
-   docker-compose logs rag-api
+   docker compose logs rag-api
    
    # API 서버 재시작
-   docker-compose restart rag-api
+   docker compose restart rag-api
    ```
 
 2. **메모리 부족**
@@ -146,7 +106,7 @@ environment:
    docker stats
    
    # 메모리 제한 설정
-   # docker-compose.yml에서 memory limits 추가
+   # docker compose.yml에서 memory limits 추가
    ```
 
 3. **포트 충돌**
@@ -181,19 +141,6 @@ docker-compose exec rag-api bash
 
 # Streamlit 앱 컨테이너 접속
 docker-compose exec streamlit-app bash
-```
-
-## 📊 모니터링
-
-### 헬스 체크
-
-```bash
-# API 서버 헬스 체크
-curl http://localhost:5000/health
-
-# Streamlit 앱 상태 확인
-curl http://localhost:8501/_stcore/health
-```
 
 ### 리소스 모니터링
 
@@ -211,12 +158,9 @@ docker stats rag-streamlit-app
 ### 이미지 재빌드
 
 ```bash
-# 모든 서비스 재빌드
-docker-compose build --no-cache
-
-# 특정 서비스만 재빌드
-docker-compose build rag-api
-```
+# 버전 업데이트 빌드
+bash new_version_build.sh <version>
+# ex) bash new_version_build.sh v1.2
 
 ### 코드 변경 후 재시작
 
@@ -228,7 +172,4 @@ docker-compose restart
 ## 📝 주의사항
 
 1. **OpenAI API 키**: 반드시 `.env` 파일에 올바른 API 키를 설정하세요.
-2. **메모리 사용량**: Milvus와 임베딩 생성으로 인해 메모리 사용량이 높을 수 있습니다.
-3. **데이터 영속성**: 중요한 데이터는 정기적으로 백업하세요.
-4. **네트워크**: OpenAI API 호출을 위한 인터넷 연결이 필요합니다.
 5. **포트 충돌**: 다른 서비스와 포트가 충돌하지 않는지 확인하세요.

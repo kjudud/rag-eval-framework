@@ -176,7 +176,7 @@ if page == "1️⃣ Step: Benchmark Generation":
     
     with col1:
         st.markdown("#### 📄 Corpus 파일 형식")
-        st.markdown("**academic_chunks_sample_mini.json**")
+        st.markdown("**ex)academic_chunks_sample_mini.json**")
         st.code('''
 [
   {
@@ -194,7 +194,7 @@ if page == "1️⃣ Step: Benchmark Generation":
         
     with col2:
         st.markdown("#### ⚙️ Config 파일 형식")
-        st.markdown("**datamorgana_config_template.json**")
+        st.markdown("**ex)datamorgana_config_template.json**")
         st.code('''
 {
   "user_categorizations": [
@@ -527,8 +527,9 @@ if page == "1️⃣ Step: Benchmark Generation":
 
 elif page == "2️⃣ Step: RAG 실행":
     st.subheader('RAG 실행')
-    st.write('참가자의 RAG API를 호출하여 질문에 대한 답변을 생성합니다')
-    
+    st.write('⚡ 참가자의 RAG API를 호출하여 질문에 대한 답변을 생성합니다')
+    st.write('🧠 Hybrid search 기반 RAG baseline 모델을 제공합니다.')
+    st.write('🔍 시맨틱 검색 + 🔑 키워드 검색 --> ⚡ hybrid search')
     # RAG 실행 섹션
     st.subheader("🤖 RAG API 호출")
     
