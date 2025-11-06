@@ -1,3 +1,22 @@
+"""
+Streamlit 변수 공유 방법:
+
+1. st.session_state (권장)
+   - 페이지 리로드 간에도 유지되는 세션 상태
+   - 사용법: st.session_state['key'] = value
+   - 예시: st.session_state['uploaded_json'] = json_data
+
+2. st.cache_data / st.cache_resource
+   - 함수 결과를 캐싱하여 재사용
+   - 사용법: @st.cache_data로 함수 데코레이트
+   - 예시: @st.cache_data로 데이터 로딩 함수 캐싱
+
+3. 전역 변수 (비권장)
+   - 페이지 리로드 시 초기화됨
+   - 멀티 사용자 환경에서 문제 발생 가능
+   - 가능하면 st.session_state 사용 권장
+"""
+
 import streamlit as st
 import json
 from io import StringIO
@@ -371,6 +390,12 @@ if page == "1️⃣ Step: Benchmark Generation":
         st.subheader("🤖 DataMorgana Generator 실행")
         st.write("2. 업로드된 JSON 파일로 QA 데이터를 생성합니다")
         
+        # 실행 중인 프로세스 상태 표시
+        if 'datamorgana_process' in st.session_state:
+            process = st.session_state['datamorgana_process']
+            if process.poll() is None:  # 프로세스가 실행 중인 경우
+                st.warning("⚠️ DataMorgana 프로세스가 실행 중입니다. 새로 시작하면 기존 프로세스가 종료됩니다.")
+        
         col1, col2 = st.columns([1, 1])
         
         with col1:
@@ -384,6 +409,25 @@ if page == "1️⃣ Step: Benchmark Generation":
                     status_text = st.empty()
                 
                 try:
+                    # 기존 프로세스가 실행 중이면 종료
+                    if 'datamorgana_process' in st.session_state:
+                        old_process = st.session_state['datamorgana_process']
+                        if old_process.poll() is None:  # 프로세스가 실행 중인 경우
+                            status_text.text("기존 프로세스 종료 중...")
+                            try:
+                                old_process.terminate()  # 정상 종료 시도
+                                # 5초 대기 후 강제 종료
+                                try:
+                                    old_process.wait(timeout=5)
+                                except subprocess.TimeoutExpired:
+                                    old_process.kill()  # 강제 종료
+                                    old_process.wait()
+                                status_text.text("기존 프로세스가 종료되었습니다.")
+                                # 세션 상태에서 제거
+                                del st.session_state['datamorgana_process']
+                            except Exception as e:
+                                st.warning(f"기존 프로세스 종료 중 오류: {str(e)}")
+                    
                     # datamorgana generator 실행 (실시간 출력)
                     cmd = [
                         sys.executable, 
@@ -396,6 +440,7 @@ if page == "1️⃣ Step: Benchmark Generation":
                     if config_path:
                         cmd.extend(["--config_file", config_path])
                     
+                    # 새 프로세스 시작
                     process = subprocess.Popen(
                         cmd,
                         stdout=subprocess.PIPE,
@@ -405,6 +450,9 @@ if page == "1️⃣ Step: Benchmark Generation":
                         bufsize=0,  # unbuffered
                         universal_newlines=True
                     )
+                    
+                    # 프로세스를 세션 상태에 저장 (필요한 경우)
+                    st.session_state['datamorgana_process'] = process
                     
                     # 실시간 출력 처리
                     import threading
@@ -456,6 +504,9 @@ if page == "1️⃣ Step: Benchmark Generation":
                         status_text.text("✅ QA 데이터 생성이 완료되었습니다!")
                         st.success("✅ QA 데이터 생성이 완료되었습니다!")
                         st.session_state['qa_generated'] = True
+                        # 프로세스 완료 후 세션 상태에서 제거
+                        if 'datamorgana_process' in st.session_state:
+                            del st.session_state['datamorgana_process']
                     else:
                         stderr_output = process.stderr.read()
                         st.error(f"❌ Generator 실행 중 오류가 발생했습니다:")
@@ -869,6 +920,12 @@ elif page == "3️⃣ Step: Evaluation":
         # RAGChecker 실행
         st.subheader("🔍 RAGChecker 실행")
         
+        # 실행 중인 프로세스 상태 표시
+        if 'ragchecker_process' in st.session_state:
+            process = st.session_state['ragchecker_process']
+            if process.poll() is None:  # 프로세스가 실행 중인 경우
+                st.warning("⚠️ RAGChecker 프로세스가 실행 중입니다. 새로 시작하면 기존 프로세스가 종료됩니다.")
+        
         col1, col2 = st.columns([1, 1])
         
         with col1:
@@ -881,6 +938,25 @@ elif page == "3️⃣ Step: Evaluation":
                     status_text = st.empty()
                 
                 try:
+                    # 기존 프로세스가 실행 중이면 종료
+                    if 'ragchecker_process' in st.session_state:
+                        old_process = st.session_state['ragchecker_process']
+                        if old_process.poll() is None:  # 프로세스가 실행 중인 경우
+                            status_text.text("기존 프로세스 종료 중...")
+                            try:
+                                old_process.terminate()  # 정상 종료 시도
+                                # 5초 대기 후 강제 종료
+                                try:
+                                    old_process.wait(timeout=5)
+                                except subprocess.TimeoutExpired:
+                                    old_process.kill()  # 강제 종료
+                                    old_process.wait()
+                                status_text.text("기존 프로세스가 종료되었습니다.")
+                                # 세션 상태에서 제거
+                                del st.session_state['ragchecker_process']
+                            except Exception as e:
+                                st.warning(f"기존 프로세스 종료 중 오류: {str(e)}")
+                    
                     # RAGChecker 실행
                     cmd = [
                         sys.executable, 
@@ -892,6 +968,7 @@ elif page == "3️⃣ Step: Evaluation":
                         "--checker_name", model_name
                     ]
                     
+                    # 새 프로세스 시작
                     process = subprocess.Popen(
                         cmd,
                         stdout=subprocess.PIPE,
@@ -901,6 +978,9 @@ elif page == "3️⃣ Step: Evaluation":
                         bufsize=0,  # unbuffered
                         universal_newlines=True
                     )
+                    
+                    # 프로세스를 세션 상태에 저장 (필요한 경우)
+                    st.session_state['ragchecker_process'] = process
                     
                     # 실시간 출력 처리
                     import threading
@@ -952,6 +1032,9 @@ elif page == "3️⃣ Step: Evaluation":
                         status_text.text("✅ Evaluation이 완료되었습니다!")
                         st.success("✅ Evaluation이 완료되었습니다!")
                         st.session_state['evaluation_completed'] = True
+                        # 프로세스 완료 후 세션 상태에서 제거
+                        if 'ragchecker_process' in st.session_state:
+                            del st.session_state['ragchecker_process']
                     else:
                         stderr_output = process.stderr.read()
                         st.error(f"❌ Evaluation 실행 중 오류가 발생했습니다:")
