@@ -24,7 +24,8 @@ from pymilvus import (
 import uuid
 import threading
 from typing import List, Dict, Any
-
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -43,6 +44,15 @@ class AcademicRAGSystem:
         self.embedding_dim = None
         self.collection = None
         self.is_initialized = False
+        
+        # RecursiveCharacterTextSplitter 초기화
+        # text-embedding-3-small 최대 토큰: 8191 토큰 ≈ 2500 문자 (안전하게 2000자로 설정)
+        self.text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=2200,  # 최대 청크 크기 (문자 수)
+            chunk_overlap=220,  # 청크 간 겹치는 길이
+            length_function=len,
+            separators=["\n\n", "\n", ". ", " ", ""]  # 분리 우선순위
+        )
         
     def initialize(self):
         """RAG 시스템 초기화"""
@@ -153,27 +163,116 @@ class AcademicRAGSystem:
     def insert_chunks_to_milvus(self, json_list: List[Dict]):
         """청크들을 Milvus에 삽입"""
         data = []
+        skipped_count = 0
+        chunked_count = 0
+        num_workers = 5  # 하드코딩된 워커 수
         
-        for i, chunk in enumerate(json_list):
-            # content를 dense embedding으로 변환
-            dense_embedding = self.emb_dense(chunk['content'])            
-            # content를 sparse vector로 변환
-            sparse_vector = self.emb_sparse(chunk['content'])
+        # Thread-safe 카운터와 Lock
+        doc_id_counter = 0
+        counter_lock = threading.Lock()
+        data_lock = threading.Lock()
+        
+        def process_text_chunk(chunk_info: tuple) -> List[Dict]:
+            """단일 텍스트 청크 처리 함수"""
+            nonlocal doc_id_counter, skipped_count, chunked_count
             
-            # 데이터 준비 - 새로운 스키마에 맞게 수정
-            data.append({
-                "id": i,
-                "dense_vector": dense_embedding,
-                "sparse_vector": sparse_vector,
-                "content": chunk['content'],
-                "title": chunk['title'],
-                "original_id": chunk['id']
-            })
+            i, chunk, text_chunk, chunk_idx, total_chunks, is_chunked = chunk_info
+            original_id = chunk.get('id', '')
+            title = chunk.get('title', '')
+            
+            try:
+                # content를 dense embedding으로 변환
+                dense_embedding = self.emb_dense(text_chunk)
+                # content를 sparse vector로 변환
+                sparse_vector = self.emb_sparse(text_chunk)
+                
+                # 데이터 준비
+                chunk_title = f"{title} (청크 {chunk_idx + 1}/{total_chunks})" if is_chunked else title
+                chunk_original_id = f"{original_id}_chunk_{chunk_idx}" if is_chunked else original_id
+                
+                # Thread-safe ID 할당
+                with counter_lock:
+                    current_id = doc_id_counter
+                    doc_id_counter += 1
+                
+                return {
+                    "id": current_id,
+                    "dense_vector": dense_embedding,
+                    "sparse_vector": sparse_vector,
+                    "content": text_chunk,
+                    "title": chunk_title,
+                    "original_id": chunk_original_id
+                }
+            except Exception as e:
+                error_msg = str(e)
+                # 컨텍스트 길이 초과 에러 처리
+                if "maximum context length" in error_msg or "context_length_exceeded" in error_msg:
+                    logger.warning(f"청크 {i}의 하위 청크 {chunk_idx} 임베딩 생성 실패: 컨텍스트 길이 초과. 건너뜁니다.")
+                    with counter_lock:
+                        skipped_count += 1
+                else:
+                    logger.error(f"청크 {i}의 하위 청크 {chunk_idx} 처리 중 오류: {error_msg}")
+                    with counter_lock:
+                        skipped_count += 1
+                return None
         
-        # Milvus에 삽입
-        self.collection.insert(data)
-        self.collection.flush()
-        logger.info(f"총 {len(data)}개의 청크를 Milvus에 삽입했습니다.")
+        # 모든 텍스트 청크를 수집
+        all_chunk_infos = []
+        for i, chunk in enumerate(json_list):
+            try:
+                content = chunk.get('content', '')
+                original_id = chunk.get('id', '')
+                
+                # content가 비어있으면 건너뛰기
+                if not content:
+                    skipped_count += 1
+                    continue
+                
+                # RecursiveCharacterTextSplitter를 사용하여 텍스트 청킹
+                text_chunks = self.text_splitter.split_text(content)
+                
+                # 원본이 여러 청크로 나뉘었는지 확인
+                is_chunked = len(text_chunks) > 1
+                if is_chunked:
+                    chunked_count += len(text_chunks) - 1
+                    logger.info(f"청크 {i} (ID: {original_id})가 {len(text_chunks)}개의 하위 청크로 분할되었습니다.")
+                
+                # 각 텍스트 청크를 처리 작업으로 추가
+                for chunk_idx, text_chunk in enumerate(text_chunks):
+                    all_chunk_infos.append((i, chunk, text_chunk, chunk_idx, len(text_chunks), is_chunked))
+            except Exception as e:
+                error_msg = str(e)
+                logger.error(f"청크 {i} 처리 중 예상치 못한 오류: {error_msg}")
+                skipped_count += 1
+        
+        # 병렬 처리로 임베딩 생성
+        logger.info(f"총 {len(all_chunk_infos)}개의 텍스트 청크를 병렬 처리합니다 (num_workers={num_workers})")
+        with ThreadPoolExecutor(max_workers=num_workers) as executor:
+            future_to_chunk = {executor.submit(process_text_chunk, chunk_info): chunk_info for chunk_info in all_chunk_infos}
+            
+            completed = 0
+            for future in as_completed(future_to_chunk):
+                try:
+                    result = future.result()
+                    if result is not None:
+                        with data_lock:
+                            data.append(result)
+                    completed += 1
+                    
+                    # 진행률 로깅
+                    if completed % 50 == 0 or completed == len(all_chunk_infos):
+                        logger.info(f"임베딩 생성 진행률: {completed}/{len(all_chunk_infos)}")
+                except Exception as e:
+                    logger.error(f"청크 처리 결과 수집 중 오류: {str(e)}")
+        
+        # Milvus에 삽입 (ID 순서대로 정렬)
+        if data:
+            data.sort(key=lambda x: x['id'])
+            self.collection.insert(data)
+            self.collection.flush()
+            logger.info(f"총 {len(data)}개의 청크를 Milvus에 삽입했습니다. (원본 {len(json_list)}개 중 {chunked_count}개 청킹됨, {skipped_count}개 건너뜀)")
+        else:
+            logger.warning(f"삽입할 청크가 없습니다. 모든 청크가 건너뛰어졌습니다. ({skipped_count}개 건너뜀)")
     
     def search_similar_chunks(self, question: str, limit: int = 3, sparse_weight: float = 0.3, dense_weight: float = 0.7):
         """Hybrid search (dense + sparse vector) using AnnSearchRequest and WeightedRanker"""
@@ -324,32 +423,55 @@ class AcademicRAGSystem:
 
 # 전역 RAG 시스템 인스턴스
 rag_system = None
+rag_system_chunks_file = None  # 현재 사용 중인 chunks_file 저장
 initialization_lock = threading.Lock()
 
-def get_rag_system():
-    """RAG 시스템 인스턴스 반환 (싱글톤)"""
-    global rag_system
+def get_rag_system(chunks_file: str = None):
+    """RAG 시스템 인스턴스 반환 (싱글톤)
+    
+    Args:
+        chunks_file: 청크 파일 경로 (기본값: 'streamlit/uploaded_files/academic_chunks_sample_mini.json')
+    """
+    global rag_system, rag_system_chunks_file
+    
+    # 기본값 설정
+    if chunks_file is None:
+        chunks_file = 'streamlit/uploaded_files/academic_chunks_sample_mini.json'
+    print(chunks_file)
+    # chunks_file이 변경되었거나 초기화되지 않은 경우
     if rag_system is None:
         with initialization_lock:
             if rag_system is None:
-                # 환경변수에서 설정 읽기
-                chunks_file = './uploaded_files/academic_chunks_sample_mini.json'
-                milvus_db_path = './academic_milvus.db'
+                # Milvus DB 경로 생성 (chunks_file과 같은 디렉토리에 .db 파일 생성)
+                chunks_file_dir = os.path.dirname(os.path.abspath(chunks_file))
+                chunks_file_basename = os.path.basename(chunks_file)
+                chunks_file_name_without_ext = os.path.splitext(chunks_file_basename)[0]
+                milvus_db_path = os.path.join(chunks_file_dir, f"{chunks_file_name_without_ext}.db")
+                
+                logger.info(f"RAG 시스템 초기화: chunks_file={chunks_file}, milvus_db_path={milvus_db_path}")
                 
                 rag_system = AcademicRAGSystem(chunks_file, milvus_db_path)
                 rag_system.initialize()
+                rag_system_chunks_file = chunks_file
+                
     return rag_system
 
 @app.route('/health', methods=['GET'])
 def health_check():
     """헬스 체크 엔드포인트"""
     try:
-        system = get_rag_system()
+        # chunks_file 파라미터 받기
+        chunks_file = request.args.get('chunks_file', None)
+        print(chunks_file)
+        # chunks_file이 제공된 경우 해당 파일로 초기화
+        system = get_rag_system(chunks_file=chunks_file)
+        
         return jsonify({
             "status": "healthy",
             "message": "Academic RAG API 서버가 정상적으로 실행 중입니다.",
             "version": "1.0.0",
-            "initialized": system.is_initialized
+            "initialized": system.is_initialized,
+            "chunks_file": system.chunks_file
         })
     except Exception as e:
         return jsonify({
@@ -371,10 +493,11 @@ def rag_query():
         
         query = data['query']
         top_k = data.get('top_k', 3)
+        chunks_file = request.args.get('chunks_file', None)
         
         logger.info(f"단일 질의 수신: {query}")
         
-        system = get_rag_system()
+        system = get_rag_system(chunks_file=chunks_file)
         result = system.process_question(query, top_k)
         
         logger.info(f"단일 질의 처리 완료: {len(result['answer'])}자 답변")
@@ -400,6 +523,7 @@ def rag_batch():
         
         queries = data['queries']
         top_k = data.get('top_k', 3)
+        chunks_file = data.get('chunks_file', None) or request.args.get('chunks_file', None)
         
         if not isinstance(queries, list):
             return jsonify({
@@ -408,7 +532,7 @@ def rag_batch():
         
         logger.info(f"배치 질의 수신: {len(queries)}개 질문")
         
-        system = get_rag_system()
+        system = get_rag_system(chunks_file=chunks_file)
         result = system.process_batch_questions(queries, top_k)
         
         logger.info(f"배치 질의 처리 완료: {len(queries)}개 질문")
@@ -438,7 +562,7 @@ def get_config():
         "default_top_k": 3,
         "max_top_k": 10,
         "model": "gpt-3.5-turbo",
-        "embedding_model": "text-embedding-3-small"
+        "embedding_model": "text-embedding-3-small",
     })
 
 if __name__ == '__main__':

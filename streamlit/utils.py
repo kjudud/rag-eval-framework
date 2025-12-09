@@ -35,11 +35,20 @@ class RAGAPIClient:
             'User-Agent': 'RAG-Eval-Framework/1.0'
         })
     
-    def health_check(self):
-        """API 서버 헬스 체크"""
+    def health_check(self, chunks_file: str = None):
+        """API 서버 헬스 체크
+        
+        Args:
+            chunks_file: 청크 파일 경로 (선택사항)
+        """
         try:
+            params = {}
+            if chunks_file:
+                params['chunks_file'] = chunks_file
+            print(params)
             response = self.session.get(
                 f"{self.base_url}/health",
+                params=params,
                 timeout=self.timeout
             )
             response.raise_for_status()
@@ -59,17 +68,21 @@ class RAGAPIClient:
         except requests.exceptions.RequestException as e:
             raise Exception(f"설정 정보 조회 실패: {str(e)}")
     
-    def batch_query(self, questions: list, top_k: int = 3):
+    def batch_query(self, questions: list, top_k: int = 3, chunks_file: str = None):
         """배치 질의응답"""
         try:
             payload = {
                 "queries": questions,
                 "top_k": top_k
             }
+            params = {}
+            if chunks_file:
+                params['chunks_file'] = chunks_file
             
             response = self.session.post(
                 f"{self.base_url}/api/rag/batch",
                 json=payload,
+                params=params,
                 timeout=self.timeout * len(questions)
             )
             response.raise_for_status()

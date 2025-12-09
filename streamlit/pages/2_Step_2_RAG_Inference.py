@@ -8,7 +8,7 @@ import os
 import time
 import traceback
 
-from utils import display_logo, RAGAPIClient, apply_sidebar_style
+from utils import display_logo, RAGAPIClient, apply_sidebar_style, get_project_root
 
 # 페이지 레이아웃 설정
 st.set_page_config(
@@ -52,11 +52,33 @@ with col1:
         help="참가자의 RAG API 서버 주소"
     )
     
+    # 프로젝트 루트 경로 가져오기
+    project_root = get_project_root()
+    uploaded_files_dir = os.path.join(project_root, "uploaded_files")
+    # uploaded_files 디렉토리에서 JSON 파일 목록 가져오기
+    chunks_file_options = []
+    if os.path.exists(uploaded_files_dir):
+        for file in os.listdir(uploaded_files_dir):
+            chunks_file_options.append(file)
+    
+    if chunks_file_options:
+        selected_file = st.selectbox(
+            "청크 파일 선택:",
+            options=chunks_file_options,
+            help="RAG 시스템에서 사용할 청크 파일을 선택하세요"
+        )
+        chunks_file_path = os.path.join(uploaded_files_dir, selected_file)
+        st.info(f"📁 선택된 파일: `{chunks_file_path}`")
+    else:
+        st.warning("⚠️ uploaded_files 디렉토리에 파일이 없습니다.")
+        selected_file = None
+        chunks_file_path = None
+    
     # API 연결 테스트
     if st.button("🔗 API 연결 테스트", type="secondary"):
         try:
             client = RAGAPIClient(api_url)
-            health = client.health_check()
+            health = client.health_check(chunks_file=chunks_file_path)
             st.success(f"✅ API 연결 성공!\n상태: {health.get('status', 'unknown')}")
             
             # API 설정 정보 표시
@@ -90,7 +112,7 @@ with col1:
             """)
 
 with col2:
-    num_questions = st.number_input("테스트할 질문 개수:", min_value=1, max_value=50, value=10)
+    num_questions = st.number_input("테스트할 질문 개수:", min_value=1, max_value=1000, value=10)
     top_k = st.number_input("검색할 문서 개수:", min_value=1, max_value=10, value=3)
 
 # API 정의 표시
@@ -218,8 +240,8 @@ else:
                 status_text.text(f"총 {len(questions)}개 질문을 배치로 처리 중...")
                 progress_bar.progress(0.2)
                 
-                # 배치 API 호출
-                batch_response = client.batch_query(questions, top_k)
+                # 배치 API 호출 (chunks_file 전달)
+                batch_response = client.batch_query(questions, top_k, chunks_file=chunks_file_path)
                 batch_results = batch_response.get('results', [])
                 
                 progress_bar.progress(0.9)

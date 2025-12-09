@@ -84,9 +84,9 @@ def main():
     with open(args.input_path, "r") as f:
         rag_results = RAGResults.from_json(f.read())
     evaluator.evaluate(rag_results, metrics=args.metrics, save_path=args.output_path)
-    print(json.dumps(rag_results.metrics, indent=2))
-    with open(args.output_path, "w") as f:
-        f.write(rag_results.to_json(indent=2))
+    print(json.dumps(rag_results.metrics, indent=2, ensure_ascii=False))
+    with open(args.output_path, "w", encoding='utf-8') as f:
+        f.write(rag_results.to_json(indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ import random
 import concurrent.futures
 import argparse
 import os
+import threading
 from dataclasses import dataclass
 from loguru import logger
 from typing import Optional, Dict, Any, List, Tuple
@@ -15,14 +16,14 @@ from tqdm import tqdm
 class Config:
     api_key: str = os.getenv("OPENAI_API_KEY")
     base_url: str = "https://api.openai.com/v1"
-    model: str = "gpt-4.1"#"claude-sonnet-4-20250514"
+    model: str = "gpt-4o"#"claude-sonnet-4-20250514"
     input_path: str = "data/academic_chunks_sample.json"
     output_path: str = "data/academic_chunks_sample_qa.json"
     config_path: str = "datamorgana_config_template.json"
     max_retries: int = 3
     retry_delay: int = 5
-    api_call_delay: float = 5
-    max_workers: int = 1
+    api_call_delay: float = 7
+    max_workers: int = 5
     num_questions_per_document: int = 1
     candidate_questions_per_call: int = 2
 
@@ -48,12 +49,12 @@ class DataMorganaGenerator:
         self.question_categorizations: List[Categorization] = []
         
     def load_configuration(self, config_path: str):
-        """加载DataMorgana配置文件"""
+        """Load DataMorgana configuration file"""
         try:
             with open(config_path, 'r', encoding='utf-8') as f:
                 config_data = json.load(f)
             
-            # 加载用户分类
+            # Load user categorizations
             if 'user_categorizations' in config_data:
                 for cat_data in config_data['user_categorizations']:
                     categories = [
@@ -68,7 +69,7 @@ class DataMorganaGenerator:
                         Categorization(name=cat_data['name'], categories=categories)
                     )
             
-            # 加载问题分类
+            # Load question categorizations
             if 'question_categorizations' in config_data:
                 for cat_data in config_data['question_categorizations']:
                     categories = [
@@ -90,10 +91,10 @@ class DataMorganaGenerator:
             self._load_default_configuration()
     
     def _load_default_configuration(self):
-        """加载默认配置（基于论文Table 1）"""
+        """Load default configuration (based on paper Table 1)"""
         logger.info("기본 설정 사용")
         
-        # 默认用户分类
+        # Default user categorization
         expert_novice = Categorization(
             name="expertise",
             categories=[
@@ -103,7 +104,7 @@ class DataMorganaGenerator:
         )
         self.user_categorizations = [expert_novice]
         
-        # 默认问题分类（基于论文Table 1）
+        # Default question categorizations (based on paper Table 1)
         factuality = Categorization(
             name="factuality",
             categories=[
@@ -138,7 +139,7 @@ class DataMorganaGenerator:
             ]
         )
         
-        # 添加语言分类
+        # Add language categorization
         language = Categorization(
             name="language",
             categories=[
@@ -150,18 +151,18 @@ class DataMorganaGenerator:
         self.question_categorizations = [factuality, premise, phrasing, linguistic_variation, language]
     
     def select_categories(self) -> Tuple[List[Category], List[Category]]:
-        """根据概率选择用户和问题类别"""
+        """Select user and question categories based on probability"""
         selected_user_categories = []
         selected_question_categories = []
         
-        # 为每个用户分类选择一个类别
+        # Select one category for each user categorization
         for categorization in self.user_categorizations:
             categories = categorization.categories
             weights = [cat.probability for cat in categories]
             selected = random.choices(categories, weights=weights, k=1)[0]
             selected_user_categories.append(selected)
         
-        # 为每个问题分类选择一个类别
+        # Select one category for each question categorization
         for categorization in self.question_categorizations:
             categories = categorization.categories
             weights = [cat.probability for cat in categories]
@@ -172,37 +173,54 @@ class DataMorganaGenerator:
     
     def build_prompt(self, document: str, user_categories: List[Category], 
                     question_categories: List[Category], num_questions: int = 2) -> str:
-        """构建DataMorgana的prompt模板（基于论文）"""
+        """Build DataMorgana prompt template (based on paper)"""
         
-        # 构建用户特征描述
+        # Build user characteristic descriptions
         user_descriptions = []
         for cat in user_categories:
-            user_descriptions.append(f"They must be {cat.description}")
+            # user_descriptions.append(f"They must be {cat.description}")
+            user_descriptions.append(f"다음 특성을 가져야 합니다: {cat.description}")
         
-        # 构建问题特征描述
+        # Build question characteristic descriptions
         question_descriptions = []
         for cat in question_categories:
-            question_descriptions.append(f"It must be {cat.description}")
+            # question_descriptions.append(f"It must be {cat.description}")
+            question_descriptions.append(f"다음 특성을 가져야 합니다: {cat.description}")
         
-        prompt = f"""You are a user simulator that should generate {num_questions} candidate questions for starting a conversation.
+#         prompt = f"""You are a user simulator that should generate {num_questions} candidate questions for starting a conversation.
 
-The {num_questions} questions must be about facts discussed in the documents you will now receive. When generating the questions, assume that the real users you must simulate, as well as the readers of the questions do not have access to these documents. Therefore, never refer to the author of the documents or the documents themselves. Also, assume that whoever reads the questions will read each question independently. The {num_questions} questions must be diverse and different from each other. Return only the questions without any preamble. Write each pair in a new line, in the following JSON format: {{"question": "<question>", "answer": "<answer>"}}.
+# The {num_questions} questions must be about facts discussed in the documents you will now receive. When generating the questions, assume that the real users you must simulate, as well as the readers of the questions do not have access to these documents. Therefore, never refer to the author of the documents or the documents themselves. Also, assume that whoever reads the questions will read each question independently. The {num_questions} questions must be diverse and different from each other. Return only the questions without any preamble. Write each pair in a new line, in the following JSON format: {{"question": "<question>", "answer": "<answer>"}}.
 
-IMPORTANT: The questions MUST include specific ENTITIES, TERMS, CONCEPTS, or NAMES mentioned in the document. Avoid vague pronoun references like "this technology", "that method", "such system", or in Chinese "这种", "那种", "有种". Instead, use the actual names like "blockchain", "COVID-19", "artificial intelligence", etc. This makes the questions clearer and more specific.
+# IMPORTANT: The questions MUST include specific ENTITIES, TERMS, CONCEPTS, or NAMES mentioned in the document. Avoid vague pronoun references like "this technology", "that method", "such system", or in Chinese "这种", "那种", "有种". Instead, use the actual names like "blockchain", "COVID-19", "artificial intelligence", etc. This makes the questions clearer and more specific.
 
-The generated questions should be about facts from the following document:
+# The generated questions should be about facts from the following document:
+# {document}
+
+# Each of the generated questions must reflect a user with the following characteristics:
+# {chr(10).join(user_descriptions)}
+
+# Each of the generated questions must have the following characteristics:
+# {chr(10).join(question_descriptions)}"""
+
+        prompt = f"""당신은 대화를 시작하기 위한 {num_questions}개의 후보 질문을 생성하는 사용자 시뮬레이터입니다.
+
+{num_questions}개의 질문은 지금 받을 문서에서 제시된 사실에 관한 것이어야 합니다. 질문을 생성할 때, 시뮬레이션해야 하는 실제 사용자와 질문을 읽는 독자들이 이 문서에 접근할 수 없다고 가정하세요. 따라서 문서의 저자나 문서 자체를 언급하지 마세요. 또한 질문을 읽는 사람이 각 질문을 독립적으로 읽는다고 가정하세요. {num_questions}개의 질문은 서로 다양하고 달라야 합니다. 서문 없이 질문만 반환하세요. 각 쌍을 새 줄에 다음 JSON 형식으로 작성하세요: {{"question": "<question>", "answer": "<answer>"}}.
+
+중요: 질문에는 반드시 문서에 언급된 구체적인 개체, 용어, 개념 또는 이름을 포함해야 합니다. "이 질병", "그 치료법", "그런 약물"과 같은 모호한 대명사 참조를 피하세요. 대신 "당뇨병", "PPARγ", "Lactobacillus casei" 등과 같은 실제 의료 용어나 개념 이름을 사용하세요. 이렇게 하면 질문이 더 명확하고 구체적이 됩니다.
+
+생성된 질문은 다음 문서의 사실에 관한 것이어야 합니다:
 {document}
 
-Each of the generated questions must reflect a user with the following characteristics:
+생성된 각 질문은 다음 특성을 가진 사용자를 반영해야 합니다:
 {chr(10).join(user_descriptions)}
 
-Each of the generated questions must have the following characteristics:
+생성된 각 질문은 다음 특성을 가져야 합니다:
 {chr(10).join(question_descriptions)}"""
 
         return prompt
     
     def get_model_response(self, prompt: str) -> Optional[str]:
-        """调用API获取模型响应"""
+        """Call API to get model response"""
         for attempt in range(self.config.max_retries):
             try:
                 response = self.client.chat.completions.create(
@@ -221,11 +239,11 @@ Each of the generated questions must have the following characteristics:
         return None
     
     def parse_qa_pairs(self, response: str) -> List[Dict[str, str]]:
-        """解析模型响应中的Q&A对"""
+        """Parse Q&A pairs from model response"""
         qa_pairs = []
         
         try:
-            # 尝试逐行解析JSON
+            # Try parsing JSON line by line
             lines = response.strip().split('\n')
             for line in lines:
                 line = line.strip()
@@ -242,34 +260,34 @@ Each of the generated questions must have the following characteristics:
         return qa_pairs
     
     def filter_qa_pairs(self, qa_pairs: List[Dict[str, str]], document: str) -> List[Dict[str, str]]:
-        """过滤Q&A对，确保质量（基于论文的过滤策略）"""
+        """Filter Q&A pairs to ensure quality (based on paper's filtering strategy)"""
         filtered_pairs = []
         
         for qa_pair in qa_pairs:
             question = qa_pair.get('question', '').strip()
             answer = qa_pair.get('answer', '').strip()
             
-            # 基本质量检查
-            if len(question) < 3 or len(answer) < 3:  # 放宽长度限制
+            # Basic quality check
+            if len(question) < 3 or len(answer) < 3:  # Relaxed length limit
                 continue
                 
-            # 检查是否引用了文档（违反context-free要求）
-            # 检查英文引用
+            # Check if document is referenced (violates context-free requirement)
+            # Check English references
             english_refs = ['document', 'text', 'passage', 'author']
-            # 检查中文引用
-            korean_refs = ['문서', '텍스트', '단락', '저자', '자료', '내용']
+            # Check Korean references
+            korean_refs = ['문서', '자료', '텍스트', '단락', '저자']
             
             question_lower = question.lower()
             if any(ref in question_lower for ref in english_refs) or any(ref in question for ref in korean_refs):
                 continue
                 
-            # 检查问题是否合理（支持中英文）
-            # 英文疑问词
+            # Check if question is reasonable (supports English and Korean)
+            # English question words
             # english_question_words = ['what', 'how', 'why', 'when', 'where', 'who', 'which', 'is', 'are', 'can', 'could', 'would', 'should', 'do', 'does', 'did']
-            # # 中文疑问词
+            # # Korean question words
             # chinese_question_words = ['什么', '怎么', '如何', '为什么', '何时', '什么时候', '哪里', '哪儿', '谁', '哪个', '哪些', '是否', '能否', '可以', '是什么', '有哪些', '有什么']
             
-            # # 检查是否包含疑问词或以问号结尾
+            # # Check if contains question words or ends with question mark
             # has_english_question = any(word in question_lower for word in english_question_words) or question.endswith('?')
             # has_chinese_question = any(word in question for word in chinese_question_words) or question.endswith('？')
             
@@ -281,7 +299,7 @@ Each of the generated questions must have the following characteristics:
         return filtered_pairs
     
     def process_document(self, document_item: Dict[str, Any]) -> Dict[str, Any]:
-        """处理单个文档，生成Q&A对"""
+        """Process a single document and generate Q&A pairs"""
         try:
             document_id = document_item.get('id', 'unknown')
             document_content = document_item.get('content', [])
@@ -292,12 +310,12 @@ Each of the generated questions must have the following characteristics:
                 return document_item
             generated_qa_pairs = []
             
-            # 生成指定数量的Q&A对
+            # Generate specified number of Q&A pairs
             for i in range(self.config.num_questions_per_document):
-                # 选择类别（步骤1）
+                # Select categories (Step 1)
                 user_categories, question_categories = self.select_categories()
                 
-                # 构建prompt（步骤2-3）
+                # Build prompt (Step 2-3)
                 prompt = self.build_prompt(
                     document_content,
                     user_categories,
@@ -305,19 +323,19 @@ Each of the generated questions must have the following characteristics:
                     self.config.candidate_questions_per_call
                 )
                 
-                # 获取模型响应
+                # Get model response
                 response = self.get_model_response(prompt)
                 if not response:
                     logger.warning(f"문서 {document_id} {i+1}번째 생성 실패")
                     continue
                 
-                # 解析Q&A对
+                # Parse Q&A pairs
                 qa_pairs = self.parse_qa_pairs(response)
                 
-                # 过滤Q&A对（步骤4）
+                # Filter Q&A pairs (Step 4)
                 filtered_pairs = self.filter_qa_pairs(qa_pairs, document_content)
                 
-                # 选择最佳Q&A对
+                # Select best Q&A pair
                 if filtered_pairs:
                     selected_pair = random.choice(filtered_pairs)
                     selected_pair['user_categories'] = ', '.join([cat.name for cat in user_categories])
@@ -334,16 +352,47 @@ Each of the generated questions must have the following characteristics:
         return document_item
     
     def generate_benchmark(self, documents: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """生成整个基准测试集（使用线程池加速）"""
+        """Generate entire benchmark dataset (using thread pool for acceleration)"""
         logger.info(f"벤치마크 데이터셋 생성을 시작합니다, 총 {len(documents)}개의 문서")
         
         results = []
         completed = 0
+        
+        # Shared counter for QA pairs (thread-safe)
+        questions_count = 0
+        save_counter = 0  # Counter for file naming (100, 200, 300, ...)
+        counter_lock = threading.Lock()
+        
+        def save_results():
+            """Save current results to temporary file (thread-safe)"""
+            nonlocal save_counter
+            try:
+                save_counter += 1
+                file_number = save_counter * 100
+                temp_path = f"{self.config.output_path}_temp_{file_number}.json"
+                
+                with open(temp_path, 'w', encoding='utf-8') as f:
+                    json.dump(results, f, ensure_ascii=False, indent=2)
+                
+            except Exception as e:
+                logger.error(f"중간 저장 실패: {e}")
+        
         with tqdm(total=len(documents), desc="생성 진행 상황") as pbar:
             with concurrent.futures.ThreadPoolExecutor(max_workers=self.config.max_workers) as executor:
                 future_to_doc = {executor.submit(self.process_document, doc): doc for doc in documents}
                 for future in concurrent.futures.as_completed(future_to_doc):
-                    results.append(future.result())
+                    result = future.result()
+                    results.append(result)
+                    
+                    # Count QA pairs in this result (thread-safe)
+                    qa_pairs_count = len(result.get('generated_qa_pairs', []))
+                    
+                    with counter_lock:
+                        questions_count += qa_pairs_count
+                        if questions_count >= 100:
+                            save_results()
+                            questions_count = 0
+                    
                     completed += 1
                     progress = int((completed / len(documents)) * 100)
                     print(f"PROGRESS:{progress}:문서 처리 중... ({completed}/{len(documents)})", flush=True)
@@ -352,7 +401,7 @@ Each of the generated questions must have the following characteristics:
         return results
     
     def save_configuration_template(self, output_path: str):
-        """保存配置文件模板"""
+        """Save configuration file template"""
         template = {
             "user_categorizations": [
                 {
@@ -434,16 +483,22 @@ def main():
                        help='output JSON file path')
     parser.add_argument('--config_file', type=str, default=None,
                        help='config file path (optional)')
+    parser.add_argument('--log_file', type=str, default=None,
+                       help='log file path (optional, if not specified, logs go to stderr)')
     args = parser.parse_args()
+    
+    # 로그 파일 설정 (파일과 콘솔 둘 다 출력)
+    if args.log_file:
+        logger.add(args.log_file, rotation="10 MB", retention="7 days", encoding="utf-8", level="INFO", enqueue=False)
     
     config = Config()
     config.input_path = args.input_file
     config.output_path = args.output_file
     
-    # 创建生成器
+    # Create generator
     generator = DataMorganaGenerator(config)
     
-    # config 파일이 지정된 경우 사용, 아니면 기본 설정 사용
+    # Use config file if specified, otherwise use default configuration
     if args.config_file:
         try:
             generator.load_configuration(args.config_file)
@@ -453,7 +508,7 @@ def main():
             logger.info("기본 설정을 사용합니다")
             generator._load_default_configuration()
     else:
-        # 如果配置文件不存在，创建模板
+        # If config file doesn't exist, create template
         try:
             generator.load_configuration(config.config_path)
         except FileNotFoundError:
@@ -461,7 +516,7 @@ def main():
             generator.save_configuration_template(config.config_path)
             generator._load_default_configuration()
     
-    # 加载文档数据
+    # Load document data
     try:
         with open(config.input_path, 'r', encoding='utf-8') as f:
             documents = json.load(f)
@@ -469,7 +524,7 @@ def main():
         logger.info(f"{len(documents)}개의 문서를 성공적으로 불러왔습니다")
     except FileNotFoundError:
         logger.error(f"입력 파일 {config.input_path} 이(가) 존재하지 않습니다")
-        # 创建示例文档
+        # Create example documents
         documents = [
             {
                 "id": "doc1",
@@ -482,17 +537,17 @@ def main():
         ]
         logger.info("예시 문서를 사용하여 시연합니다.")
     
-    # 生成基准测试集
+    # Generate benchmark dataset
     print(f"PROGRESS:0:총 {len(documents)}개 문서 처리 시작", flush=True)
     results = generator.generate_benchmark(documents)
     print(f"PROGRESS:100:벤치마크 데이터셋 생성 완료", flush=True)
     
-    # 保存结果
+    # Save results
     # results = [i for i in results if i['generated_qa_pairs']]
     with open(config.output_path, 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     
-    # 统计生成结果
+    # Statistics of generated results
     total_qa_pairs = sum(len(doc.get('generated_qa_pairs', [])) for doc in results)
     logger.success(f"벤치마크 데이터셋 생성 완료!")
     logger.info(f"총 처리한 문서 수: {len(results)}")

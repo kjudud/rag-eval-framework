@@ -227,8 +227,8 @@ class RAGChecker():
         for requirement in requirements:
             self.check_claims(results, check_type=requirement)
             if save_path is not None:
-                with open(save_path, "w") as f:
-                    f.write(results.to_json(indent=2))
+                with open(save_path, "w", encoding='utf-8') as f:
+                    f.write(results.to_json(indent=2, ensure_ascii=False))
 
         # compute the metrics
         for metric in ret_metrics:
@@ -247,7 +247,7 @@ class RAGChecker():
         
         # save the results            
         if save_path is not None:
-                with open(save_path, "w") as f:
-                    f.write(results.to_json(indent=2))
+                with open(save_path, "w", encoding='utf-8') as f:
+                    f.write(results.to_json(indent=2, ensure_ascii=False))
 
         return results.metrics

@@ -309,11 +309,15 @@ if 'uploaded_json' in st.session_state:
                 input_file_abs = os.path.join(project_root, "streamlit", input_path)
                 output_file_abs = os.path.join(project_root, "streamlit", output_path)
                 
+                # 로그 파일 경로 설정
+                log_file_abs = os.path.join(project_root, "streamlit", "datamorgana_generator.log")
+                
                 cmd = [
                     sys.executable, 
                     datamorgana_script,
                     "--input_file", input_file_abs,
-                    "--output_file", output_file_abs
+                    "--output_file", output_file_abs,
+                    "--log_file", log_file_abs
                 ]
                 
                 # config 파일이 있으면 추가
