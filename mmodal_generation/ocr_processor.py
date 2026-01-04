@@ -6,6 +6,8 @@ import os
 import torch
 from transformers import AutoModel, AutoTokenizer
 from dataclasses import dataclass
+from typing import List
+import fitz  # PyMuPDF
 
 
 @dataclass
@@ -103,3 +105,111 @@ class OCRProcessor:
             if os.path.isdir(pdf_dir_path):
                 output_pdf_dir = os.path.join(output_dir, pdf_dir)
                 self.process_pdf_pages(pdf_dir_path, output_pdf_dir)
+
+    def convert_pdf_to_images(
+        self, pdf_path: str, output_dir: str, dpi: int = 300
+    ) -> List[str]:
+        """
+        PyMuPDF를 사용하여 PDF 파일을 PNG 이미지로 변환
+
+        Args:
+            pdf_path: 입력 PDF 파일 경로
+            output_dir: 출력 디렉토리 경로
+            dpi: 이미지 해상도 (기본값: 300)
+
+        Raises:
+            FileNotFoundError: PDF 파일이 존재하지 않는 경우
+        """
+
+        # PDF 파일 이름 (확장자 제외)
+        pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
+
+        image_paths = []
+
+        # PDF 열기
+        doc = fitz.open(pdf_path)
+
+        # 각 페이지를 PNG로 변환
+        for page_num in range(len(doc)):
+            page = doc[page_num]
+            # 페이지를 pixmap으로 렌더링 (DPI 직접 지정)
+            pix = page.get_pixmap(dpi=dpi)
+            # PNG 파일로 저장
+            image_filename = f"{page_num + 1:04d}.png"
+            image_path = os.path.join(output_dir, pdf_name, image_filename)
+            pix.save(image_path)
+            image_paths.append(image_path)
+
+        doc.close()
+
+        return image_paths
+
+    def convert_pdfs_in_dir(
+        self, pdf_dir: str, output_dir: str, dpi: int = 300
+    ) -> dict:
+        """
+        디렉토리 내의 모든 PDF 파일을 PNG 이미지로 변환
+
+        Args:
+            pdf_dir: PDF 파일들이 있는 디렉토리 경로
+            output_dir: 출력 디렉토리 경로
+            dpi: 이미지 해상도 (기본값: 300)
+
+        Returns:
+            {
+                "total_pdfs": 총 PDF 파일 수,
+                "total_images": 총 생성된 이미지 수,
+                "results": {
+                    "pdf_file_name": [생성된 이미지 경로 리스트],
+                    ...
+                }
+            }
+
+        Raises:
+            FileNotFoundError: 디렉토리가 존재하지 않는 경우
+        """
+        if not os.path.exists(pdf_dir):
+            raise FileNotFoundError(f"디렉토리를 찾을 수 없습니다: {pdf_dir}")
+
+        if not os.path.isdir(pdf_dir):
+            raise ValueError(f"경로가 디렉토리가 아닙니다: {pdf_dir}")
+
+        # 출력 디렉토리 생성
+        os.makedirs(output_dir, exist_ok=True)
+
+        # PDF 파일 찾기
+        pdf_files = [
+            f
+            for f in os.listdir(pdf_dir)
+            if os.path.isfile(os.path.join(pdf_dir, f)) and f.lower().endswith(".pdf")
+        ]
+
+        if not pdf_files:
+            return {
+                "total_pdfs": 0,
+                "total_images": 0,
+                "results": {},
+            }
+
+        results = {}
+        total_images = 0
+
+        # 각 PDF 파일 변환
+        for pdf_file in pdf_files:
+            pdf_path = os.path.join(pdf_dir, pdf_file)
+            try:
+                image_paths = self.convert_pdf_to_images(
+                    pdf_path=pdf_path, output_dir=output_dir, dpi=dpi
+                )
+                results[pdf_file] = image_paths
+                total_images += len(image_paths)
+            except Exception as e:
+                # 에러 발생 시 빈 리스트로 저장
+                results[pdf_file] = []
+                print(f"PDF 변환 실패 ({pdf_file}): {e}")
+
+        return {
+            "total_pdfs": len(pdf_files),
+            "total_images": total_images,
+            "results": results,
+        }
