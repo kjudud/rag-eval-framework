@@ -4,6 +4,8 @@
 - display_logo: 로고 표시 함수
 - get_project_root: 프로젝트 루트 경로 반환
 - run_in_conda_env: conda 환경에서 스크립트 실행
+- terminate_old_process: 기존 프로세스 종료 함수
+- show_loading_spinner: 로딩 스피너 표시 함수
 """
 
 import streamlit as st
@@ -318,17 +320,24 @@ def run_in_conda_env(
 
         if python_path is None:
             # conda run 사용 (가장 선호)
-            cmd = ["conda", "run", "-n", env_name, "python", script_path] + args
+            # -u 옵션: unbuffered 모드 (출력 버퍼링 없음)
+            cmd = ["conda", "run", "-n", env_name, "python", "-u", script_path] + args
         else:
             # 직접 Python 경로 사용
-            cmd = [python_path, script_path] + args
+            # -u 옵션: unbuffered 모드 (출력 버퍼링 없음)
+            cmd = [python_path, "-u", script_path] + args
 
         # 기본값 설정
         popen_kwargs.setdefault("stdout", subprocess.PIPE)
         popen_kwargs.setdefault("stderr", subprocess.PIPE)
         popen_kwargs.setdefault("text", True)
-        popen_kwargs.setdefault("bufsize", 0)
+        popen_kwargs.setdefault("bufsize", 0)  # unbuffered
         popen_kwargs.setdefault("universal_newlines", True)
+
+        # 환경 변수에 PYTHONUNBUFFERED 추가 (이중 보장)
+        env = os.environ.copy()
+        env["PYTHONUNBUFFERED"] = "1"
+        popen_kwargs.setdefault("env", env)
 
         process = subprocess.Popen(cmd, cwd=cwd, **popen_kwargs)
 
@@ -338,3 +347,56 @@ def run_in_conda_env(
         raise RuntimeError(str(e))
     except Exception as e:
         raise RuntimeError(f"conda 환경 '{env_name}'에서 스크립트 실행 실패: {e}")
+
+
+def terminate_old_process(process_key: str, status_text):
+    """기존 프로세스가 실행 중이면 종료
+
+    Args:
+        process_key: 세션 상태에 저장된 프로세스 키
+        status_text: 상태 메시지를 표시할 st.empty() 객체
+    """
+    if process_key in st.session_state:
+        old_process = st.session_state[process_key]
+        if old_process.poll() is None:
+            status_text.text("기존 프로세스 종료 중...")
+            try:
+                old_process.terminate()
+                old_process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                old_process.kill()
+                old_process.wait()
+            except Exception as e:
+                st.warning(f"기존 프로세스 종료 중 오류: {str(e)}")
+            else:
+                status_text.text("기존 프로세스가 종료되었습니다.")
+            del st.session_state[process_key]
+
+
+def show_loading_spinner(status_text, message: str, color: str = "#3498db"):
+    """HTML/CSS 로딩 스피너를 표시하는 함수
+
+    st.spinner()는 컨텍스트 매니저이므로 with 블록이 끝나면 사라집니다.
+    백그라운드 프로세스 실행 중에도 스피너를 계속 표시해야 하므로
+    HTML/CSS를 사용하여 구현했습니다.
+
+    Args:
+        status_text: 스피너를 표시할 st.empty() 객체
+        message: 표시할 메시지
+        color: 스피너 색상 (기본값: 파란색 #3498db)
+    """
+    status_text.markdown(
+        f"""
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="spinner" style="border: 3px solid #f3f3f3; border-top: 3px solid {color}; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite;"></div>
+            <span>{message}</span>
+        </div>
+        <style>
+            @keyframes spin {{
+                0% {{ transform: rotate(0deg); }}
+                100% {{ transform: rotate(360deg); }}
+            }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )

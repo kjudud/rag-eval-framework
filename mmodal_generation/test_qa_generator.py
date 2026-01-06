@@ -4,18 +4,20 @@ ocr_output 디렉토리를 입력으로 사용하여 QA 생성 수행
 """
 
 import os
+import argparse
 from qa_generator import Qwen3vlQaConfig, run_qa_generation
 
 
-def main():
+def main(
+    ocr_output_dir: str = "ocr_output",
+    output_file: str = "data/qa_results.json",
+    num_questions_per_document: int = 1,
+    max_new_tokens: int = 256,
+):
     """메인 테스트 함수"""
     print("=" * 60)
     print("QA Generator 테스트 시작")
     print("=" * 60)
-
-    # 입력 디렉토리 설정
-    ocr_output_dir = "ocr_output"
-    output_file = "data/test_qa_results.json"
 
     # 디렉토리 존재 확인
     if not os.path.exists(ocr_output_dir):
@@ -57,8 +59,8 @@ def main():
     config = Qwen3vlQaConfig(
         input_path=ocr_output_dir,
         output_path=output_file,
-        num_questions_per_document=1,  # 테스트용으로 1개만 생성
-        max_new_tokens=256,
+        num_questions_per_document=num_questions_per_document,
+        max_new_tokens=max_new_tokens,
     )
     print(f"모델: {config.model_name}")
     print(f"입력 경로: {config.input_path}")
@@ -76,7 +78,6 @@ def main():
         # run_qa_generation 함수 호출
         run_qa_generation(config)
 
-
         print("\n✓ QA 생성 완료")
 
         # 결과 확인
@@ -92,9 +93,7 @@ def main():
                 data = json.load(f)
 
             total_docs = len(data)
-            total_qa_pairs = sum(
-                len(doc.get("generated_qa_pairs", [])) for doc in data
-            )
+            total_qa_pairs = sum(len(doc.get("generated_qa_pairs", [])) for doc in data)
 
             print(f"처리된 문서 수: {total_docs}개")
             print(f"생성된 QA 쌍 수: {total_qa_pairs}개")
@@ -126,4 +125,39 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="QA Generator 테스트: OCR 출력 디렉토리를 사용하여 QA 생성 수행"
+    )
+    parser.add_argument(
+        "--ocr-output-dir",
+        type=str,
+        default="ocr_output",
+        help="OCR 처리 결과 디렉토리 경로 (기본값: ocr_output)",
+    )
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        default="data/test_qa_results.json",
+        help="QA 생성 결과 출력 파일 경로 (기본값: data/test_qa_results.json)",
+    )
+    parser.add_argument(
+        "--num-questions",
+        type=int,
+        default=1,
+        help="문서당 생성할 QA 쌍의 개수 (기본값: 1)",
+    )
+    parser.add_argument(
+        "--max-new-tokens",
+        type=int,
+        default=256,
+        help="최대 생성 토큰 수 (기본값: 256)",
+    )
+
+    args = parser.parse_args()
+
+    main(
+        ocr_output_dir=args.ocr_output_dir,
+        output_file=args.output_file,
+        num_questions_per_document=args.num_questions,
+        max_new_tokens=args.max_new_tokens,
+    )

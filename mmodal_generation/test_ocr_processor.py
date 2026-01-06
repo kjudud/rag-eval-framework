@@ -28,15 +28,7 @@ def main(
         print(f"✗ 오류: '{pdf_dir}' 디렉토리가 존재하지 않습니다.")
         return
 
-    # pdfs_to_img 디렉토리 구조 확인
-    pdf_dirs = [
-        d
-        for d in os.listdir(pdfs_to_img_dir)
-        if os.path.isdir(os.path.join(pdfs_to_img_dir, d))
-    ]
-
     print(f"\nPDF 디렉토리: {pdf_dir}")
-    print(f"이미지 변환 출력 디렉토리: {pdfs_to_img_dir}")
     print(f"OCR 출력 디렉토리: {output_base_dir}")
     print("\n" + "-" * 60)
     print("OCRProcessor 초기화")

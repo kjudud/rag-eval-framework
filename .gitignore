@@ -1,3 +1,11 @@
 *.json
 *.gz
+*.png
+*.pdf
+*.zip
 .env
+# Streamlit uploaded files
+uploaded_files/
+# OCR result files
+mmodal_generation/pdfs_to_img/
+mmodal_generation/ocr_output/

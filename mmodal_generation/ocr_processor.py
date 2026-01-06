@@ -129,6 +129,10 @@ class OCRProcessor:
         # PDF 열기
         doc = fitz.open(pdf_path)
 
+        # 출력 디렉토리 생성 (PDF 이름별 디렉토리)
+        pdf_output_dir = os.path.join(output_dir, pdf_name)
+        os.makedirs(pdf_output_dir, exist_ok=True)
+
         # 각 페이지를 PNG로 변환
         for page_num in range(len(doc)):
             page = doc[page_num]
@@ -136,7 +140,7 @@ class OCRProcessor:
             pix = page.get_pixmap(dpi=dpi)
             # PNG 파일로 저장
             image_filename = f"{page_num + 1:04d}.png"
-            image_path = os.path.join(output_dir, pdf_name, image_filename)
+            image_path = os.path.join(pdf_output_dir, image_filename)
             pix.save(image_path)
             image_paths.append(image_path)
 
@@ -144,9 +148,7 @@ class OCRProcessor:
 
         return image_paths
 
-    def convert_pdfs_in_dir(
-        self, pdf_dir: str, output_dir: str, dpi: int = 300
-    ) -> dict:
+    def convert_pdfs(self, pdf_dir: str, output_dir: str, dpi: int = 300) -> dict:
         """
         디렉토리 내의 모든 PDF 파일을 PNG 이미지로 변환
 
@@ -190,7 +192,7 @@ class OCRProcessor:
                 "total_images": 0,
                 "results": {},
             }
-
+        print("aaaaaa")
         results = {}
         total_images = 0
 
@@ -207,7 +209,7 @@ class OCRProcessor:
                 # 에러 발생 시 빈 리스트로 저장
                 results[pdf_file] = []
                 print(f"PDF 변환 실패 ({pdf_file}): {e}")
-
+        print("cccccccc")
         return {
             "total_pdfs": len(pdf_files),
             "total_images": total_images,

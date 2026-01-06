@@ -6,12 +6,20 @@ OCR 처리와 QA 생성을 순차적으로 수행
 import streamlit as st
 import json
 import os
-import subprocess
 import threading
 import queue
 import zipfile
+import time
+import traceback
 
-from utils import display_logo, apply_sidebar_style, get_project_root, run_in_conda_env
+from utils import (
+    display_logo,
+    apply_sidebar_style,
+    get_project_root,
+    run_in_conda_env,
+    terminate_old_process,
+    show_loading_spinner,
+)
 
 # 페이지 레이아웃 설정
 st.set_page_config(
@@ -23,8 +31,6 @@ st.set_page_config(
 
 # 사이드바 스타일 적용
 apply_sidebar_style()
-
-# 로고 표시
 display_logo()
 
 # 로고 아래 구분선
@@ -40,10 +46,109 @@ st.markdown(
 st.subheader("Benchmark Generation (Multi-modal)")
 st.write("멀티모달 데이터(이미지 + 텍스트)를 사용하여 QA 데이터를 생성합니다.")
 
-# 프로젝트 루트 경로
 project_root = get_project_root()
 
-# 단계별 진행 상황 표시
+
+# ==================== 헬퍼 함수 ====================
+def get_zip_name():
+    """세션 상태에서 ZIP 파일명 가져오기"""
+    return st.session_state.get("zip_name", "default")
+
+
+def read_output(pipe, q):
+    """파이프에서 출력을 읽어 큐에 저장하는 함수"""
+    for line in iter(pipe.readline, ""):
+        q.put(line)
+    pipe.close()
+
+
+def collect_process_output(process, log_key: str, max_lines: int = 100):
+    """프로세스 출력을 수집하여 세션 상태에 저장"""
+    output_queue = queue.Queue()
+    error_queue = queue.Queue()
+
+    # 출력 읽기 스레드 시작
+    output_thread = threading.Thread(
+        target=read_output, args=(process.stdout, output_queue)
+    )
+    output_thread.daemon = True
+    output_thread.start()
+
+    error_thread = threading.Thread(
+        target=read_output, args=(process.stderr, error_queue)
+    )
+    error_thread.daemon = True
+    error_thread.start()
+
+    log_lines = []
+
+    # 프로세스 완료까지 출력 수집
+    while True:
+        if process.poll() is not None:
+            break
+
+        # 표준 출력 읽기
+        try:
+            output = output_queue.get(timeout=0.3)
+            if output:
+                log_lines.append(output.strip())
+                if len(log_lines) > max_lines:
+                    log_lines.pop(0)
+        except queue.Empty:
+            pass
+
+        # 에러 출력 읽기
+        try:
+            error = error_queue.get(timeout=0.3)
+            if error:
+                log_lines.append(f"[ERROR] {error.strip()}")
+                if len(log_lines) > max_lines:
+                    log_lines.pop(0)
+        except queue.Empty:
+            pass
+
+        time.sleep(0.05)
+
+    # 프로세스 완료 대기
+    process.wait()
+
+    # 스레드 완료 대기 및 남은 출력 읽기
+    output_thread.join(timeout=2)
+    error_thread.join(timeout=2)
+
+    for queue_obj in [output_queue, error_queue]:
+        while True:
+            try:
+                line = queue_obj.get_nowait()
+                if line:
+                    prefix = "[ERROR] " if queue_obj == error_queue else ""
+                    log_lines.append(f"{prefix}{line.strip()}")
+                    if len(log_lines) > max_lines:
+                        log_lines.pop(0)
+            except queue.Empty:
+                break
+
+    # 세션 상태에 저장
+    if log_lines:
+        st.session_state[log_key] = log_lines
+
+    return log_lines
+
+
+def display_logs(log_key: str, title: str = "실행 로그"):
+    """세션 상태에 저장된 로그를 표시"""
+    if log_key in st.session_state and st.session_state[log_key]:
+        with st.expander(f"📋 {title}", expanded=False):
+            st.text_area(
+                title,
+                value="\n".join(st.session_state[log_key]),
+                height=300,
+                disabled=True,
+            )
+
+
+# ==================== UI 초기화 ====================
+
 st.markdown("---")
 st.markdown("### 📋 처리 단계")
 
@@ -71,17 +176,16 @@ with col3:
 
 st.markdown("---")
 
-# Step 1: OCR 처리
+# ==================== Step 1: OCR 처리 ====================
+
 st.subheader("🔍 Step 1: OCR 처리")
 st.write("1. ZIP 파일을 업로드하고 OCR 처리를 수행합니다.")
 
-# 업로드 디렉토리 설정
 upload_base_dir = os.path.join(
     project_root, "uploaded_files", "benchmark_generation_img_txt"
 )
 os.makedirs(upload_base_dir, exist_ok=True)
 
-# ZIP 파일 업로드 섹션
 st.markdown("### 📤 ZIP 파일 업로드")
 uploaded_zip = st.file_uploader(
     "OCR 처리를 위한 ZIP 파일을 선택하세요",
@@ -90,88 +194,40 @@ uploaded_zip = st.file_uploader(
 )
 
 # ZIP 파일 업로드 및 압축 해제
+extract_dir = None
 if uploaded_zip is not None:
     try:
-        # ZIP 파일 저장
         zip_path = os.path.join(upload_base_dir, uploaded_zip.name)
         with open(zip_path, "wb") as f:
             f.write(uploaded_zip.getbuffer())
 
         st.success(f"✅ ZIP 파일이 업로드되었습니다: `{uploaded_zip.name}`")
 
-        # ZIP 파일 압축 해제
+        zip_name = os.path.splitext(uploaded_zip.name)[0]
+        extract_dir = os.path.join(upload_base_dir, zip_name)
+        os.makedirs(extract_dir, exist_ok=True)
+        st.session_state["zip_name"] = zip_name
+
         with zipfile.ZipFile(zip_path, "r") as zip_ref:
-            # 압축 해제 전 디렉토리 확인
-            file_list = zip_ref.namelist()
-            st.info(f"📁 ZIP 파일 내 파일 수: {len(file_list)}개")
+            zip_ref.extractall(extract_dir)
 
-            # 압축 해제
-            zip_ref.extractall(upload_base_dir)
-            st.success(f"✅ ZIP 파일이 압축 해제되었습니다: `{upload_base_dir}`")
-
-            # 압축 해제된 파일 목록 표시
-            extracted_files = [f for f in file_list if not f.endswith("/")]
-            if extracted_files:
-                with st.expander("📋 압축 해제된 파일 목록"):
-                    for file_name in extracted_files[:20]:  # 최대 20개만 표시
-                        st.write(f"- {file_name}")
-                    if len(extracted_files) > 20:
-                        st.info(f"... 외 {len(extracted_files) - 20}개 파일")
-
-    except zipfile.BadZipFile:
-        st.error("❌ 올바른 ZIP 파일 형식이 아닙니다.")
     except Exception as e:
         st.error(f"❌ ZIP 파일 처리 중 오류가 발생했습니다: {str(e)}")
-        import traceback
-
         st.code(traceback.format_exc())
 
-# 입력 디렉토리 확인
-pdfs_to_img_dir = os.path.join(project_root, "mmodal_generation", "pdfs_to_img")
-ocr_output_dir = os.path.join(project_root, "mmodal_generation", "ocr_output")
+# OCR 완료 메시지 표시
+if st.session_state.get("ocr_completed", False):
+    st.success("✅ OCR 처리가 완료되었습니다!")
 
-col1, col2 = st.columns(2)
-with col1:
-    st.write(f"**업로드 디렉토리:** `{upload_base_dir}`")
-    if os.path.exists(upload_base_dir):
-        uploaded_files = [
-            f
-            for f in os.listdir(upload_base_dir)
-            if os.path.isfile(os.path.join(upload_base_dir, f))
-        ]
-        uploaded_dirs = [
-            d
-            for d in os.listdir(upload_base_dir)
-            if os.path.isdir(os.path.join(upload_base_dir, d))
-        ]
-        if uploaded_files or uploaded_dirs:
-            st.success(
-                f"✅ 업로드된 항목: {len(uploaded_files)}개 파일, {len(uploaded_dirs)}개 디렉토리"
-            )
-        else:
-            st.info("ℹ️ 업로드된 파일이 없습니다.")
-
-with col2:
-    st.write(f"**출력 디렉토리:** `{ocr_output_dir}`")
-    if os.path.exists(ocr_output_dir):
-        output_dirs = [
-            d
-            for d in os.listdir(ocr_output_dir)
-            if os.path.isdir(os.path.join(ocr_output_dir, d))
-        ]
-        st.info(f"ℹ️ 출력 디렉토리: {len(output_dirs)}개 처리된 디렉토리")
-    else:
-        st.info("ℹ️ 출력 디렉토리가 아직 생성되지 않았습니다.")
+    display_logs("ocr_log_lines", "OCR 처리 실행 로그")
 
 # OCR 처리 실행
 if st.button(
     "🚀 OCR 처리 시작", type="primary", disabled=st.session_state["ocr_completed"]
 ):
-    # 압축 해제된 디렉토리 확인
-    if not os.path.exists(upload_base_dir):
-        st.error(f"❌ 업로드 디렉토리가 존재하지 않습니다: `{upload_base_dir}`")
+    if extract_dir is None or not os.path.exists(extract_dir):
+        st.error("❌ 업로드된 파일이 존재하지 않습니다")
     else:
-        # 진행상황 표시를 위한 컨테이너
         progress_container = st.container()
         status_container = st.container()
 
@@ -179,157 +235,105 @@ if st.button(
             progress_bar = st.progress(0)
             status_text = st.empty()
 
-            try:
-                # 기존 프로세스가 실행 중이면 종료
+        try:
+            terminate_old_process("ocr_process", status_text)
+
+            zip_name = get_zip_name()
+            pdfs_to_img_dir_path = os.path.join(
+                project_root, "mmodal_generation", "pdfs_to_img", zip_name
+            )
+            output_dir_path = os.path.join(
+                project_root, "mmodal_generation", "ocr_output", zip_name
+            )
+
+            os.makedirs(pdfs_to_img_dir_path, exist_ok=True)
+            os.makedirs(output_dir_path, exist_ok=True)
+
+            ocr_script = [
+                os.path.join(
+                    project_root, "mmodal_generation", "test_ocr_processor.py"
+                ),
+                "--pdf-dir",
+                extract_dir,
+                "--pdfs-to-img-dir",
+                pdfs_to_img_dir_path,
+                "--output-dir",
+                output_dir_path,
+            ]
+
+            process = run_in_conda_env(
+                env_name="deepseek-ocr",
+                script_path=ocr_script[0],
+                args=ocr_script[1:],
+            )
+
+            st.session_state["ocr_process"] = process
+            st.session_state["ocr_log_lines"] = ["OCR 처리 시작 중..."]
+
+            # 로딩 스피너 표시
+            show_loading_spinner(status_text, "OCR 처리 실행 중...")
+
+            log_container = status_container.empty()
+            log_container.text_area(
+                "실행 로그",
+                value="프로세스 출력을 수집하고 있습니다...",
+                height=200,
+                disabled=True,
+            )
+
+            # 출력 수집
+            log_lines = collect_process_output(process, "ocr_log_lines", max_lines=100)
+
+            # 최종 로그 표시
+            if log_lines:
+                log_container.text_area(
+                    "실행 로그",
+                    value="\n".join(log_lines),
+                    height=200,
+                    disabled=True,
+                )
+
+            return_code = process.returncode
+
+            if return_code == 0:
+                progress_bar.progress(1.0)
+                status_text.text("✅ OCR 처리가 완료되었습니다!")
+                st.session_state["ocr_completed"] = True
+
                 if "ocr_process" in st.session_state:
-                    old_process = st.session_state["ocr_process"]
-                    if old_process.poll() is None:  # 프로세스가 실행 중인 경우
-                        status_text.text("기존 프로세스 종료 중...")
-                        old_process.terminate()
-                        try:
-                            old_process.wait(timeout=5)
-                        except subprocess.TimeoutExpired:
-                            old_process.kill()
-                            old_process.wait()
-                        status_text.text("기존 프로세스가 종료되었습니다.")
-                        del st.session_state["ocr_process"]
+                    del st.session_state["ocr_process"]
+                st.success("✅ OCR 처리가 완료되었습니다!")
+                st.rerun()
+            else:
+                st.error("❌ OCR 처리 중 오류가 발생했습니다.")
+                if log_lines:
+                    st.code("\n".join(log_lines))
 
-                # 경로 설정 (절대 경로)
-                pdf_dir_abs = upload_base_dir  # 압축 해제한 디렉토리
-                pdfs_to_img_dir_abs = os.path.join(
-                    project_root, "mmodal_generation", "pdfs_to_img"
-                )
-                output_base_dir_abs = os.path.join(
-                    project_root, "mmodal_generation", "ocr_output"
-                )
+        except Exception as e:
+            st.error(f"❌ 실행 중 오류가 발생했습니다: {str(e)}")
+            st.code(traceback.format_exc())
 
-                # OCR 스크립트 경로와 인자 포함
-                ocr_script = [
-                    os.path.join(
-                        project_root, "mmodal_generation", "test_ocr_processor.py"
-                    ),
-                    "--pdf-dir",
-                    pdf_dir_abs,
-                    "--pdfs-to-img-dir",
-                    pdfs_to_img_dir_abs,
-                    "--output-dir",
-                    output_base_dir_abs,
-                ]
+# ==================== Step 2: QA 생성 ====================
 
-                # conda 환경에서 OCR 스크립트 실행
-                status_text.text("OCR 처리 시작 중...")
-                process = run_in_conda_env(
-                    env_name="deepseek-ocr",
-                    script_path=ocr_script[0],
-                    args=ocr_script[1:],
-                )
-
-                # 프로세스를 세션 상태에 저장
-                st.session_state["ocr_process"] = process
-
-                # 실시간 출력 처리
-                def read_output(pipe, q):
-                    for line in iter(pipe.readline, ""):
-                        q.put(line)
-                    pipe.close()
-
-                # 출력을 읽는 스레드 시작
-                output_queue = queue.Queue()
-                output_thread = threading.Thread(
-                    target=read_output, args=(process.stdout, output_queue)
-                )
-                output_thread.daemon = True
-                output_thread.start()
-
-                # 에러 출력도 읽기
-                error_queue = queue.Queue()
-                error_thread = threading.Thread(
-                    target=read_output, args=(process.stderr, error_queue)
-                )
-                error_thread.daemon = True
-                error_thread.start()
-
-                # 출력 표시
-                log_container = status_container.empty()
-                log_lines = []
-
-                while True:
-                    # 프로세스가 종료되었는지 확인
-                    if process.poll() is not None:
-                        break
-
-                    # 표준 출력 읽기
-                    try:
-                        output = output_queue.get(timeout=0.5)
-                        if output:
-                            log_lines.append(output.strip())
-                            if len(log_lines) > 20:  # 최대 20줄만 유지
-                                log_lines.pop(0)
-                            log_container.text_area(
-                                "실행 로그",
-                                value="\n".join(log_lines),
-                                height=200,
-                                disabled=True,
-                            )
-                    except queue.Empty:
-                        pass
-
-                    # 에러 출력 읽기
-                    try:
-                        error = error_queue.get(timeout=0.1)
-                        if error:
-                            log_lines.append(f"[ERROR] {error.strip()}")
-                            if len(log_lines) > 20:
-                                log_lines.pop(0)
-                            log_container.text_area(
-                                "실행 로그",
-                                value="\n".join(log_lines),
-                                height=200,
-                                disabled=True,
-                            )
-                    except queue.Empty:
-                        pass
-
-                # 프로세스 완료 대기
-                return_code = process.wait()
-
-                if return_code == 0:
-                    progress_bar.progress(1.0)
-                    status_text.text("✅ OCR 처리가 완료되었습니다!")
-                    st.success("✅ OCR 처리가 완료되었습니다!")
-                    st.session_state["ocr_completed"] = True
-                    if "ocr_process" in st.session_state:
-                        del st.session_state["ocr_process"]
-                    st.rerun()
-                else:
-                    stderr_output = (
-                        process.stderr.read() if process.stderr else "에러 출력 없음"
-                    )
-                    st.error("❌ OCR 처리 중 오류가 발생했습니다:")
-                    st.code(stderr_output)
-
-            except Exception as e:
-                st.error(f"❌ 실행 중 오류가 발생했습니다: {str(e)}")
-                import traceback
-
-                st.code(traceback.format_exc())
-
-# OCR 완료 후 Step 2 표시
 if st.session_state["ocr_completed"]:
     st.markdown("---")
     st.subheader("📝 Step 2: QA 생성")
     st.write("2. OCR 처리된 결과를 사용하여 QA 데이터를 생성합니다.")
 
-    # OCR 출력 확인
-    if os.path.exists(ocr_output_dir):
+    # OCR 출력 디렉토리 경로 계산 (zip_name 사용)
+    zip_name = get_zip_name()
+    ocr_output_dir_path = os.path.join(
+        project_root, "mmodal_generation", "ocr_output", zip_name
+    )
+
+    if os.path.exists(ocr_output_dir_path):
         output_dirs = [
             d
-            for d in os.listdir(ocr_output_dir)
-            if os.path.isdir(os.path.join(ocr_output_dir, d))
+            for d in os.listdir(ocr_output_dir_path)
+            if os.path.isdir(os.path.join(ocr_output_dir_path, d))
         ]
         st.info(f"ℹ️ 처리된 OCR 결과: {len(output_dirs)}개 디렉토리")
 
-        # QA 생성 설정
         col1, col2 = st.columns(2)
         with col1:
             num_questions = st.number_input(
@@ -349,17 +353,15 @@ if st.session_state["ocr_completed"]:
                 help="모델이 생성할 최대 토큰 수",
             )
 
-        # 출력 파일 경로
+        zip_name = get_zip_name()
         output_file = os.path.join(
-            project_root, "streamlit", "generated_qa_data_multi_modal.json"
+            project_root, "streamlit", f"generated_qa_data_{zip_name}.json"
         )
         st.write(f"**출력 파일:** `{output_file}`")
 
-        # QA 생성 실행
         if st.button(
             "🚀 QA 생성 시작", type="primary", disabled=st.session_state["qa_completed"]
         ):
-            # 진행상황 표시를 위한 컨테이너
             progress_container = st.container()
             status_container = st.container()
 
@@ -368,83 +370,57 @@ if st.session_state["ocr_completed"]:
                 status_text = st.empty()
 
             try:
-                # 기존 프로세스가 실행 중이면 종료
-                if "qa_process" in st.session_state:
-                    old_process = st.session_state["qa_process"]
-                    if old_process.poll() is None:  # 프로세스가 실행 중인 경우
-                        status_text.text("기존 프로세스 종료 중...")
-                        try:
-                            old_process.terminate()
-                            try:
-                                old_process.wait(timeout=5)
-                            except subprocess.TimeoutExpired:
-                                old_process.kill()
-                                old_process.wait()
-                            status_text.text("기존 프로세스가 종료되었습니다.")
-                            del st.session_state["qa_process"]
-                        except Exception as e:
-                            st.warning(f"기존 프로세스 종료 중 오류: {str(e)}")
+                terminate_old_process("qa_process", status_text)
 
-                # QA 스크립트 경로 (cwd 기준 상대 경로)
                 qa_script = "test_qa_generator.py"
                 cwd_path = os.path.join(project_root, "mmodal_generation")
+                output_file_path = os.path.join(
+                    project_root, "streamlit", f"generated_qa_data_{zip_name}.json"
+                )
 
-                # test_qa_generator.py는 직접 수정이 필요하므로,
-                # 여기서는 환경 변수나 임시 파일로 설정 전달
-                # 또는 qa_generator.py를 직접 호출하는 방식으로 변경 필요
+                # 로딩 스피너 표시
+                show_loading_spinner(status_text, "QA 생성 시작 중...")
 
-                # 일단 test_qa_generator.py를 수정 가능한 버전으로 실행
-                # 실제로는 qa_generator.py의 main 함수를 직접 호출하는 것이 좋음
-
-                status_text.text("QA 생성 시작 중...")
-
-                # conda 환경에서 QA 스크립트 실행
-                # 주의: test_qa_generator.py는 하드코딩된 설정을 사용하므로
-                # 실제로는 qa_generator.py를 직접 호출하거나
-                # test_qa_generator.py를 수정해야 함
-
-                # 임시로 test_qa_generator.py 실행 (설정은 스크립트 내부에서)
                 process = run_in_conda_env(
                     env_name="Qwen3-VL",
                     script_path=qa_script,
+                    args=[
+                        "--ocr-output-dir",
+                        ocr_output_dir_path,
+                        "--output-file",
+                        output_file_path,
+                        "--num-questions",
+                        str(num_questions),
+                        "--max-new-tokens",
+                        str(max_tokens),
+                    ],
                     cwd=cwd_path,
                 )
 
-                # 프로세스를 세션 상태에 저장
                 st.session_state["qa_process"] = process
+                log_container = status_container.empty()
+                log_lines = []
 
-                # 실시간 출력 처리
-                def read_output(pipe, q):
-                    for line in iter(pipe.readline, ""):
-                        q.put(line)
-                    pipe.close()
-
-                # 출력을 읽는 스레드 시작
+                # 출력 수집 (PROGRESS 메시지 파싱 포함)
                 output_queue = queue.Queue()
+                error_queue = queue.Queue()
+
                 output_thread = threading.Thread(
                     target=read_output, args=(process.stdout, output_queue)
                 )
                 output_thread.daemon = True
                 output_thread.start()
 
-                # 에러 출력도 읽기
-                error_queue = queue.Queue()
                 error_thread = threading.Thread(
                     target=read_output, args=(process.stderr, error_queue)
                 )
                 error_thread.daemon = True
                 error_thread.start()
 
-                # 출력 표시
-                log_container = status_container.empty()
-                log_lines = []
-
                 while True:
-                    # 프로세스가 종료되었는지 확인
                     if process.poll() is not None:
                         break
 
-                    # 표준 출력 읽기
                     try:
                         output = output_queue.get(timeout=0.5)
                         if output:
@@ -458,7 +434,6 @@ if st.session_state["ocr_completed"]:
                                 disabled=True,
                             )
 
-                            # PROGRESS 메시지 파싱
                             if "PROGRESS:" in output:
                                 try:
                                     parts = output.strip().split(":", 2)
@@ -474,7 +449,6 @@ if st.session_state["ocr_completed"]:
                     except queue.Empty:
                         pass
 
-                    # 에러 출력 읽기
                     try:
                         error = error_queue.get(timeout=0.1)
                         if error:
@@ -490,8 +464,9 @@ if st.session_state["ocr_completed"]:
                     except queue.Empty:
                         pass
 
-                # 프로세스 완료 대기
                 return_code = process.wait()
+                output_thread.join(timeout=2)
+                error_thread.join(timeout=2)
 
                 if return_code == 0:
                     progress_bar.progress(1.0)
@@ -502,51 +477,36 @@ if st.session_state["ocr_completed"]:
                         del st.session_state["qa_process"]
                     st.rerun()
                 else:
-                    stderr_output = (
-                        process.stderr.read() if process.stderr else "에러 출력 없음"
-                    )
-                    st.error("❌ QA 생성 중 오류가 발생했습니다:")
-                    st.code(stderr_output)
+                    st.error("❌ QA 생성 중 오류가 발생했습니다.")
+                    if log_lines:
+                        st.code("\n".join(log_lines))
 
             except Exception as e:
                 st.error(f"❌ 실행 중 오류가 발생했습니다: {str(e)}")
-                import traceback
-
                 st.code(traceback.format_exc())
     else:
         st.warning(
             "⚠️ OCR 출력 디렉토리가 존재하지 않습니다. 먼저 OCR 처리를 완료하세요."
         )
 
-# QA 완료 후 결과 표시
+# ==================== Step 3: 결과 확인 ====================
+
 if st.session_state["qa_completed"]:
     st.markdown("---")
     st.subheader("📋 Step 3: 생성된 QA 데이터 확인")
 
-    # 출력 파일 경로
+    zip_name = get_zip_name()
     output_file = os.path.join(
-        project_root, "streamlit", "generated_qa_data_multi_modal.json"
-    )
-    # test_qa_generator.py의 기본 출력 경로도 확인
-    default_output_file = os.path.join(
-        project_root, "mmodal_generation", "data", "test_qa_results.json"
+        project_root, "streamlit", f"generated_qa_data_{zip_name}.json"
     )
 
-    # 파일 찾기
-    qa_file_path = None
     if os.path.exists(output_file):
-        qa_file_path = output_file
-    elif os.path.exists(default_output_file):
-        qa_file_path = default_output_file
-
-    if qa_file_path and os.path.exists(qa_file_path):
         try:
-            with open(qa_file_path, "r", encoding="utf-8") as f:
+            with open(output_file, "r", encoding="utf-8") as f:
                 qa_data = json.load(f)
 
-            st.success(f"📁 QA 데이터 파일을 찾았습니다: `{qa_file_path}`")
+            st.success(f"📁 QA 데이터 파일을 찾았습니다: `{output_file}`")
 
-            # 파일 정보
             col1, col2 = st.columns(2)
             with col1:
                 if isinstance(qa_data, list):
@@ -558,19 +518,19 @@ if st.session_state["qa_completed"]:
                 else:
                     st.metric("데이터 타입", type(qa_data).__name__)
             with col2:
-                file_size = os.path.getsize(qa_file_path)
+                file_size = os.path.getsize(output_file)
                 st.metric("파일 크기", f"{file_size:,} bytes")
 
             # 첫 5개 QA 쌍 표시
             if isinstance(qa_data, list) and len(qa_data) > 0:
                 st.write("**첫 5개 QA 쌍:**")
                 displayed = 0
-                for i, qa_item in enumerate(qa_data):
+                for qa_item in qa_data:
                     if displayed >= 5:
                         break
                     qa_pairs = qa_item.get("generated_qa_pairs", [])
                     if qa_pairs:
-                        for j, qa_pair in enumerate(qa_pairs):
+                        for qa_pair in qa_pairs:
                             if displayed >= 5:
                                 break
                             with st.expander(
@@ -591,46 +551,37 @@ if st.session_state["qa_completed"]:
                                     )
                                 st.write("---")
                             displayed += 1
-                            if displayed >= 5:
-                                break
 
-            # 전체 데이터 다운로드 버튼
-            with open(qa_file_path, "r", encoding="utf-8") as f:
+            # 다운로드 버튼
+            with open(output_file, "r", encoding="utf-8") as f:
                 qa_file_content = f.read()
 
+            download_filename = f"generated_qa_data_{zip_name}.json"
             st.download_button(
                 label="📥 생성된 QA 데이터 다운로드",
                 data=qa_file_content,
-                file_name="generated_qa_data_multi_modal.json",
+                file_name=download_filename,
                 mime="application/json",
             )
 
         except Exception as e:
             st.error(f"❌ QA 데이터 파일을 읽는 중 오류가 발생했습니다: {str(e)}")
-            import traceback
-
             st.code(traceback.format_exc())
     else:
         st.warning("⚠️ 생성된 QA 데이터 파일을 찾을 수 없습니다.")
-        st.info("다음 경로들을 확인했습니다:")
-        st.write(f"- `{output_file}`")
-        st.write(f"- `{default_output_file}`")
+        st.write(f"확인 경로: `{output_file}`")
 
-# 리셋 버튼
+# ==================== 리셋 버튼 ====================
+
 st.markdown("---")
 if st.button("🔄 전체 프로세스 리셋"):
     st.session_state["ocr_completed"] = False
     st.session_state["qa_completed"] = False
-    if "ocr_process" in st.session_state:
-        try:
-            st.session_state["ocr_process"].terminate()
-        except (AttributeError, ProcessLookupError):
-            pass
-        del st.session_state["ocr_process"]
-    if "qa_process" in st.session_state:
-        try:
-            st.session_state["qa_process"].terminate()
-        except (AttributeError, ProcessLookupError):
-            pass
-        del st.session_state["qa_process"]
+    for process_key in ["ocr_process", "qa_process"]:
+        if process_key in st.session_state:
+            try:
+                st.session_state[process_key].terminate()
+            except (AttributeError, ProcessLookupError):
+                pass
+            del st.session_state[process_key]
     st.rerun()
