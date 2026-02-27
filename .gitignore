@@ -5,6 +5,8 @@
 *.zip
 .env
 *.log
+*.db
+*.db.lock
 # Streamlit uploaded files
 uploaded_files/
 # OCR result files
