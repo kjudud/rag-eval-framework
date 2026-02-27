@@ -192,7 +192,7 @@ class OCRProcessor:
                 "total_images": 0,
                 "results": {},
             }
-        print("aaaaaa")
+
         results = {}
         total_images = 0
 
@@ -209,7 +209,7 @@ class OCRProcessor:
                 # 에러 발생 시 빈 리스트로 저장
                 results[pdf_file] = []
                 print(f"PDF 변환 실패 ({pdf_file}): {e}")
-        print("cccccccc")
+
         return {
             "total_pdfs": len(pdf_files),
             "total_images": total_images,

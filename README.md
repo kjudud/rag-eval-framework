@@ -7,23 +7,37 @@
 ### 1. 의존성 설치
 
 ```bash
-pip install -r requirements.txt
+conda create -n rag-eval-framework python=3.11
+conda activate rag-eval-framework
+pip install -r requirements.txt 
+conda deactivate
+
+# OCR
+conda create -n deepseek-ocr python=3.12
+conda activate deepseek-ocr
+pip install -r mmodal_generation/ocr_requirements.txt
+conda deactivate
+
+# Mmodal QA generation
+conda create -n Qwen3-VL python=3.12
+conda activate Qwen3-VL
+pip install -r mmodal_generation/mmodal_gen_requirements.txt
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu118
+conda deactivate
+
 ```
 
 ### 2. Academic RAG API 서버 시작
 
 ```bash
+conda activate rag-eval-framework
 python academic_rag_api.py
 ```
 
-서버가 `http://localhost:5000`에서 실행됩니다.
-(상황에 맞게 주소, 포트 변경)
-
 ### 3. Streamlit 앱 시작
-
 ```bash
-cd streamlit
-streamlit run streamlit_page.py
+conda activate rag-eval-framework
+streamlit run streamlit/Home.py
 ```
 
 브라우저에서 `http://localhost:8501`로 접속합니다.
@@ -38,6 +52,11 @@ streamlit run streamlit_page.py
 1. JSON 형식의 corpus 파일을 업로드합니다
 2. DataMorgana를 사용하여 QA 데이터를 생성합니다
 3. 생성된 QA 데이터를 미리보기하고 다운로드할 수 있습니다
+
+### Step 1-1: Multimodal(img-text) Benchmark Generation
+1. pdf 압축 파일을 업로드 합니다
+2. pdf 파일로 부터 OCR을 수행합니다
+3. OCR 결과로부터 multimodal DataMorgana를 사용하여 QA 데이터를 생성합니다
 
 ### Step 2: RAG 실행 (배치 API 호출)
 1. 참가자의 RAG API URL을 입력합니다 (기본값 : http://localhost:5000)
@@ -154,6 +173,12 @@ RAG-eval-framework/
 │   ├── quick_start.py         # 평가 실행 스크립트
 │   ├── results/               # 평가 결과 저장
 │   ├── ragchecker/            # 평가 라이브러리
+│   └── ...
+├── mmodal_generation/         # 멀티모달(이미지/OCR) 벤치마크 생성
+│   ├── ocr_processor.py       # OCR 처리
+│   ├── qa_generator.py        # QA 데이터 생성
+│   ├── pipeline.py            # 파이프라인 실행
+│   ├── data/                  # 입력/출력 데이터
 │   └── ...
 ├── academic_rag_api.py        # Baseline RAG API 서버
 ├── academic_rag.py            # 원본 RAG 시스템
