@@ -5,14 +5,15 @@ ocr_output 디렉토리를 입력으로 사용하여 QA 생성 수행
 
 import os
 import argparse
-from qa_generator import Qwen3vlQaConfig, run_qa_generation
+from lora_tuned_qa_generator import Qwen3vlQaConfig, run_qa_generation
 
 
 def main(
     ocr_output_dir: str = "ocr_output",
     output_file: str = "data/qa_results.json",
     num_questions_per_document: int = 1,
-    max_new_tokens: int = 256,
+    max_new_tokens: int = 1024,
+    config_file: str = None,
 ):
     """메인 테스트 함수"""
     print("=" * 60)
@@ -61,6 +62,7 @@ def main(
         output_path=output_file,
         num_questions_per_document=num_questions_per_document,
         max_new_tokens=max_new_tokens,
+        config_file=config_file,
     )
     print(f"모델: {config.model_name}")
     print(f"입력 경로: {config.input_path}")
@@ -149,8 +151,15 @@ if __name__ == "__main__":
     parser.add_argument(
         "--max-new-tokens",
         type=int,
-        default=256,
-        help="최대 생성 토큰 수 (기본값: 256)",
+        default=1024,
+        help="최대 생성 토큰 수 (기본값: 1024)",
+    )
+
+    parser.add_argument(
+        "--config-file",
+        type=str,
+        default=None,
+        help="DataMorgana 설정 파일 경로 (기본값: datamorgana_config_template.json)",
     )
 
     args = parser.parse_args()
@@ -160,4 +169,5 @@ if __name__ == "__main__":
         output_file=args.output_file,
         num_questions_per_document=args.num_questions,
         max_new_tokens=args.max_new_tokens,
+        config_file=args.config_file,
     )

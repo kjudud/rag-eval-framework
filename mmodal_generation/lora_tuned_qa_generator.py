@@ -10,6 +10,8 @@ import threading
 import uuid
 from loguru import logger
 from tqdm import tqdm
+from PIL import Image as PILImage
+from unsloth import FastVisionModel
 
 # 환경 변수는 QAGenerator.__init__에서 Config 값으로 설정됨
 
@@ -25,17 +27,18 @@ class Qwen3vlQaConfig:
     max_workers: int = 1  # 멀티모달 모델은 GPU 메모리 제약으로 1로 설정 권장
     num_questions_per_document: int = 1
     candidate_questions_per_call: int = 2
-    max_new_tokens: int = 256  # 최대 생성 토큰 수
+    max_new_tokens: int = 1024  # 최대 생성 토큰 수
     config_file: Optional[str] = "datamorgana_config_template.json"  # 설정 파일 경로
     log_file: Optional[str] = None  # 로그 파일 경로
     # Qwen3-VL 모델 생성 파라미터
     greedy: bool = False
-    top_p: float = 0.8
+    top_p: float = 0.9
     top_k: int = 20
-    temperature: float = 0.7
+    temperature: float = 0.5
     repetition_penalty: float = 1.0
     presence_penalty: float = 1.5
     out_seq_length: int = 16384
+    lora_adapter_path: str = "models/qwen3-vl-8b-sft/checkpoint-150"
 
 
 @dataclass
@@ -67,12 +70,66 @@ class QAGenerator:
         os.environ["repetition_penalty"] = str(config.repetition_penalty)
         os.environ["presence_penalty"] = str(config.presence_penalty)
         os.environ["out_seq_length"] = str(config.out_seq_length)
+        os.environ["do_sample"] = str(True if config.temperature > 0 else False)
 
-        # Load model and processor (기존 코드 그대로)
-        logger.info(f"모델 로딩 중: {config.model_name}")
-        self.model = Qwen3VLForConditionalGeneration.from_pretrained(
-            config.model_name, dtype="auto", device_map="auto"
+        def _load_config(path: str, default: dict) -> dict:
+            """JSON 설정 파일을 로드하고, 없으면 default를 반환합니다."""
+            if os.path.exists(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            return default
+
+        adapter_cfg = _load_config(
+            os.path.join(config.lora_adapter_path, "adapter_config.json"),
+            default={
+                "r": 16,
+                "lora_alpha": 16,
+                "lora_dropout": 0,
+                "bias": "none",
+                "use_rslora": False,
+                "loftq_config": None,
+                "target_modules": "all-linear",
+            },
         )
+        unsloth_cfg = _load_config(
+            os.path.join(config.lora_adapter_path, "unsloth_config.json"),
+            default={
+                "finetune_vision_layers": True,
+                "finetune_language_layers": True,
+                "finetune_attention_modules": True,
+                "finetune_mlp_modules": True,
+                "random_state": 3407,
+            },
+        )
+
+        # 4비트 양자화 베이스 모델 로드
+        self.model, self.tokenizer = FastVisionModel.from_pretrained(
+            "unsloth/Qwen3-VL-8B-Instruct-unsloth-bnb-4bit",
+            load_in_4bit=True,
+            use_gradient_checkpointing=False,
+        )
+
+        # 학습 시와 동일한 PEFT 구조 재구성 (어댑터 로드 전에 반드시 필요)
+        self.model = FastVisionModel.get_peft_model(
+            self.model,
+            finetune_vision_layers=unsloth_cfg["finetune_vision_layers"],
+            finetune_language_layers=unsloth_cfg["finetune_language_layers"],
+            finetune_attention_modules=unsloth_cfg["finetune_attention_modules"],
+            finetune_mlp_modules=unsloth_cfg["finetune_mlp_modules"],
+            r=adapter_cfg["r"],
+            lora_alpha=adapter_cfg["lora_alpha"],
+            lora_dropout=adapter_cfg["lora_dropout"],
+            bias=adapter_cfg["bias"],
+            random_state=unsloth_cfg["random_state"],
+            use_rslora=adapter_cfg["use_rslora"],
+            loftq_config=adapter_cfg["loftq_config"],
+            target_modules=adapter_cfg["target_modules"],
+        )
+
+        self.model.load_adapter(
+            os.path.abspath(config.lora_adapter_path), adapter_name="default"
+        )
+        FastVisionModel.for_inference(self.model)
         self.processor = AutoProcessor.from_pretrained(config.model_name)
         logger.info("모델 로딩 완료")
 
@@ -145,7 +202,7 @@ class QAGenerator:
         document: str,
         user_categories: List[Category],
         question_categories: List[Category],
-        num_questions: int = 1,
+        num_questions: int = 2,
     ) -> str:
         """Build DataMorgana prompt template (based on paper)"""
 
@@ -195,13 +252,14 @@ class QAGenerator:
                 # Build messages
                 if image_paths:
                     for image_path in image_paths:
-                        messages["content"].append(
+                        img = PILImage.open(image_path).convert("RGB")
+                        messages[0]["content"].append(
                             {
                                 "type": "image",
-                                "image": image_path,
+                                "image": img,
                             }
                         )
-                messages["content"].append(
+                messages[0]["content"].append(
                     {
                         "type": "text",
                         "text": prompt,
@@ -271,7 +329,6 @@ class QAGenerator:
     ) -> List[Dict[str, str]]:
         """Filter Q&A pairs to ensure quality (based on paper's filtering strategy)"""
         filtered_pairs = []
-
         for qa_pair in qa_pairs:
             question = qa_pair.get("question", "").strip()
             answer = qa_pair.get("answer", "").strip()
@@ -340,6 +397,20 @@ class QAGenerator:
                 # Select categories (Step 1)
                 user_categories, question_categories = self.select_categories()
 
+                # 이미지가 없으면 qa_type 카테고리를 'text'로 강제 지정
+                if not image_paths:
+                    qa_type_index = None
+                    for i, cat in enumerate(self.question_categorizations):
+                        if cat.name == "qa_type":
+                            qa_type_index = i
+                            break
+                    if qa_type_index is not None:
+                        question_categories[qa_type_index] = Category(
+                            name="text",
+                            probability=1.0,
+                            description="text 정보만을 바탕으로 질문과 답변을 생성합니다.",
+                        )
+
                 # Build prompt (Step 2-3)
                 prompt = self.build_prompt(
                     markdown_content,
@@ -347,7 +418,6 @@ class QAGenerator:
                     question_categories,
                     self.config.candidate_questions_per_call,
                 )
-
                 # Get model response (image_path가 없으면 None 전달)
                 if image_paths:
                     response = self.get_model_response(
@@ -360,13 +430,12 @@ class QAGenerator:
                 if not response:
                     logger.warning(f"문서 {document_id} {i+1}번째 생성 실패")
                     continue
-
                 # Parse Q&A pairs
                 qa_pairs = self.parse_qa_pairs(response)
-
+                print(qa_pairs)
                 # Filter Q&A pairs (Step 4)
                 filtered_pairs = self.filter_qa_pairs(qa_pairs)
-
+                print(filtered_pairs)
                 # Select best Q&A pair
                 if filtered_pairs:
                     selected_pair = random.choice(filtered_pairs)

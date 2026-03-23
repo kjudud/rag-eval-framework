@@ -157,6 +157,8 @@ if "ocr_completed" not in st.session_state:
     st.session_state["ocr_completed"] = False
 if "qa_completed" not in st.session_state:
     st.session_state["qa_completed"] = False
+if "datamorgana_config_path" not in st.session_state:
+    st.session_state["datamorgana_config_path"] = None
 
 # 단계 표시
 col1, col2, col3 = st.columns(3)
@@ -334,6 +336,36 @@ if st.session_state["ocr_completed"]:
         ]
         st.info(f"ℹ️ 처리된 OCR 결과: {len(output_dirs)}개 디렉토리")
 
+        # DataMorgana 설정 파일 업로드
+        st.markdown("#### ⚙️ DataMorgana 설정 파일 (선택)")
+        uploaded_config = st.file_uploader(
+            "datamorgana_config_template.json 파일을 업로드하세요 (업로드하지 않으면 기본 설정 사용)",
+            type=["json"],
+            key="datamorgana_config_uploader",
+            help="QA 생성에 사용할 카테고리 설정 파일입니다.",
+        )
+        if uploaded_config is not None:
+            try:
+                config_json = json.loads(uploaded_config.read().decode("utf-8"))
+                config_save_path = os.path.join(
+                    upload_base_dir, f"datamorgana_config_{zip_name}.json"
+                )
+                with open(config_save_path, "w", encoding="utf-8") as f:
+                    json.dump(config_json, f, ensure_ascii=False, indent=2)
+                st.session_state["datamorgana_config_path"] = config_save_path
+                st.success(f"✅ 설정 파일이 업로드되었습니다: `{uploaded_config.name}`")
+            except Exception as e:
+                st.error(f"❌ 설정 파일 처리 중 오류가 발생했습니다: {str(e)}")
+                st.session_state["datamorgana_config_path"] = None
+        elif st.session_state.get("datamorgana_config_path"):
+            st.info(
+                f"ℹ️ 이전에 업로드된 설정 파일을 사용합니다: `{os.path.basename(st.session_state['datamorgana_config_path'])}`"
+            )
+        else:
+            st.info(
+                "ℹ️ 설정 파일이 없으면 기본 `datamorgana_config_template.json`을 사용합니다."
+            )
+
         col1, col2 = st.columns(2)
         with col1:
             num_questions = st.number_input(
@@ -348,7 +380,7 @@ if st.session_state["ocr_completed"]:
                 "최대 생성 토큰 수",
                 min_value=64,
                 max_value=2048,
-                value=256,
+                value=1024,
                 step=64,
                 help="모델이 생성할 최대 토큰 수",
             )
@@ -393,7 +425,12 @@ if st.session_state["ocr_completed"]:
                         str(num_questions),
                         "--max-new-tokens",
                         str(max_tokens),
-                    ],
+                    ]
+                    + (
+                        ["--config-file", st.session_state["datamorgana_config_path"]]
+                        if st.session_state.get("datamorgana_config_path")
+                        else []
+                    ),
                     cwd=cwd_path,
                 )
 

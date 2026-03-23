@@ -12,7 +12,10 @@ uploaded_files/
 # OCR result files
 mmodal_generation/pdfs_to_img/
 mmodal_generation/ocr_output/
-
+# Multimodal models
+mmodal_generation/models/
+mmodal_generation/unsloth_compiled_cache/
+temp/
 # =============================================================================
 # Python
 # =============================================================================
