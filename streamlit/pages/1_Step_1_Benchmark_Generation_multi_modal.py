@@ -159,6 +159,8 @@ if "qa_completed" not in st.session_state:
     st.session_state["qa_completed"] = False
 if "datamorgana_config_path" not in st.session_state:
     st.session_state["datamorgana_config_path"] = None
+if "pdf_stats" not in st.session_state:
+    st.session_state["pdf_stats"] = None
 
 # 단계 표시
 col1, col2, col3 = st.columns(3)
@@ -220,6 +222,28 @@ if uploaded_zip is not None:
 # OCR 완료 메시지 표시
 if st.session_state.get("ocr_completed", False):
     st.success("✅ OCR 처리가 완료되었습니다!")
+    if "ocr_elapsed_sec" in st.session_state:
+        elapsed = st.session_state["ocr_elapsed_sec"]
+        st.info(f"⏱️ OCR 처리 소요 시간: {elapsed:.1f}초 ({elapsed/60:.1f}분)")
+
+    stats = st.session_state.get("pdf_stats")
+    if stats:
+        col_a, col_b, col_c, col_d = st.columns(4)
+        col_a.metric("총 PDF 수", f"{stats['total_pdfs']}개")
+        col_b.metric("총 페이지 수", f"{stats['total_pages']}페이지")
+        col_c.metric("총 파일 크기", f"{stats['total_mb']} MB")
+        col_d.metric("평균 파일 크기", f"{stats['avg_mb']} MB")
+
+        if stats.get("size_dist"):
+            with st.expander("📊 파일 크기 분포", expanded=False):
+                st.dataframe(
+                    {
+                        "크기 구간": list(stats["size_dist"].keys()),
+                        "파일 수": list(stats["size_dist"].values()),
+                    },
+                    hide_index=True,
+                    use_container_width=True,
+                )
 
     display_logs("ocr_log_lines", "OCR 처리 실행 로그")
 
@@ -301,6 +325,21 @@ if st.button(
                 progress_bar.progress(1.0)
                 status_text.text("✅ OCR 처리가 완료되었습니다!")
                 st.session_state["ocr_completed"] = True
+
+                # TIMING / PDF_STATS 메시지 파싱
+                for line in log_lines:
+                    if "TIMING:total:" in line:
+                        try:
+                            elapsed = float(line.split("TIMING:total:")[1].strip())
+                            st.session_state["ocr_elapsed_sec"] = elapsed
+                        except (ValueError, IndexError):
+                            pass
+                    if "PDF_STATS:" in line:
+                        try:
+                            json_str = line.split("PDF_STATS:")[1].strip()
+                            st.session_state["pdf_stats"] = json.loads(json_str)
+                        except Exception:
+                            pass
 
                 if "ocr_process" in st.session_state:
                     del st.session_state["ocr_process"]
@@ -510,6 +549,16 @@ if st.session_state["ocr_completed"]:
                     status_text.text("✅ QA 생성이 완료되었습니다!")
                     st.success("✅ QA 생성이 완료되었습니다!")
                     st.session_state["qa_completed"] = True
+
+                    # TIMING 메시지 파싱
+                    for line in log_lines:
+                        if line.startswith("TIMING:total:"):
+                            try:
+                                elapsed = float(line.split(":")[2])
+                                st.session_state["qa_elapsed_sec"] = elapsed
+                            except (ValueError, IndexError):
+                                pass
+
                     if "qa_process" in st.session_state:
                         del st.session_state["qa_process"]
                     st.rerun()
@@ -531,6 +580,9 @@ if st.session_state["ocr_completed"]:
 if st.session_state["qa_completed"]:
     st.markdown("---")
     st.subheader("📋 Step 3: 생성된 QA 데이터 확인")
+    if "qa_elapsed_sec" in st.session_state:
+        elapsed = st.session_state["qa_elapsed_sec"]
+        st.info(f"⏱️ QA 생성 소요 시간: {elapsed:.1f}초 ({elapsed/60:.1f}분)")
 
     zip_name = get_zip_name()
     output_file = os.path.join(

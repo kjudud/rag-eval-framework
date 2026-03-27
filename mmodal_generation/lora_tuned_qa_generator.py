@@ -9,9 +9,11 @@ import concurrent.futures
 import threading
 import uuid
 from loguru import logger
+import sys
 from tqdm import tqdm
 from PIL import Image as PILImage
 from unsloth import FastVisionModel
+from peft import PeftModel
 
 # 환경 변수는 QAGenerator.__init__에서 Config 값으로 설정됨
 
@@ -38,6 +40,7 @@ class Qwen3vlQaConfig:
     repetition_penalty: float = 1.0
     presence_penalty: float = 1.5
     out_seq_length: int = 16384
+    image_max_size: int = 1024  # 이미지 긴 쪽 최대 픽셀 (비주얼 토큰 수 조절)
     lora_adapter_path: str = "models/qwen3-vl-8b-sft/checkpoint-150"
 
 
@@ -110,25 +113,10 @@ class QAGenerator:
         )
 
         # 학습 시와 동일한 PEFT 구조 재구성 (어댑터 로드 전에 반드시 필요)
-        self.model = FastVisionModel.get_peft_model(
-            self.model,
-            finetune_vision_layers=unsloth_cfg["finetune_vision_layers"],
-            finetune_language_layers=unsloth_cfg["finetune_language_layers"],
-            finetune_attention_modules=unsloth_cfg["finetune_attention_modules"],
-            finetune_mlp_modules=unsloth_cfg["finetune_mlp_modules"],
-            r=adapter_cfg["r"],
-            lora_alpha=adapter_cfg["lora_alpha"],
-            lora_dropout=adapter_cfg["lora_dropout"],
-            bias=adapter_cfg["bias"],
-            random_state=unsloth_cfg["random_state"],
-            use_rslora=adapter_cfg["use_rslora"],
-            loftq_config=adapter_cfg["loftq_config"],
-            target_modules=adapter_cfg["target_modules"],
-        )
-
-        self.model.load_adapter(
-            os.path.abspath(config.lora_adapter_path), adapter_name="default"
-        )
+        # PeftModel.from_pretrained으로 어댑터 구조 재구성 + 가중치 로드 한 번에 처리
+        # adapter_config.json을 직접 읽어 PEFT 구조 결정, 로컬 경로 정상 인식
+        adapter_path = os.path.abspath(config.lora_adapter_path)
+        self.model = PeftModel.from_pretrained(self.model, adapter_path)
         FastVisionModel.for_inference(self.model)
         self.processor = AutoProcessor.from_pretrained(config.model_name)
         logger.info("모델 로딩 완료")
@@ -253,6 +241,13 @@ class QAGenerator:
                 if image_paths:
                     for image_path in image_paths:
                         img = PILImage.open(image_path).convert("RGB")
+                        # 긴 쪽이 image_max_size를 초과하면 비율 유지하며 축소
+                        max_size = self.config.image_max_size
+                        if max(img.width, img.height) > max_size:
+                            scale = max_size / max(img.width, img.height)
+                            new_w = int(img.width * scale)
+                            new_h = int(img.height * scale)
+                            img = img.resize((new_w, new_h), PILImage.LANCZOS)
                         messages[0]["content"].append(
                             {
                                 "type": "image",
@@ -534,7 +529,7 @@ class QAGenerator:
             except Exception as e:
                 logger.error(f"중간 저장 실패: {e}")
 
-        with tqdm(total=len(documents), desc="생성 진행 상황") as pbar:
+        with tqdm(total=len(documents), desc="생성 진행 상황", file=sys.stdout) as pbar:
             with concurrent.futures.ThreadPoolExecutor(
                 max_workers=self.config.max_workers
             ) as executor:

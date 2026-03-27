@@ -4,8 +4,74 @@ PDF 디렉토리를 이미지로 변환하고 OCR 처리 수행
 """
 
 import os
+import json
 import argparse
+import time
+import fitz
 from ocr_processor import OCRProcessor
+
+
+def analyze_pdfs(pdf_dir: str):
+    """PDF 디렉토리의 총 페이지 수 및 파일 크기 분포 분석"""
+    pdf_files = sorted(
+        [
+            f
+            for f in os.listdir(pdf_dir)
+            if os.path.isfile(os.path.join(pdf_dir, f)) and f.lower().endswith(".pdf")
+        ]
+    )
+    if not pdf_files:
+        print("  PDF 파일 없음")
+        return
+
+    total_pages = 0
+    file_sizes_mb = []
+
+    for pdf_file in pdf_files:
+        pdf_path = os.path.join(pdf_dir, pdf_file)
+        file_sizes_mb.append(os.path.getsize(pdf_path) / (1024 * 1024))
+        try:
+            doc = fitz.open(pdf_path)
+            total_pages += len(doc)
+            doc.close()
+        except Exception as e:
+            print(f"  ⚠ {pdf_file} 분석 실패: {e}")
+
+    total_mb = sum(file_sizes_mb)
+    avg_mb = total_mb / len(file_sizes_mb)
+
+    print(f"  총 PDF 파일 수: {len(pdf_files)}개")
+    print(f"  총 페이지 수: {total_pages}페이지")
+
+    buckets = [
+        ("<1 MB",    lambda s: s < 1),
+        ("1~5 MB",   lambda s: 1 <= s < 5),
+        ("5~10 MB",  lambda s: 5 <= s < 10),
+        ("10~20 MB", lambda s: 10 <= s < 20),
+        ("≥20 MB",   lambda s: s >= 20),
+    ]
+    size_dist = {label: sum(1 for s in file_sizes_mb if cond(s)) for label, cond in buckets}
+
+    print(f"\n  [파일 크기 분포]")
+    for label, count in size_dist.items():
+        if count:
+            print(f"    {label}: {count}개")
+    print(
+        f"    → 평균: {avg_mb:.1f} MB  최소: {min(file_sizes_mb):.1f} MB  "
+        f"최대: {max(file_sizes_mb):.1f} MB  합계: {total_mb:.1f} MB"
+    )
+
+    # Streamlit 파싱용 JSON 마커 출력
+    stats = {
+        "total_pdfs": len(pdf_files),
+        "total_pages": total_pages,
+        "avg_mb": round(avg_mb, 1),
+        "min_mb": round(min(file_sizes_mb), 1),
+        "max_mb": round(max(file_sizes_mb), 1),
+        "total_mb": round(total_mb, 1),
+        "size_dist": {k: v for k, v in size_dist.items() if v > 0},
+    }
+    print(f"PDF_STATS:{json.dumps(stats, ensure_ascii=False)}", flush=True)
 
 
 def main(
@@ -30,6 +96,13 @@ def main(
 
     print(f"\nPDF 디렉토리: {pdf_dir}")
     print(f"OCR 출력 디렉토리: {output_base_dir}")
+
+    # PDF 분석 (OCR 전에 수행)
+    print("\n" + "-" * 60)
+    print("PDF 분석")
+    print("-" * 60)
+    analyze_pdfs(pdf_dir)
+
     print("\n" + "-" * 60)
     print("OCRProcessor 초기화")
     print("-" * 60)
@@ -50,7 +123,7 @@ def main(
     print("\n" + "-" * 60)
     print("PDF를 이미지로 변환 시작")
     print("-" * 60)
-
+    total_start = time.time()
     try:
         result = processor.convert_pdfs(
             pdf_dir=pdf_dir, output_dir=pdfs_to_img_dir, dpi=300
@@ -128,7 +201,11 @@ def main(
 
         traceback.print_exc()
 
+    total_elapsed = time.time() - total_start
     print("\n" + "=" * 60)
+    print(f"총 소요 시간: {total_elapsed:.1f}초 ({total_elapsed/60:.1f}분)")
+    print("=" * 60)
+    print(f"TIMING:total:{total_elapsed:.1f}", flush=True)
 
 
 if __name__ == "__main__":

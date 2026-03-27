@@ -1,9 +1,14 @@
 """
 QA Generator 테스트 코드
 ocr_output 디렉토리를 입력으로 사용하여 QA 생성 수행
+
+사용 방법:
+cd mmodal_generation
+python mmodal_generation/test_qa_generator.py --ocr-output-dir /home/jy/projects_wsl/02.RAG-eval-framework/mmodal_generation/ocr_output/test_2
 """
 
 import os
+import time
 import argparse
 from lora_tuned_qa_generator import Qwen3vlQaConfig, run_qa_generation
 
@@ -16,6 +21,7 @@ def main(
     config_file: str = None,
 ):
     """메인 테스트 함수"""
+
     print("=" * 60)
     print("QA Generator 테스트 시작")
     print("=" * 60)
@@ -38,7 +44,7 @@ def main(
 
     print(f"\n입력 디렉토리: {ocr_output_dir}")
     print(f"출력 파일: {output_file}")
-    print(f"발견된 PDF 디렉토리: {len(pdf_dirs)}개")
+    print(f"발견된 PDF 수: {len(pdf_dirs)}개")
 
     # 각 PDF 디렉토리의 페이지 수 확인
     total_pages = 0
@@ -51,7 +57,7 @@ def main(
         total_pages += page_count
         print(f"  - {pdf_dir}: {page_count}개 페이지")
 
-    print(f"\n총 {total_pages}개 페이지 발견")
+    print(f"\n총 PDF 수: {len(pdf_dirs)}개 / 총 페이지 수: {total_pages}개")
 
     # Config 설정
     print("\n" + "-" * 60)
@@ -75,12 +81,17 @@ def main(
     print("\n" + "-" * 60)
     print("QA 생성 시작")
     print("-" * 60)
+    total_start = time.time()
 
     try:
         # run_qa_generation 함수 호출
+        qa_start = time.time()
         run_qa_generation(config)
+        qa_elapsed = time.time() - qa_start
+        total_elapsed = time.time() - total_start
 
         print("\n✓ QA 생성 완료")
+        print(f"  QA 생성 소요 시간: {qa_elapsed:.1f}초 ({qa_elapsed/60:.1f}분)")
 
         # 결과 확인
         print("\n" + "-" * 60)
@@ -99,6 +110,25 @@ def main(
 
             print(f"처리된 문서 수: {total_docs}개")
             print(f"생성된 QA 쌍 수: {total_qa_pairs}개")
+            if total_qa_pairs > 0:
+                print(f"QA 쌍당 평균 생성 시간: {qa_elapsed/total_qa_pairs:.1f}초")
+
+            # 시간 정보를 output_file에 기록
+
+            timing_info = {
+                "qa_elapsed_sec": round(qa_elapsed, 1),
+                "total_elapsed_sec": round(total_elapsed, 1),
+                "total_docs": total_docs,
+                "total_qa_pairs": total_qa_pairs,
+                "avg_sec_per_qa": (
+                    round(qa_elapsed / total_qa_pairs, 1)
+                    if total_qa_pairs > 0
+                    else None
+                ),
+            }
+            result_with_timing = {"timing": timing_info, "data": data}
+            with open(output_file, "w", encoding="utf-8") as f:
+                json.dump(result_with_timing, f, ensure_ascii=False, indent=2)
 
             # 샘플 QA 쌍 출력
             if total_qa_pairs > 0:
@@ -117,13 +147,16 @@ def main(
 
     except Exception as e:
         print(f"\n✗ QA 생성 중 오류 발생: {e}")
+        total_elapsed = time.time() - total_start
         import traceback
 
         traceback.print_exc()
 
     print("\n" + "=" * 60)
     print("테스트 완료")
+    print(f"총 소요 시간: {total_elapsed:.1f}초 ({total_elapsed/60:.1f}분)")
     print("=" * 60)
+    print(f"TIMING:total:{total_elapsed:.1f}", flush=True)
 
 
 if __name__ == "__main__":
