@@ -5,4 +5,5 @@ einops
 addict 
 easydict
 pymupdf
-pip install flash-attn==2.7.3 --no-build-isolation
+# flash-attn: pip requirements 문법이 아니므로 아래는 주석으로만 둠(CUDA·빌드 필요, torch 설치 후 실행).
+#   pip install flash-attn==2.7.3 --no-build-isolation

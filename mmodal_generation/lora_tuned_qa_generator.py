@@ -427,10 +427,8 @@ class QAGenerator:
                     continue
                 # Parse Q&A pairs
                 qa_pairs = self.parse_qa_pairs(response)
-                print(qa_pairs)
                 # Filter Q&A pairs (Step 4)
                 filtered_pairs = self.filter_qa_pairs(qa_pairs)
-                print(filtered_pairs)
                 # Select best Q&A pair
                 if filtered_pairs:
                     selected_pair = random.choice(filtered_pairs)

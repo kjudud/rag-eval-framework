@@ -17,7 +17,11 @@ LATEST_VERSION=$(docker images rag-eval-framework --format "{{.Tag}}" | \
     grep -v "latest" | \
     sort -V | \
     tail -1)
-docker build --build-arg BASE_VERSION=$LATEST_VERSION -t rag-eval-framework:$VERSION .
+# 프로젝트 루트에서 실행할 것 (-f 및 컨텍스트 . 기준)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$ROOT_DIR"
+docker build --build-arg BASE_VERSION=$LATEST_VERSION -f docker_dir/Dockerfile -t rag-eval-framework:$VERSION .
 
 # 2. Docker 이미지 압축 파일 생성
 echo "📦 이미지 압축 파일 생성 중..."

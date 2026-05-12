@@ -4,13 +4,15 @@ ocr_output 디렉토리를 입력으로 사용하여 QA 생성 수행
 
 사용 방법:
 cd mmodal_generation
-python mmodal_generation/test_qa_generator.py --ocr-output-dir /home/jy/projects_wsl/02.RAG-eval-framework/mmodal_generation/ocr_output/test_2
+python test_qa_generator.py --ocr-output-dir /home/jy/projects_wsl/02.RAG-eval-framework/mmodal_generation/ocr_output/test_2
 """
 
 import os
 import time
 import argparse
-from lora_tuned_qa_generator import Qwen3vlQaConfig, run_qa_generation
+
+# from lora_tuned_qa_generator import Qwen3vlQaConfig, run_qa_generation
+from qa_generator import Qwen3vlQaConfig, run_qa_generation
 
 
 def main(

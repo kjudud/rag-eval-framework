@@ -195,13 +195,13 @@ class QAGenerator:
                 # Build messages
                 if image_paths:
                     for image_path in image_paths:
-                        messages["content"].append(
+                        messages[0]["content"].append(
                             {
                                 "type": "image",
                                 "image": image_path,
                             }
                         )
-                messages["content"].append(
+                messages[0]["content"].append(
                     {
                         "type": "text",
                         "text": prompt,

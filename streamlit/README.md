@@ -4,13 +4,15 @@
 
 ## 🚀 빠른 시작
 
-### 1. 의존성 설치
+### 1. 의존성 설치(root에서)
 
 ```bash
+conda create -n rag-eval-framework python=3.11
+conda activate rag-eval-framework
 pip install -r requirements.txt
 ```
 
-### 2. WSL 환경 설정 (WSL 사용자만)
+### 2. WSL 환경 설정 (WSL 사용시 port 에러 발생시)
 
 ```bash
 # 포트 포워딩 설정 (Windows 관리자 권한 필요)
