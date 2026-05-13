@@ -13,9 +13,13 @@ uploaded_files/
 mmodal_generation/pdfs_to_img/
 mmodal_generation/ocr_output/
 # Multimodal models
-mmodal_generation/models/
+mmodal_generation/models/*
+!mmodal_generation/models/.gitkeep
 mmodal_generation/unsloth_compiled_cache/
 temp/
+# RAGChecker results
+RAGChecker/results/*
+!RAGChecker/results/.gitkeep
 # =============================================================================
 # Python
 # =============================================================================
