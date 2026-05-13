@@ -11,8 +11,9 @@ import os
 import time
 import argparse
 
-# from lora_tuned_qa_generator import Qwen3vlQaConfig, run_qa_generation
-from qa_generator import Qwen3vlQaConfig, run_qa_generation
+from lora_tuned_qa_generator import Qwen3vlQaConfig, run_qa_generation
+
+# from qa_generator import Qwen3vlQaConfig, run_qa_generation
 
 
 def main(

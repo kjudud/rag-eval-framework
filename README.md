@@ -21,24 +21,28 @@ conda deactivate
 # OCR (DeepSeek-OCR 등, Python 3.12)
 conda create -n deepseek-ocr python=3.12
 conda activate deepseek-ocr
-pip install -r mmodal_generation/ocr_requirements.txt
+# CUDA·빌드 환경에 맞게 torch 설치
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu118
 # flash-attn은 CUDA·빌드 환경에 맞게 torch 설치 후 별도 실행:
 pip install flash-attn==2.7.3 --no-build-isolation
+# 필요 패키지 설치
+pip install -r mmodal_generation/ocr_requirements.txt
 conda deactivate
 
 # 멀티모달 QA 생성 (Qwen3-VL 등, Python 3.12)
 conda create -n Qwen3-VL python=3.12
 conda activate Qwen3-VL
-pip install -r mmodal_generation/mmodal_gen_requirements.txt
 # CUDA·빌드 환경에 맞게 torch 설치
 pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu118
+# 필요 패키지 설치
+pip install -r mmodal_generation/mmodal_gen_requirements.txt
 conda deactivate
 ```
 
 > Streamlit의 `run_in_conda_env`는 위 **환경 이름**(`deepseek-ocr`, `Qwen3-VL`)과 일치해야 합니다. 이름을 바꾼 경우 `streamlit/utils.py`의 호출부를 함께 수정하세요.
 
 ### 2. Academic RAG API 서버 시작
-
+### 예시 academic rag 구성. 지식베이스 변경하려면 수정 해야함.
 ```bash
 conda activate rag-eval-framework
 python academic_rag_api.py
@@ -204,8 +208,8 @@ RAG-eval-framework/
 │   └── ...
 ├── mmodal_generation/                # 멀티모달(OCR·비전 QA) 파이프라인
 │   ├── ocr_processor.py
-│   ├── qa_generator.py
-│   ├── lora_tuned_qa_generator.py    # LoRA·Unsloth 기반 QA(스크립트용)
+│   ├── qa_generator.py             # base Qwen3-VL 사용 멀티모달 QA 생성 스크립트    
+│   ├── lora_tuned_qa_generator.py  # LoRA tuned Qwen3-VL 사용 멀티모달 QA 생성 스크립트
 │   ├── test_ocr_processor.py       # Streamlit OCR 단계에서 호출
 │   ├── test_qa_generator.py        # Streamlit QA 단계에서 호출
 │   ├── pipeline.py
