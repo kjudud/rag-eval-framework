@@ -285,14 +285,14 @@ else:
                         
                         # 개별 메트릭 표시
                         if 'metrics' in first_result:
-                            st.write("**개별 메트릭:**")
+                            st.write("**예시) 첫번째 qa쌍에 대한 결과:**")
                             metric_cols = st.columns(len(first_result['metrics']))
                             for i, (metric_name, metric_value) in enumerate(first_result['metrics'].items()):
                                 with metric_cols[i]:
                                     st.metric(
                                         metric_name.replace('_', ' ').title(),
                                         f"{metric_value:.2f}",
-                                        help=f"첫 번째 질문의 {metric_name} 점수"
+                                        help=f"첫 번째 qa쌍에 대한 {metric_name} 점수"
                                     )
                     
                     # 상세 결과 표시

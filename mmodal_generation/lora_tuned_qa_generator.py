@@ -20,7 +20,7 @@ from peft import PeftModel
 
 @dataclass
 class Qwen3vlQaConfig:
-    model_name: str = "Qwen/Qwen3-VL-8B-Instruct"
+    model_name: str = "Qwen/Qwen3-VL-32B-Instruct"
     input_path: str = "ocr_output"  # OCR로 변환된 데이터 디렉토리
     output_path: str = "data/results_qa.json"
     max_retries: int = 2
@@ -41,7 +41,7 @@ class Qwen3vlQaConfig:
     presence_penalty: float = 1.5
     out_seq_length: int = 16384
     image_max_size: int = 1024  # 이미지 긴 쪽 최대 픽셀 (비주얼 토큰 수 조절)
-    lora_adapter_path: str = "models/qwen3-vl-8b-sft/checkpoint-150"
+    lora_adapter_path: str = "models/qwen3-vl-32b-sft/checkpoint-225"
 
 
 @dataclass
